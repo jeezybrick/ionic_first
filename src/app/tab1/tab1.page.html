@@ -1,68 +1,46 @@
-<!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
-<ion-reorder-group disabled="false">
-  <!-- Default reorder icon, end aligned items -->
-  <ion-item>
-    <ion-label>
-      Item 1
-    </ion-label>
-    <ion-reorder slot="end"></ion-reorder>
-  </ion-item>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Карточки</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-item>
-    <ion-label>
-      Item 2
-    </ion-label>
-    <ion-reorder slot="end"></ion-reorder>
-  </ion-item>
+<ion-content>
 
-  <!-- Default reorder icon, start aligned items -->
-  <ion-item>
-    <ion-reorder slot="start"></ion-reorder>
-    <ion-label>
-      Item 3
-    </ion-label>
-  </ion-item>
+  <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+    <ion-reorder>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+          <ion-card-title>Card Title</ion-card-title>
+        </ion-card-header>
 
-  <ion-item>
-    <ion-reorder slot="start"></ion-reorder>
-    <ion-label>
-      Item 4
-    </ion-label>
-  </ion-item>
-
-  <!-- Custom reorder icon end items -->
-  <ion-item>
-    <ion-label>
-      Item 5
-    </ion-label>
-    <ion-reorder slot="end">
-      <ion-icon name="pizza"></ion-icon>
+        <ion-card-content>
+          Keep close to Nature's heart... and break clear away, once in awhile,
+          and climb a mountain or spend a week in the woods. Wash your spirit clean.
+        </ion-card-content>
+      </ion-card>
     </ion-reorder>
-  </ion-item>
+    <ion-reorder>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Card Subtitle 22</ion-card-subtitle>
+          <ion-card-title>Card Title 2</ion-card-title>
+        </ion-card-header>
 
-  <ion-item>
-    <ion-label>
-      Item 6
-    </ion-label>
-    <ion-reorder slot="end">
-      <ion-icon name="pizza"></ion-icon>
+        <ion-card-content>
+          Keep close to Nature's heart... and break clear away, once in awhile,
+          and climb a mountain or spend a week in the woods. Wash your spirit clean.
+        </ion-card-content>
+      </ion-card>
     </ion-reorder>
-  </ion-item>
 
-  <!-- Items wrapped in a reorder, entire item can be dragged -->
-  <ion-reorder>
-    <ion-item>
-      <ion-label>
-        Item 7
-      </ion-label>
-    </ion-item>
-  </ion-reorder>
+  </ion-reorder-group>
 
-  <ion-reorder>
-    <ion-item>
-      <ion-label>
-        Item 8
-      </ion-label>
-    </ion-item>
-  </ion-reorder>
-</ion-reorder-group>
+  <!-- fab placed to the top end -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
