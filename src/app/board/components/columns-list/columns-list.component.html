@@ -4,26 +4,25 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-title>Колонки</ion-title>
+  <ion-title>{{board.name}}</ion-title>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid *ngIf="isBoardLoading">
     <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-spinner ></ion-spinner>
+      <ion-spinner></ion-spinner>
     </ion-row>
   </ion-grid>
 
   <div *ngIf="!isBoardLoading">
     <ion-card *ngFor="let column of columns">
       <ion-card-header>
-        <ion-card-subtitle>Название 2 колонки</ion-card-subtitle>
+        <ion-card-subtitle>{{column.createdAt | date: 'medium'}}</ion-card-subtitle>
         <ion-card-title>{{column.name}}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        Keep close to Nature's heart... and break clear away, once in awhile,
-        and climb a mountain or spend a week in the woods. Wash your spirit clean.
+        {{column.cards.length}} карточек
       </ion-card-content>
     </ion-card>
   </div>
