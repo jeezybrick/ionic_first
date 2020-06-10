@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 const defaultAvatarUrl = 'https://ionicframework.com/docs/demos/api/avatar/avatar.svg';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss'],
 })
-export class Tab2Page {
+export class UsersListComponent implements OnInit {
   public users = [
     {
-      name: 'Андрей Стеценко',
+      name: 'Андрей Стаценко',
       avatar: defaultAvatarUrl,
     },
     {
@@ -21,6 +21,8 @@ export class Tab2Page {
   public filteredUsers = [...this.users];
 
   constructor() {}
+  ngOnInit() {
+  }
 
   public searchUsers(value: string): void {
     if (!value.length) {
