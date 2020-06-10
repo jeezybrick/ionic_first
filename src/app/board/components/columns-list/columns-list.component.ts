@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ColumnService } from '../../../shared/services/column.service';
 import { CardService } from '../../../shared/services/card.service';
 import { Board } from '../../../shared/models/board.model';
+import { ModalController } from '@ionic/angular';
+import { CreateColumnModalComponent } from '../create-column-modal/create-column-modal.component';
 
 @Component({
   selector: 'app-columns-list',
@@ -19,6 +21,7 @@ export class ColumnsListComponent implements OnInit {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private boardService: BoardService,
+              private modalController: ModalController,
               private columnService: ColumnService,
               private cardService: CardService) { }
 
@@ -31,6 +34,23 @@ export class ColumnsListComponent implements OnInit {
       this.getBoardDetail(params.boardId);
 
     });
+  }
+
+  async createColumn() {
+    const modal = await this.modalController.create({
+      component: CreateColumnModalComponent,
+      componentProps: {
+        boardId: this.board._id,
+      }
+    });
+
+    modal.onWillDismiss().then((res) => {
+      if (res && res.data) {
+        this.columns = [...this.columns, res.data.createdColumn];
+      }
+    });
+
+    return await modal.present();
   }
 
   private getBoardDetail(boardId): void {

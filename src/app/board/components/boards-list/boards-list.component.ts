@@ -20,7 +20,7 @@ export class BoardsListComponent implements OnInit {
       private modalController: ModalController,
       private boardService: BoardService,
       private toastService: ToastService,
-      private loaderService: LoaderService,) {}
+      private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.getBoardList();

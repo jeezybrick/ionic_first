@@ -15,10 +15,10 @@
   </ion-grid>
 
   <div *ngIf="!isBoardLoading">
-    <ion-card *ngFor="let column of [1,2,3,4,5,6]">
+    <ion-card *ngFor="let column of columns">
       <ion-card-header>
         <ion-card-subtitle>Название 2 колонки</ion-card-subtitle>
-        <ion-card-title>Название колонки</ion-card-title>
+        <ion-card-title>{{column.name}}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
@@ -36,7 +36,7 @@
     <ion-fab-button>
       <ion-icon name="person-add"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button>
+    <ion-fab-button (click)="createColumn()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab-list>

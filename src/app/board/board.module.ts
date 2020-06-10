@@ -8,9 +8,18 @@ import { CardsListComponent } from './components/cards-list/cards-list.component
 import { CreateBoardModalComponent } from './components/create-board-modal/create-board-modal.component';
 import { FormsModule } from '@angular/forms';
 import { ColumnsListComponent } from './components/columns-list/columns-list.component';
+import { CreateColumnModalComponent } from './components/create-column-modal/create-column-modal.component';
+import { CreateCardModalComponent } from './components/create-card-modal/create-card-modal.component';
 
 @NgModule({
-  declarations: [BoardsListComponent, CardsListComponent, CreateBoardModalComponent, ColumnsListComponent],
+  declarations: [
+      BoardsListComponent,
+    CardsListComponent,
+    CreateBoardModalComponent,
+    ColumnsListComponent,
+    CreateColumnModalComponent,
+    CreateCardModalComponent,
+  ],
   imports: [
     IonicModule,
     CommonModule,
