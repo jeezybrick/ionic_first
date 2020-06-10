@@ -15,11 +15,11 @@ export class BoardService {
   private activeBoard$ = new BehaviorSubject<Board>(null);
 
   constructor(private http: HttpClient) {
-    this.getBoards().subscribe();
+    // this.getBoards().subscribe();
   }
 
   public getBoards(sortBy = 'createdAt', sortDirection = '1'): any {
-    return this.http.get<Board[]>('/api/boards', {params: {sortBy, sortDirection}}).pipe(
+    return this.http.get<Board[]>('https://task-manager-322.herokuapp.com/api/boards', {params: {sortBy, sortDirection}}).pipe(
       tap((boards: Board[]) => {
         this.boards = boards;
         this.boards$.next(this.boards);
