@@ -63,14 +63,13 @@ export class ColumnsListComponent implements OnInit {
         const actionSheet = await this.actionSheetController.create({
             header: 'Колонки',
             buttons: [{
-                text: 'Delete',
+                text: 'Удалить',
                 role: 'destructive',
                 handler: () => {
-                    console.log('Delete clicked');
                     this.removeColumn(columnId);
                 }
             }, {
-                text: 'Cancel',
+                text: 'Отмена',
                 role: 'cancel'
             }]
         });
