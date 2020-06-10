@@ -8,13 +8,23 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-searchbar type="text" debounce="500" animated placeholder="Пользователи" (ionInput)="searchUsers($event.target.value)"></ion-searchbar>
-  <ion-list>
-    <ion-item *ngFor="let user of filteredUsers">
-      <ion-avatar slot="end">
-        <img [src]="user.avatar">
-      </ion-avatar>
-      <ion-label>{{user.name}}</ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-grid *ngIf="isUsersLoading">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-spinner ></ion-spinner>
+    </ion-row>
+  </ion-grid>
+
+  <ng-container *ngIf="!isUsersLoading">
+    <ion-searchbar type="text" debounce="500" animated placeholder="Пользователи" (ionInput)="searchUsers($event.target.value)"></ion-searchbar>
+    <ion-list>
+      <ion-item *ngFor="let user of filteredUsers">
+        <ion-avatar slot="end">
+          <img [src]="user.avatar">
+        </ion-avatar>
+        <ion-label>{{user.fullname}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+
 </ion-content>

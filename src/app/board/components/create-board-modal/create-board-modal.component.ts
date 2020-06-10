@@ -30,7 +30,7 @@ export class CreateBoardModalComponent implements OnInit {
     }
 
     public async createBoard() {
-        await this.loaderService.presentLoading();
+        await this.loaderService.presentLoading('Cохранение...');
 
         this.boardService.createBoard({name: this.boardName})
             .pipe(finalize(() => this.loaderService.dismissLoading()))

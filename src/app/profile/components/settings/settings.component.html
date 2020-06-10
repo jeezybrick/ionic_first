@@ -8,22 +8,47 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-item>
-    <ion-label position="floating">Полное имя</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+  <ion-grid *ngIf="isUserLoading">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-spinner ></ion-spinner>
+    </ion-row>
+  </ion-grid>
 
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
+  <form novalidate *ngIf="!isUserLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)">
 
-  <div class="ion-padding">
-    <ion-button expand="block">Редактировать</ion-button>
-  </div>
+    <ion-item>
+      <ion-label position="floating" >Полное имя</ion-label>
+      <ion-input formControlName="fullname"></ion-input>
+      <ion-text color="danger" *ngIf="profileForm.get('fullname').hasError('required') && profileForm.get('fullname').touched">
+        Обов'язкове поле
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+      <ion-text color="danger" *ngIf="profileForm.get('email').hasError('email') && profileForm.get('email').touched">
+        Невірний формат email
+      </ion-text>
+    </ion-item>
+
+    <div class="ion-padding">
+      <ion-button expand="block" type="submit" [disabled]="profileForm.invalid">Редактировать</ion-button>
+    </div>
+
+  </form>
 
   <div class="ion-padding">
     <ion-button expand="block" color="danger" (click)="logout()">Выйти</ion-button>
   </div>
+
+  <ion-grid *ngIf="errors">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-text class="ion-padding ion-justify-content-center" color="danger">
+        {{ errors.email }}
+      </ion-text>
+    </ion-row>
+  </ion-grid>
+
 
 </ion-content>

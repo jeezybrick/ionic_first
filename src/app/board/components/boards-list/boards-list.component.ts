@@ -36,7 +36,7 @@ export class BoardsListComponent implements OnInit {
   public async deleteBoard(event, boardId: string) {
     event.stopPropagation();
     event.preventDefault();
-    await this.loaderService.presentLoading();
+    await this.loaderService.presentLoading('Удаление...');
 
     this.boardService.deleteBoard(boardId)
         .pipe(finalize(() => this.loaderService.dismissLoading()))

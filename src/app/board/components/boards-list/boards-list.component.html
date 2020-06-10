@@ -12,7 +12,7 @@
   </ion-grid>
 
   <ion-list *ngIf="!isBoardsListLoading">
-    <ion-item-sliding *ngFor="let board of boards" [routerLink]="[board._id, 'cards']">
+    <ion-item-sliding *ngFor="let board of boards" [routerLink]="[board._id, 'columns']">
       <ion-item>
         <ion-label>
           <h3>{{board.name}}</h3>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../../shared/services/user.service';
+import { User } from '../../../shared/models/user.model';
 
-const defaultAvatarUrl = 'https://ionicframework.com/docs/demos/api/avatar/avatar.svg';
 
 @Component({
   selector: 'app-users-list',
@@ -8,20 +9,17 @@ const defaultAvatarUrl = 'https://ionicframework.com/docs/demos/api/avatar/avata
   styleUrls: ['./users-list.component.scss'],
 })
 export class UsersListComponent implements OnInit {
-  public users = [
-    {
-      name: 'Андрей Стаценко',
-      avatar: defaultAvatarUrl,
-    },
-    {
-      name: 'Анастасия Земляная',
-      avatar: defaultAvatarUrl,
-    },
-  ];
-  public filteredUsers = [...this.users];
+  public users: User[] = [];
+  public filteredUsers = [];
+  public isUsersLoading: boolean = true;
 
-  constructor() {}
+  constructor(private userService: UserService) {}
   ngOnInit() {
+    this.userService.getAllUsers().subscribe((users) => {
+      this.users = users;
+      this.filteredUsers = [...this.users];
+      this.isUsersLoading = false;
+    });
   }
 
   public searchUsers(value: string): void {
