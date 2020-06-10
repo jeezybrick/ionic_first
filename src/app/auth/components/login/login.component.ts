@@ -20,9 +20,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {}
 
-  public login(): void {
+  public async login() {
     this.error = null;
-    this.loaderService.presentLoading();
+    await this.loaderService.presentLoading();
 
     this.authService.login(this.email, this.password)
         .pipe(

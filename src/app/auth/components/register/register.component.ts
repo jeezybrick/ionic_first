@@ -44,13 +44,13 @@ export class RegisterComponent implements OnInit {
     return this.userForm.get('repeatPassword') as FormControl;
   }
 
-  public register() {
+  public async register() {
 
     if (!this.userForm.valid) {
       return;
     }
 
-    this.loaderService.presentLoading('Регистарция...');
+    await this.loaderService.presentLoading('Регистарция...');
 
     const {
       fullname,

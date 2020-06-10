@@ -38,14 +38,14 @@ export class SettingsComponent implements OnInit {
     this.router.navigate(['/auth/login']);
   }
 
-  public onSubmit({value, invalid}: any) {
+  public async onSubmit({value, invalid}: any) {
 
     if (invalid) {
       return;
     }
 
     this.errors = null;
-    this.loaderService.presentLoading();
+    await this.loaderService.presentLoading();
 
     this.authService.updateProfile(value)
         .pipe(

@@ -34,13 +34,10 @@
 
     <div class="ion-padding">
       <ion-button expand="block" type="submit" [disabled]="profileForm.invalid">Редактировать</ion-button>
+      <ion-button expand="block" color="danger" fill="outline" (click)="logout()">Выйти</ion-button>
     </div>
 
   </form>
-
-  <div class="ion-padding">
-    <ion-button expand="block" color="danger" (click)="logout()">Выйти</ion-button>
-  </div>
 
   <ion-grid *ngIf="errors">
     <ion-row class="ion-justify-content-center ion-align-items-center">
