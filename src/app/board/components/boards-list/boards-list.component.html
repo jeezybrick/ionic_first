@@ -12,12 +12,15 @@
   </ion-grid>
 
   <ion-list *ngIf="!isBoardsListLoading">
-    <ion-item-sliding routerLink="123/cards">
+    <ion-item-sliding *ngFor="let board of boards" [routerLink]="[board._id, 'cards']">
       <ion-item>
-        <ion-label>Item</ion-label>
+        <ion-label>
+          <h3>{{board.name}}</h3>
+          <p>{{board.createdAt | date: 'longDate'}}</p>
+        </ion-label>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option color="danger">Удалить</ion-item-option>
+        <ion-item-option color="danger" (click)="deleteBoard($event, board._id)">Удалить</ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

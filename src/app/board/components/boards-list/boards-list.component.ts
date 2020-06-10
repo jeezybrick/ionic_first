@@ -1,7 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonReorderGroup, ModalController, ToastController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Board } from '../../../shared/models/board.model';
 import { BoardService } from '../../../shared/services/board.service';
+import { CreateBoardModalComponent } from '../create-board-modal/create-board-modal.component';
+import { ToastService } from '../../../shared/services/toast.service';
+import { LoaderService } from '../../../shared/services/loader.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-boards-list',
@@ -11,12 +15,12 @@ import { BoardService } from '../../../shared/services/board.service';
 export class BoardsListComponent implements OnInit {
   public boards: Board[] = [];
   public isBoardsListLoading = true;
-  public isBoardsDeleteProcess = false;
 
   constructor(
       private modalController: ModalController,
       private boardService: BoardService,
-      private toastController: ToastController) {}
+      private toastService: ToastService,
+      private loaderService: LoaderService,) {}
 
   ngOnInit() {
     this.getBoardList();
@@ -24,19 +28,26 @@ export class BoardsListComponent implements OnInit {
 
   async presentModal() {
     const modal = await this.modalController.create({
-      component: ModallPage,
-      cssClass: 'my-custom-class'
+      component: CreateBoardModalComponent,
     });
     return await modal.present();
   }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Что-то пошло не так :(',
-      duration: 5000,
-      color: 'danger'
-    });
-    toast.present();
+  public async deleteBoard(event, boardId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    await this.loaderService.presentLoading();
+
+    this.boardService.deleteBoard(boardId)
+        .pipe(finalize(() => this.loaderService.dismissLoading()))
+        .subscribe((response: any) => {
+          this.isBoardsListLoading = true;
+          this.toastService.presentToast('Доска упешно удалена');
+          this.getBoardList();
+        },
+          (error) => {
+            this.toastService.presentErrorToast();
+          });
   }
 
   private getBoardList(): void {
@@ -46,39 +57,8 @@ export class BoardsListComponent implements OnInit {
               this.isBoardsListLoading = false;
             },
             (error) => {
-              this.presentToast();
+              this.toastService.presentErrorToast();
             });
 
   }
-}
-
-@Component({
-  selector: 'app-modal-page',
-  template: `
-          <ion-header translucent>
-            <ion-toolbar>
-              <ion-title>Добавить карточку</ion-title>
-              <ion-buttons slot="end">
-                <ion-button (click)="dismiss()">Close</ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
-          <ion-content fullscreen>
-          </ion-content>
-        `,
-})
-export class ModallPage {
-
-  constructor(public modalController: ModalController) {
-
-  }
-
-  public dismiss() {
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
-    this.modalController.dismiss({
-      dismissed: true
-    });
-  }
-
 }

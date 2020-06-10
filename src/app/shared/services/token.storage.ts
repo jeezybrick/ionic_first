@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 const TOKEN_KEY = 'Token';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TokenStorage {
 
   constructor() { }

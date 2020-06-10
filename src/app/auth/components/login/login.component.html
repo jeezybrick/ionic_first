@@ -1,3 +1,39 @@
-<p>
-  login works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Авторизация
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input type="email" [(ngModel)]="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Пароль</ion-label>
+    <ion-input type="password" [(ngModel)]="password"></ion-input>
+  </ion-item>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="login()" [disabled]="!email.length || !password.length">Логин</ion-button>
+  </div>
+
+  <ion-grid *ngIf="error">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-text class="ion-padding ion-justify-content-center" color="danger">
+        {{error.message}}
+      </ion-text>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label>
+      Все ще незареєстровані? <a [routerLink]="['/auth/register']">Натисніть сюди</a>
+    </ion-label>
+  </ion-item>
+
+</ion-content>

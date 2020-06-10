@@ -1,3 +1,64 @@
-<p>
-  register works!
-</p>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Реєстрація
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <form novalidate [formGroup]="userForm">
+
+    <ion-item>
+      <ion-label position="floating">Повне ім'я</ion-label>
+      <ion-input type="text" formControlName="fullname" required></ion-input>
+      <ion-text color="danger" *ngIf="fullname.touched && fullname.hasError('required')">
+        Обязательное поле
+      </ion-text>
+    </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input type="email" formControlName="email" required></ion-input>
+    <ion-text color="danger" *ngIf="email.touched && email.hasError('email')">
+      Невірний email
+    </ion-text>
+  </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Пароль</ion-label>
+      <ion-input type="password" formControlName="password" required></ion-input>
+      <ion-text color="danger" *ngIf="password.touched && password.hasError('required')">
+        Обязательное поле
+      </ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Введіть пароль ще раз</ion-label>
+      <ion-input type="password" formControlName="repeatPassword" required></ion-input>
+      <ion-text color="danger" *ngIf="repeatPassword.touched && repeatPassword.hasError('passwordMatch')">
+        Паролі не співпадають
+      </ion-text>
+    </ion-item>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="register()" [disabled]="userForm.invalid">Реєстрація</ion-button>
+  </div>
+
+  <ion-grid *ngIf="error">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-text class="ion-padding ion-justify-content-center" color="danger">
+        {{error.message}}
+      </ion-text>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label>
+      Вже зареєстровані? <a [routerLink]="['/auth/login']">Авторизуйтесь тут</a>
+    </ion-label>
+  </ion-item>
+  </form>
+
+</ion-content>
