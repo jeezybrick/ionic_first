@@ -41,8 +41,9 @@ export class BoardsListComponent implements OnInit {
     this.boardService.deleteBoard(boardId)
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: any) => {
-          this.isBoardsListLoading = true;
           this.toastService.presentToast('Доска упешно удалена');
+
+          this.isBoardsListLoading = true;
           this.getBoardList();
         },
           (error) => {
