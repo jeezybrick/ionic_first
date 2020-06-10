@@ -27,7 +27,7 @@ export class UsersListComponent implements OnInit {
       this.filteredUsers = [...this.users];
     }
 
-    this.filteredUsers = this.users.filter(option => option.name.toLowerCase().indexOf(value.toLowerCase()) > -1);
+    this.filteredUsers = this.users.filter(option => option.fullname.toLowerCase().indexOf(value.toLowerCase()) > -1);
   }
 
 }
