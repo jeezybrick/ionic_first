@@ -85,7 +85,10 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         return await modal.present();
     }
 
-    async presentActionSheet(columnId: string) {
+    async presentActionSheet(event, columnId: string) {
+        event.stopPropagation();
+        event.preventDefault();
+
         const actionSheet = await this.actionSheetController.create({
             header: 'Колонки',
             buttons: [{

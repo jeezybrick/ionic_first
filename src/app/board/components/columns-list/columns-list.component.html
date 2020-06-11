@@ -20,7 +20,7 @@
         <ion-grid>
           <ion-row class="ion-justify-content-between">
             <span>{{column.createdAt | date: 'longDate'}}</span>
-            <ion-card-subtitle><ion-icon size="small" (click)="presentActionSheet(column._id)" name="ellipsis-horizontal"></ion-icon></ion-card-subtitle>
+            <ion-card-subtitle><ion-icon size="small" (click)="presentActionSheet($event, column._id)" name="ellipsis-horizontal"></ion-icon></ion-card-subtitle>
           </ion-row>
         </ion-grid>
         <ion-card-title>{{column.name}}</ion-card-title>
