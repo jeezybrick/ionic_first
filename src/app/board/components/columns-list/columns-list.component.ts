@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Column } from '../../../shared/models/column.model';
 import { BoardService } from '../../../shared/services/board.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,16 +10,18 @@ import { CreateColumnModalComponent } from '../create-column-modal/create-column
 import { LoaderService } from '../../../shared/services/loader.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { finalize } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
     selector: 'app-columns-list',
     templateUrl: './columns-list.component.html',
     styleUrls: ['./columns-list.component.scss'],
 })
-export class ColumnsListComponent implements OnInit {
+export class ColumnsListComponent implements OnInit, OnDestroy {
     public columns: Column[] = [];
     public board: Board;
     public isBoardLoading = true;
+    private subs = new SubSink();
 
     constructor(private router: Router,
                 private route: ActivatedRoute,
@@ -40,6 +42,10 @@ export class ColumnsListComponent implements OnInit {
             this.getBoardDetail(params.boardId);
 
         });
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
     }
 
     async createColumn() {
@@ -77,11 +83,10 @@ export class ColumnsListComponent implements OnInit {
     }
 
     private getBoardDetail(boardId): void {
-        this.boardService.getBoardDetail(boardId).subscribe((response: Board) => {
+        this.subs.sink = this.boardService.getBoardDetail(boardId).subscribe((response: Board) => {
             if (response) {
                 this.board = response;
                 this.columns = [...response.columns];
-                this.boardService.setActiveBoard(response);
             } else {
                 this.router.navigate(['boards']);
             }

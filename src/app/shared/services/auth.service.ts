@@ -26,6 +26,7 @@ export class AuthService {
         this.setUser(data.user);
         this.token.saveToken(data.token);
         this.boardService.getBoards().subscribe();
+        this.boardService.startPollingInviteToBoard();
         observer.complete();
 
       }, (error) => {
@@ -93,6 +94,7 @@ export class AuthService {
   signOut(): void {
     this.token.signOut();
     this.setUser(null);
-    this.boardService.setActiveBoardsList([]);
+    this.boardService.stopPollingInviteToBoard();
+
   }
 }

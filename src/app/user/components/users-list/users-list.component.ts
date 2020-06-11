@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/models/user.model';
+import { SubSink } from 'subsink';
 
 
 @Component({
@@ -8,18 +9,24 @@ import { User } from '../../../shared/models/user.model';
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss'],
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
   public users: User[] = [];
   public filteredUsers = [];
   public isUsersLoading: boolean = true;
+  private subs = new SubSink();
 
   constructor(private userService: UserService) {}
+
   ngOnInit() {
-    this.userService.getAllUsers().subscribe((users) => {
+    this.subs.sink = this.userService.getAllUsers().subscribe((users) => {
       this.users = users;
       this.filteredUsers = [...this.users];
       this.isUsersLoading = false;
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   public searchUsers(value: string): void {

@@ -1,20 +1,53 @@
 <ion-header translucent>
-  <ion-toolbar>
-    <ion-title>Добавить доску</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Закрыть</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Добавить доску</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">Закрыть</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-item>
-    <ion-label position="floating">Имя доски</ion-label>
-    <ion-input type="text" [(ngModel)]="boardName"></ion-input>
-  </ion-item>
+    <ion-item>
+        <ion-label position="floating">Имя доски</ion-label>
+        <ion-input type="text" [(ngModel)]="boardName"></ion-input>
+    </ion-item>
 
-  <div class="ion-padding">
-    <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Создать доску</ion-button>
+  <div class="ion-padding" *ngIf="selectedUsers.length">
+    <ion-chip *ngFor="let selectedUser of selectedUsers">
+      <ion-avatar>
+        <img [src]="selectedUser.avatar">
+      </ion-avatar>
+      <ion-label>{{selectedUser.fullname}}</ion-label>
+      <ion-icon name="close-circle" (click)="removeSelectedUser(selectedUser, search)"></ion-icon>
+    </ion-chip>
   </div>
+
+    <div class="autocomplete-wrap">
+        <ion-searchbar #search
+                       type="text"
+                       debounce="500"
+                       placeholder="Добавить пользователя к доске"
+                       (ionFocus)="onFocus()"
+                       (ionBlur)="onBlur()"
+                       (ionInput)="searchUsers($event.target.value)">
+        </ion-searchbar>
+
+        <div class="autocomplete-body" *ngIf="searchInputFocused">
+            <ion-list>
+                <ion-item *ngFor="let user of filteredUsers" (click)="selectUser(user, search);">
+                    <ion-avatar slot="end">
+                        <img [src]="user.avatar">
+                    </ion-avatar>
+                    <ion-label>{{user.fullname}}</ion-label>
+                </ion-item>
+            </ion-list>
+        </div>
+
+    </div>
+
+    <div class="ion-padding">
+        <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Создать доску</ion-button>
+    </div>
 </ion-content>
 

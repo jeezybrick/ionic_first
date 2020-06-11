@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Board } from '../../../shared/models/board.model';
 import { BoardService } from '../../../shared/services/board.service';
@@ -6,15 +6,17 @@ import { CreateBoardModalComponent } from '../create-board-modal/create-board-mo
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-boards-list',
   templateUrl: './boards-list.component.html',
   styleUrls: ['./boards-list.component.scss'],
 })
-export class BoardsListComponent implements OnInit {
+export class BoardsListComponent implements OnInit, OnDestroy {
   public boards: Board[] = [];
   public isBoardsListLoading = true;
+  private subs = new SubSink();
 
   constructor(
       private modalController: ModalController,
@@ -26,7 +28,11 @@ export class BoardsListComponent implements OnInit {
     this.getBoardList();
   }
 
-  async presentModal() {
+  ngOnDestroy() {
+      this.subs.unsubscribe();
+  }
+
+    async presentModal() {
     const modal = await this.modalController.create({
       component: CreateBoardModalComponent,
     });
@@ -38,7 +44,7 @@ export class BoardsListComponent implements OnInit {
     event.preventDefault();
     await this.loaderService.presentLoading('Удаление...');
 
-    this.boardService.deleteBoard(boardId)
+    this.subs.sink = this.boardService.deleteBoard(boardId)
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: any) => {
           this.toastService.presentToast('Доска упешно удалена');
@@ -52,7 +58,7 @@ export class BoardsListComponent implements OnInit {
   }
 
   private getBoardList(): void {
-    this.boardService.getBoards()
+    this.subs.sink = this.boardService.getBoards()
         .subscribe((response: Board[]) => {
               this.boards = response;
               this.isBoardsListLoading = false;

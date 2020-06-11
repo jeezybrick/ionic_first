@@ -1,0 +1,18 @@
+.autocomplete-wrap {
+  position: relative;
+
+  .autocomplete-body {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    left: 0;
+    z-index: 9;
+    background-color: #FFFFFF;
+    overflow-y: auto;
+    max-height: 500px;
+    border-left: 1px solid lightgrey;
+    border-right: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    margin: 0 12px;
+  }
+}

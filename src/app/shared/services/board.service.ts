@@ -1,76 +1,67 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { Board } from '../models/board.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class BoardService {
+    private boards: Board[] = [];
+    private pollingInviteToBoardSubscription: Subscription;
+    private pollingInviteToBoardInterval: number = 15 * 1000;
 
-  private boards: Board[] = [];
+    constructor(private http: HttpClient) {
+    }
 
-  private boards$ = new BehaviorSubject<Board[]>(null);
-  private activeBoard$ = new BehaviorSubject<Board>(null);
+    public getBoards(sortBy = 'createdAt', sortDirection = '1'): any {
+        return this.http.get<Board[]>('/api/boards', {params: {sortBy, sortDirection}}).pipe(
+            tap((boards: Board[]) => {
+                this.boards = boards;
+            })
+        );
+    }
 
-  constructor(private http: HttpClient) {
-    // this.getBoards().subscribe();
-  }
+    public getBoardDetail(boardId): any {
+        return this.http.get<Board>(`/api/boards/${boardId}`);
+    }
 
-  public getBoards(sortBy = 'createdAt', sortDirection = '1'): any {
-    return this.http.get<Board[]>('/api/boards', {params: {sortBy, sortDirection}}).pipe(
-      tap((boards: Board[]) => {
-        this.boards = boards;
-        this.boards$.next(this.boards);
-      })
-    );
-  }
+    public createBoard(data: { name: string; users?: string[] }): any {
+        return this.http.post('/api/boards', data).pipe(
+            tap((board: Board) => {
+                this.boards.push(board);
+            })
+        );
+    }
 
-  public getBoardDetail(boardId): any {
-    return this.http.get<Board>(`/api/boards/${boardId}`).pipe(
-      tap((board: Board) => {
-        this.activeBoard$.next(board);
-      })
-    );
-  }
+    public deleteBoard(boardId): any {
+        return this.http.delete(`/api/boards/${boardId}`).pipe(
+            tap((data: any) => {
+                const index = this.boards.findIndex((item) => item._id === boardId);
 
-  public createBoard(data: { name: string; }): any {
-    return this.http.post('/api/boards', data).pipe(
-      tap((board: Board) => {
-        this.boards.push(board);
-        this.boards$.next(this.boards);
-      })
-    );
-  }
+                if (index > -1) {
+                    this.boards.splice(index, 1);
+                }
+            })
+        );
+    }
 
-  public deleteBoard(boardId): any {
-    return this.http.delete(`/api/boards/${boardId}`).pipe(
-      tap((data: any) => {
-        const index = this.boards.findIndex((item) => item._id === boardId);
 
-        if (index > -1) {
-          this.boards.splice(index, 1);
+    public startPollingInviteToBoard(): void {
+        this.stopPollingInviteToBoard();
+        this.pollingInviteToBoardSubscription = timer(0, this.pollingInviteToBoardInterval).subscribe((res) => {
+
+        });
+
+    }
+
+    public stopPollingInviteToBoard(): void {
+
+        if (this.pollingInviteToBoardSubscription) {
+            this.pollingInviteToBoardSubscription.unsubscribe();
         }
-        this.boards$.next(this.boards);
-      })
-    );
-  }
 
-  public getActiveBoardsList(): any {
-    return this.boards$.asObservable();
-  }
-
-  public setActiveBoardsList(data): void {
-     this.boards$.next(data);
-  }
-
-  public getActiveBoard(): any {
-    return this.activeBoard$.asObservable();
-  }
-
-  public setActiveBoard(data): any {
-    return this.activeBoard$.next(data);
-  }
+    }
 
 }

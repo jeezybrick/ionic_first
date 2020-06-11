@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ColumnsListComponent } from './components/columns-list/columns-list.component';
 import { CreateColumnModalComponent } from './components/create-column-modal/create-column-modal.component';
 import { CreateCardModalComponent } from './components/create-card-modal/create-card-modal.component';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CreateCardModalComponent } from './components/create-card-modal/create-
     IonicModule,
     CommonModule,
     FormsModule,
-    BoardRoutingModule
+    BoardRoutingModule,
+    AutoCompleteModule,
   ]
 })
 export class BoardModule { }
