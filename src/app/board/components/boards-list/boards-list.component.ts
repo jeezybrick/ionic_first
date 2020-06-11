@@ -7,6 +7,9 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { User } from '../../../shared/models/user.model';
+import { AuthService } from '../../../shared/services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-boards-list',
@@ -14,6 +17,7 @@ import { SubSink } from 'subsink';
   styleUrls: ['./boards-list.component.scss'],
 })
 export class BoardsListComponent implements OnInit, OnDestroy {
+  public currentUser$: Observable<User>;
   public boards: Board[] = [];
   public isBoardsListLoading = true;
   private subs = new SubSink();
@@ -22,10 +26,12 @@ export class BoardsListComponent implements OnInit, OnDestroy {
       private modalController: ModalController,
       private boardService: BoardService,
       private toastService: ToastService,
+      private authService: AuthService,
       private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.getBoardList();
+    this.currentUser$ = this.authService.getUser();
   }
 
   ngOnDestroy() {

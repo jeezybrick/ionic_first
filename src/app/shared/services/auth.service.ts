@@ -10,10 +10,11 @@ import { TokenStorage } from './token.storage';
   providedIn: 'root'
 })
 export class AuthService {
-
   public $userSource: Subject<any> = new Subject();
 
-  constructor(private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {}
+  constructor(private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {
+    this.me().subscribe();
+  }
 
   login(email: string, password: string): Observable<any> {
     return new Observable(observer => {
