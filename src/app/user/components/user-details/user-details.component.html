@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="Назад"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-title> {{userDetails?.fullname}}</ion-title>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid *ngIf="isUserLoading">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-spinner ></ion-spinner>
+    </ion-row>
+  </ion-grid>
+
+  <ng-container *ngIf="!isUserLoading">
+
+    <ion-grid>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-avatar>
+          <img [src]="userDetails.avatar">
+        </ion-avatar>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <p>{{userDetails.fullname}}</p>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+
+</ion-content>
