@@ -11,6 +11,10 @@ import { LoaderService } from '../../../shared/services/loader.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-user-to-board-modal.component';
+import { Observable } from 'rxjs';
+import { User } from '../../../shared/models/user.model';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
     selector: 'app-columns-list',
@@ -21,6 +25,8 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
     public columns: Column[] = [];
     public board: Board;
     public isBoardLoading = true;
+    public currentUser$: Observable<User>;
+    public currentUserId: string;
     private subs = new SubSink();
 
     constructor(private router: Router,
@@ -30,11 +36,14 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
                 private actionSheetController: ActionSheetController,
                 private columnService: ColumnService,
                 private loaderService: LoaderService,
+                private authService: AuthService,
                 private toastService: ToastService) {
     }
 
     ngOnInit() {
-        this.route.params.subscribe((params) => {
+        this.currentUser$ = this.authService.getUser();
+        this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
+        this.subs.sink = this.route.params.subscribe((params) => {
             if (!params.boardId) {
                 this.router.navigate(['boards']);
             }
@@ -59,6 +68,17 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         modal.onWillDismiss().then((res) => {
             if (res && res.data) {
                 this.columns = [...this.columns, res.data.createdColumn];
+            }
+        });
+
+        return await modal.present();
+    }
+
+    async addUsersToBoard() {
+        const modal = await this.modalController.create({
+            component: AddUserToBoardModalComponent,
+            componentProps: {
+                board: this.board,
             }
         });
 
@@ -100,7 +120,7 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
     private async removeColumn(columnId: string) {
         await this.loaderService.presentLoading('Удаление...');
 
-        this.columnService.deleteColumn(columnId)
+        this.subs.sink = this.columnService.deleteColumn(columnId)
             .pipe(finalize(() => this.loaderService.dismissLoading()))
             .subscribe((response: Column[]) => {
 

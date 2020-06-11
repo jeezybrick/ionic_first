@@ -1,0 +1,21 @@
+<div class="autocomplete-wrap">
+  <ion-searchbar #searchInput
+                 type="text"
+                 placeholder="Добавить пользователя к доске"
+                 (ionFocus)="onFocus()"
+                 (ionBlur)="onBlur()"
+                 (ionInput)="searchUsers($event.target.value)">
+  </ion-searchbar>
+
+  <div class="autocomplete-body" *ngIf="searchInputFocused">
+    <ion-list>
+      <ion-item *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+        <ion-avatar slot="end">
+          <img [src]="user.avatar">
+        </ion-avatar>
+        <ion-label>{{user.fullname}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</div>

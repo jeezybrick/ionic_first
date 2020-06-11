@@ -19,32 +19,11 @@
         <img [src]="selectedUser.avatar">
       </ion-avatar>
       <ion-label>{{selectedUser.fullname}}</ion-label>
-      <ion-icon name="close-circle" (click)="removeSelectedUser(selectedUser, search)"></ion-icon>
+      <ion-icon name="close-circle" (click)="removeSelectedUser(selectedUser)"></ion-icon>
     </ion-chip>
   </div>
 
-    <div class="autocomplete-wrap">
-        <ion-searchbar #search
-                       type="text"
-                       debounce="500"
-                       placeholder="Добавить пользователя к доске"
-                       (ionFocus)="onFocus()"
-                       (ionBlur)="onBlur()"
-                       (ionInput)="searchUsers($event.target.value)">
-        </ion-searchbar>
-
-        <div class="autocomplete-body" *ngIf="searchInputFocused">
-            <ion-list>
-                <ion-item *ngFor="let user of filteredUsers" (click)="selectUser(user, search);">
-                    <ion-avatar slot="end">
-                        <img [src]="user.avatar">
-                    </ion-avatar>
-                    <ion-label>{{user.fullname}}</ion-label>
-                </ion-item>
-            </ion-list>
-        </div>
-
-    </div>
+    <app-users-autocomplete [selectedUsers]="selectedUsers" (userSelected)="onUserSelected($event)"></app-users-autocomplete>
 
     <div class="ion-padding">
         <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Создать доску</ion-button>

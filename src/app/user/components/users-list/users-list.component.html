@@ -15,7 +15,7 @@
   </ion-grid>
 
   <ng-container *ngIf="!isUsersLoading">
-    <ion-searchbar type="text" debounce="500" animated placeholder="Пользователи" (ionInput)="searchUsers($event.target.value)"></ion-searchbar>
+    <ion-searchbar type="text" animated placeholder="Пользователи" (ionInput)="searchUsers($event.target.value)"></ion-searchbar>
     <ion-list>
       <ion-item *ngFor="let user of filteredUsers">
         <ion-avatar slot="end">

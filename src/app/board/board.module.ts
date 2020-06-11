@@ -11,6 +11,8 @@ import { ColumnsListComponent } from './components/columns-list/columns-list.com
 import { CreateColumnModalComponent } from './components/create-column-modal/create-column-modal.component';
 import { CreateCardModalComponent } from './components/create-card-modal/create-card-modal.component';
 import { AutoCompleteModule } from 'ionic4-auto-complete';
+import { UsersAutocompleteModule } from '../shared/components/users-autocomplete/users-autocomplete.module';
+import { AddUserToBoardModalComponent } from './components/add-user-to-board-modal/add-user-to-board-modal.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { AutoCompleteModule } from 'ionic4-auto-complete';
     ColumnsListComponent,
     CreateColumnModalComponent,
     CreateCardModalComponent,
+    AddUserToBoardModalComponent,
   ],
   imports: [
     IonicModule,
@@ -27,6 +30,7 @@ import { AutoCompleteModule } from 'ionic4-auto-complete';
     FormsModule,
     BoardRoutingModule,
     AutoCompleteModule,
+    UsersAutocompleteModule,
   ]
 })
 export class BoardModule { }

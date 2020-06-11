@@ -18,7 +18,8 @@
     <ion-card *ngFor="let column of columns">
       <ion-card-header>
         <ion-grid>
-          <ion-row class="ion-justify-content-end">
+          <ion-row class="ion-justify-content-between">
+            <span>{{column.createdAt | date: 'longDate'}}</span>
             <ion-card-subtitle><ion-icon size="small" (click)="presentActionSheet(column._id)" name="ellipsis-horizontal"></ion-icon></ion-card-subtitle>
           </ion-row>
         </ion-grid>
@@ -29,14 +30,21 @@
         {{column.cards.length}} карточек
       </ion-card-content>
     </ion-card>
+    <ion-card (click)="createColumn()">
+      <ion-card-content>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-icon name="add" size="large"></ion-icon>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
   </div>
 
 </ion-content>
 
-<ion-fab vertical="bottom" horizontal="end">
+<ion-fab vertical="bottom" horizontal="end" *ngIf="(currentUser$ | async) as currentUser">
   <ion-fab-button><ion-icon name="ellipsis-horizontal"></ion-icon></ion-fab-button>
   <ion-fab-list side="top">
-    <ion-fab-button>
+    <ion-fab-button *ngIf="currentUser._id === board?.owner" (click)="addUsersToBoard()">
       <ion-icon name="person-add"></ion-icon>
     </ion-fab-button>
     <ion-fab-button (click)="createColumn()">
@@ -45,3 +53,6 @@
   </ion-fab-list>
 
 </ion-fab>
+
+
+

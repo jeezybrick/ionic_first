@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { BoardService } from './board.service';
 import { TokenStorage } from './token.storage';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public $userSource: Subject<any> = new Subject();
+  public $userSource: Subject<any> = new BehaviorSubject(null);
 
   constructor(private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {
     this.me().subscribe();
@@ -62,7 +63,7 @@ export class AuthService {
   }
 
   getUser(): Observable<any> {
-    return this.$userSource.asObservable();
+    return this.$userSource.asObservable().pipe(filter(item => !!item));
   }
 
   updateProfile(data): Observable<any> {

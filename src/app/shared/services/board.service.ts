@@ -48,6 +48,9 @@ export class BoardService {
         );
     }
 
+    public addUsersToBoard(boardId: string, ids: string[]): any {
+        return this.http.post(`/api/boards/${boardId}/add-users`, {users: ids});
+    }
 
     public startPollingInviteToBoard(): Observable<boolean> {
         this.stopPollingInviteToBoard();
