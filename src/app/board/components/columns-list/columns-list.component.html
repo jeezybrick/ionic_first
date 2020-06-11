@@ -16,7 +16,7 @@
 
   <div *ngIf="!isBoardLoading">
     <ion-card *ngFor="let column of columns" [routerLink]="[column._id]">
-      <ion-card-header>
+      <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
         <ion-card-subtitle>
           <ion-grid>
             <ion-row class="ion-justify-content-between ion-align-items-center">
