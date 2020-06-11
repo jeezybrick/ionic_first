@@ -17,12 +17,17 @@
   <div *ngIf="!isBoardLoading">
     <ion-card *ngFor="let column of columns" [routerLink]="[column._id]">
       <ion-card-header>
-        <ion-grid>
-          <ion-row class="ion-justify-content-between">
-            <span>{{column.createdAt | date: 'longDate'}}</span>
-            <ion-card-subtitle><ion-icon size="small" (click)="presentActionSheet($event, column._id)" name="ellipsis-horizontal"></ion-icon></ion-card-subtitle>
-          </ion-row>
-        </ion-grid>
+        <ion-card-subtitle>
+          <ion-grid>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <span>{{column.createdAt | date: 'longDate'}}</span>
+
+              <ion-button class="more-button" size="default" (click)="presentActionSheet($event, column._id)" fill="clear">
+                <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
+              </ion-button>
+            </ion-row>
+          </ion-grid>
+        </ion-card-subtitle>
         <ion-card-title>{{column.name}}</ion-card-title>
       </ion-card-header>
 
