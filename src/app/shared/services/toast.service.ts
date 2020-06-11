@@ -13,7 +13,7 @@ export class ToastService {
         this.toast = await this.toastController.create({
             message,
             color,
-            duration: 2000,
+            duration: 3000,
         });
         await this.toast.present();
     }
