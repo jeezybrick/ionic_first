@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'https://task-manager-322.herokuapp.com',
+  api: 'http://localhost:5000',
 };
 
 /*

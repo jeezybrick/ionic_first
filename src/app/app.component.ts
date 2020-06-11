@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BoardService } from './shared/services/board.service';
+import { ToastService } from './shared/services/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private boardService: BoardService,
+    private toastService: ToastService,
   ) {
     this.initializeApp();
   }
@@ -24,7 +26,9 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.boardService.startPollingInviteToBoard();
+      this.boardService.startPollingInviteToBoard().subscribe((value) => {
+        this.toastService.presentToast('Вы были добавлены к одной или несколим доскам');
+      });
     });
   }
 }

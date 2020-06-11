@@ -10,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthHeaderInterceptor } from './shared/interceptors/header.interceptor';
-import { CatchErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,10 +22,6 @@ import { CatchErrorInterceptor } from './shared/interceptors/http-error.intercep
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHeaderInterceptor,
-      multi: true,
-    }, {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CatchErrorInterceptor,
       multi: true,
     },
   ],
