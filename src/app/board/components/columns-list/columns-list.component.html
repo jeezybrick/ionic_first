@@ -38,7 +38,7 @@
       <ion-card-content>
         {{column.cards.length}}
         <span [ngSwitch]="true">
-          <ng-container *ngSwitchCase="column.cards.length >= 2 <= 4">
+          <ng-container *ngSwitchCase="column.cards.length >= 2 && column.cards.length <= 4">
             карточки
           </ng-container>
 
