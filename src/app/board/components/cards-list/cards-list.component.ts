@@ -102,6 +102,11 @@ export class CardsListComponent implements OnInit, OnDestroy {
     const actionSheet = await this.actionSheetController.create({
       header: 'Карточки',
       buttons: [{
+        text: 'Редактировать',
+        handler: () => {
+
+        }
+      }, {
         text: 'Удалить',
         role: 'destructive',
         handler: () => {
