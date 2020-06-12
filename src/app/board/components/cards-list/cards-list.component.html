@@ -8,15 +8,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="isCardsLoading">
-    <ion-card (click)="addCard()">
-      <ion-card-content>
-        <ion-row class="ion-justify-content-center ion-align-items-center">
-          <ion-icon name="add" size="large"></ion-icon>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
+  <ion-card (click)="addCard()" *ngIf="!cards.length">
+    <ion-card-content>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-icon name="add" size="large"></ion-icon>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
 
+  <ng-container *ngIf="isCardsLoading">
     <ion-card *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
       <ion-card-content class="ion-no-padding" style="height: 120px">
         <ion-skeleton-text class="ion-no-margin" animated style="width: 100%;height: 100%"></ion-skeleton-text>
@@ -36,7 +36,7 @@
           <ion-card-subtitle>
             <ion-grid>
               <ion-row class="ion-justify-content-between ion-align-items-center">
-                <span>{{card.createdAt | date: 'longDate'}}</span>
+                <span>{{card.createdAt | date: 'longDate'}} - {{ card.position }}</span>
 
                 <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card._id)" fill="clear">
                   <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
@@ -55,15 +55,7 @@
 
   </ion-reorder-group>
 
-  <ion-card (click)="addCard()">
-    <ion-card-content>
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-        <ion-icon name="add" size="large"></ion-icon>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="cards.length">
     <ion-fab-button (click)="addCard()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

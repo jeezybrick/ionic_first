@@ -56,7 +56,6 @@ export class CardsListComponent implements OnInit, OnDestroy {
   }
 
   public doReorder(ev: any) {
-
     const data: UpdateCardPositionInterface = {
       currentColumnId: this.columnId,
       previousColumnId: this.columnId,
@@ -68,7 +67,6 @@ export class CardsListComponent implements OnInit, OnDestroy {
       console.log(res);
     });
     ev.detail.complete();
-    console.log(this.cards);
   }
 
   public reloadData(event): void {

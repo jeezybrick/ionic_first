@@ -7,13 +7,19 @@ import { ToastController } from '@ionic/angular';
 export class ToastService {
     public toast;
 
-    constructor(public toastController: ToastController) {}
+    constructor(public toastController: ToastController) {
+    }
 
     public async presentToast(message: string, color = 'primary') {
         this.toast = await this.toastController.create({
             message,
             color,
-            duration: 3000,
+            position: 'top',
+            duration: 2500,
+            buttons: [{
+                icon: 'close',
+                role: 'cancel'
+            }]
         });
         await this.toast.present();
     }
