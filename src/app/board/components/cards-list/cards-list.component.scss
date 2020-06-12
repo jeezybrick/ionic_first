@@ -1,3 +1,7 @@
+$low-priority-color: #588bff;
+$medium-priority-color: #f8ab04;
+$high-priority-color: #f75630;
+
 .more-button {
   position: relative;
   left: 20px;
@@ -5,4 +9,37 @@
   .more-icon {
     font-size: 24px;
   }
+}
+
+.card-item {
+  border-bottom: 2px solid transparent;
+
+  .priority-icon {
+    padding-left: 7px
+  }
+
+  &.low {
+    border-bottom-color: $low-priority-color;
+
+    .priority-icon {
+      color: $low-priority-color;
+    }
+  }
+
+  &.medium {
+    border-bottom-color: $medium-priority-color;
+
+    .priority-icon {
+      color: $medium-priority-color;
+    }
+  }
+
+  &.high {
+    border-bottom-color: $high-priority-color;
+
+    .priority-icon {
+      color: $high-priority-color;
+    }
+  }
+
 }

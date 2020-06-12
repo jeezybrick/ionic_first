@@ -13,6 +13,15 @@
     <ion-input type="text" [(ngModel)]="cardName"></ion-input>
   </ion-item>
 
+  <ion-item>
+    <ion-label>Приоритет</ion-label>
+    <ion-select placeholder="Не выбран" okText="Выбрать" cancelText="Отмена" [(ngModel)]="cardPriority">
+      <ion-select-option *ngFor="let priority of cardPriorities" [value]="priority.value">
+        {{priority.name}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <div class="ion-padding" *ngIf="selectedUsers.length">
     <ion-chip *ngFor="let selectedUser of selectedUsers">
       <ion-avatar>

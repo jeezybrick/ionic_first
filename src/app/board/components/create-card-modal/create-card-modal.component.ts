@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SubSink } from 'subsink';
 import { ModalController } from '@ionic/angular';
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
-import { CardService } from '../../../shared/services/card.service';
+import { CardPrioritiesEnum, CardPrioritiesInterface, CardService, cardPriorities } from '../../../shared/services/card.service';
 import { Card } from '../../../shared/models/card.model';
 
 @Component({
@@ -12,9 +12,11 @@ import { Card } from '../../../shared/models/card.model';
   templateUrl: './create-card-modal.component.html',
   styleUrls: ['./create-card-modal.component.scss'],
 })
-export class CreateCardModalComponent implements OnDestroy {
+export class CreateCardModalComponent implements OnInit, OnDestroy {
   public cardName = '';
   public selectedUsers = [];
+  public cardPriorities: CardPrioritiesInterface[] = [...cardPriorities];
+  public cardPriority: CardPrioritiesEnum;
   private subs = new SubSink();
 
   @Input() columnId: string;
@@ -22,7 +24,10 @@ export class CreateCardModalComponent implements OnDestroy {
   constructor(public modalController: ModalController,
               private toastService: ToastService,
               private cardService: CardService,
-              private loaderService: LoaderService) {
+              private loaderService: LoaderService) {}
+
+  ngOnInit() {
+    this.cardPriority = this.cardPriorities[0].value;
   }
 
   ngOnDestroy() {
@@ -44,8 +49,13 @@ export class CreateCardModalComponent implements OnDestroy {
 
   public async createCard() {
     await this.loaderService.presentLoading('Cохранение...');
+    const data = {
+      name: this.cardName,
+      priority: this.cardPriority,
+      users: this.selectedUsers.map(item => item._id),
+    };
 
-    this.subs.sink = this.cardService.createCard(this.columnId, {name: this.cardName, users: this.selectedUsers.map(item => item._id)})
+    this.subs.sink = this.cardService.createCard(this.columnId, data)
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: Card) => {
           this.dismiss({createdCard: response});

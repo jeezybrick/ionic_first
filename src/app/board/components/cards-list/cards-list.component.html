@@ -30,7 +30,7 @@
 
   <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length <= 1">
 
-      <ion-card *ngFor="let card of cards">
+      <ion-card class="card-item {{card.priority}}" *ngFor="let card of cards">
 
         <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
           <ion-card-subtitle>
@@ -51,7 +51,16 @@
           </ion-reorder>
         </ion-card-header>
 
-        <ion-card-content></ion-card-content>
+        <ion-card-content>
+
+          <ion-grid>
+            <ion-row class="ion-justify-content-start ion-align-items-center">
+              <ion-icon class="priority-icon" name="arrow-up"></ion-icon>
+              <span>{{card.priorityName}}</span>
+            </ion-row>
+          </ion-grid>
+
+        </ion-card-content>
 
       </ion-card>
   </ion-reorder-group>

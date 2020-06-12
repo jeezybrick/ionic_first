@@ -6,9 +6,9 @@ import { LoaderService } from '../../../shared/services/loader.service';
 import { CreateCardModalComponent } from '../create-card-modal/create-card-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../../shared/models/card.model';
-import { delay, finalize } from 'rxjs/operators';
+import { delay, finalize, map } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { CardService, UpdateCardPositionInterface } from '../../../shared/services/card.service';
+import { cardPriorities, CardService, UpdateCardPositionInterface } from '../../../shared/services/card.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 
@@ -132,7 +132,11 @@ export class CardsListComponent implements OnInit, OnDestroy {
   private getCards(columnId, event?): void {
     this.subs.sink = this.cardService.getAllCards(columnId)
         .pipe(
-            delay(1000)
+            delay(1000),
+            map((cards: Card[]) => cards.map(item => {
+              const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
+              return {...item, priorityName };
+            }))
         )
         .subscribe((response: Card[]) => {
       this.cards = response;
