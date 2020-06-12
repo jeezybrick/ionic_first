@@ -5,7 +5,7 @@ import { BoardService } from '../../../shared/services/board.service';
 import { CreateBoardModalComponent } from '../create-board-modal/create-board-modal.component';
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
-import { finalize } from 'rxjs/operators';
+import { delay, finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { User } from '../../../shared/models/user.model';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -70,6 +70,9 @@ export class BoardsListComponent implements OnInit, OnDestroy {
 
     private getBoardList(event?): void {
         this.subs.sink = this.boardService.getBoards()
+            .pipe(
+                delay(1000)
+            )
             .subscribe((response: Board[]) => {
                     this.boards = response;
                     this.isBoardsListLoading = false;

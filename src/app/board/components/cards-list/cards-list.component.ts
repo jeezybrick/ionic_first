@@ -6,7 +6,7 @@ import { LoaderService } from '../../../shared/services/loader.service';
 import { CreateCardModalComponent } from '../create-card-modal/create-card-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../../shared/models/card.model';
-import { finalize } from 'rxjs/operators';
+import { delay, finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { CardService } from '../../../shared/services/card.service';
 import { Observable } from 'rxjs';
@@ -123,7 +123,11 @@ export class CardsListComponent implements OnInit, OnDestroy {
   }
 
   private getCards(columnId, event?): void {
-    this.subs.sink = this.cardService.getAllCards(columnId).subscribe((response: Card[]) => {
+    this.subs.sink = this.cardService.getAllCards(columnId)
+        .pipe(
+            delay(1000)
+        )
+        .subscribe((response: Card[]) => {
       this.cards = response;
       this.isCardsLoading = false;
 

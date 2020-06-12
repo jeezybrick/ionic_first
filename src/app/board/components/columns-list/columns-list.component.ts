@@ -9,7 +9,7 @@ import { ActionSheetController, ModalController } from '@ionic/angular';
 import { CreateColumnModalComponent } from '../create-column-modal/create-column-modal.component';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { ToastService } from '../../../shared/services/toast.service';
-import { finalize } from 'rxjs/operators';
+import { delay, finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-user-to-board-modal.component';
 import { Observable } from 'rxjs';
@@ -110,7 +110,11 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
     }
 
     private getBoardDetail(boardId, event?): void {
-        this.subs.sink = this.boardService.getBoardDetail(boardId).subscribe((response: Board) => {
+        this.subs.sink = this.boardService.getBoardDetail(boardId)
+            .pipe(
+                delay(1000)
+            )
+            .subscribe((response: Board) => {
             this.board = response;
             this.columns = [...response.columns];
             this.isBoardLoading = false;
