@@ -56,15 +56,20 @@ export class CardsListComponent implements OnInit, OnDestroy {
   }
 
   public doReorder(ev: any) {
+    const cardsCountIndexes = this.cards.length - 1;
+    const toIndex = ev.detail.to > cardsCountIndexes ? cardsCountIndexes : ev.detail.to;
+    const fromIndex = ev.detail.from;
+
     const data: UpdateCardPositionInterface = {
       currentColumnId: this.columnId,
       previousColumnId: this.columnId,
-      currentIndex: ev.detail.to,
-      previousIndex: ev.detail.from,
-      cardId: this.cards[ev.detail.from]._id,
+      currentIndex: toIndex,
+      previousIndex: fromIndex,
+      cardId: this.cards[fromIndex]._id,
     };
+
     this.subs.sink = this.cardService.updatePosition(data).subscribe((res) => {
-      console.log(res);
+      this.cards = res;
     });
     ev.detail.complete();
   }

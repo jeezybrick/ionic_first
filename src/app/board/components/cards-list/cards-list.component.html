@@ -28,7 +28,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length < 2">
+  <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length <= 1">
 
     <ion-reorder *ngFor="let card of cards">
       <ion-card>
