@@ -30,13 +30,15 @@
 
   <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length <= 1">
 
-    <ion-reorder *ngFor="let card of cards">
-      <ion-card>
+      <ion-card *ngFor="let card of cards">
+
         <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
           <ion-card-subtitle>
             <ion-grid>
               <ion-row class="ion-justify-content-between ion-align-items-center">
-                <span>{{card.createdAt | date: 'longDate'}} - {{ card.position }}</span>
+                <ion-reorder>
+                  <span>{{card.createdAt | date: 'longDate'}}</span>
+                </ion-reorder>
 
                 <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card._id)" fill="clear">
                   <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
@@ -44,15 +46,14 @@
               </ion-row>
             </ion-grid>
           </ion-card-subtitle>
+          <ion-reorder>
           <ion-card-title>{{card.name}}</ion-card-title>
+          </ion-reorder>
         </ion-card-header>
 
-        <ion-card-content>
+        <ion-card-content></ion-card-content>
 
-        </ion-card-content>
       </ion-card>
-    </ion-reorder>
-
   </ion-reorder-group>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="cards.length">

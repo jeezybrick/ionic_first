@@ -121,17 +121,12 @@ export class CardsListComponent implements OnInit, OnDestroy {
     this.subs.sink = this.cardService.deleteCard(cardId)
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: Card[]) => {
-
-              const index = this.cards.findIndex((item) => item._id === cardId);
-
-              if (index > -1) {
-                this.toastService.presentToast('Карточка упешно удалена');
-                this.cards.splice(index, 1);
-              }
-            },
-            (error) => {
-              this.toastService.presentErrorToast();
-            });
+          this.cards = response;
+          this.toastService.presentToast('Карточка упешно удалена');
+          },
+          (error) => {
+            this.toastService.presentErrorToast();
+          });
   }
 
   private getCards(columnId, event?): void {
