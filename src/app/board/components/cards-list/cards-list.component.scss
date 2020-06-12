@@ -15,7 +15,9 @@ $high-priority-color: #f75630;
   border-bottom: 2px solid transparent;
 
   .priority-icon {
-    padding-left: 7px
+    position: relative;
+    bottom: 2px;
+    padding-right: 7px
   }
 
   &.low {
