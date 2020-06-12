@@ -1,7 +1,7 @@
 <div class="autocomplete-wrap">
   <ion-searchbar #searchInput
                  type="text"
-                 placeholder="Добавить пользователя к доске"
+                 [placeholder]="placeholder"
                  (ionFocus)="onFocus()"
                  (ionBlur)="onBlur()"
                  (ionInput)="searchUsers($event.target.value)">

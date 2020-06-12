@@ -9,8 +9,8 @@ export class CardService {
 
   constructor(private http: HttpClient) {}
 
-  public getAllCards(): any {
-    return this.http.get(`/api/cards`);
+  public getAllCards(columnId): any {
+    return this.http.get(`/api/columns/${columnId}/cards`);
   }
 
   public createCard(columnId: string, data: any): any {

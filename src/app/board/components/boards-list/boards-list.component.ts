@@ -38,7 +38,7 @@ export class BoardsListComponent implements OnInit, OnDestroy {
       this.subs.unsubscribe();
   }
 
-    async presentModal() {
+  async presentModal() {
     const modal = await this.modalController.create({
       component: CreateBoardModalComponent,
     });

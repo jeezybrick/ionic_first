@@ -8,34 +8,51 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
-    <ion-reorder>
+  <ion-grid *ngIf="isCardsLoading">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-spinner></ion-spinner>
+    </ion-row>
+  </ion-grid>
+
+  <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length < 2">
+
+    <ion-reorder *ngFor="let card of cards">
       <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-          <ion-card-title>Card Title</ion-card-title>
+        <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
+          <ion-card-subtitle>
+            <ion-grid>
+              <ion-row class="ion-justify-content-between ion-align-items-center">
+                <span>{{card.createdAt | date: 'longDate'}}</span>
+
+                <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card._id)" fill="clear">
+                  <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
+                </ion-button>
+              </ion-row>
+            </ion-grid>
+          </ion-card-subtitle>
+          <ion-card-title>{{card.name}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-      </ion-card>
-    </ion-reorder>
-    <ion-reorder>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>Card Subtitle 22</ion-card-subtitle>
-          <ion-card-title>Card Title 2</ion-card-title>
-        </ion-card-header>
 
-        <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
         </ion-card-content>
       </ion-card>
     </ion-reorder>
 
   </ion-reorder-group>
+
+  <ion-card (click)="addCard()">
+    <ion-card-content>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-icon name="add" size="large"></ion-icon>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addCard()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

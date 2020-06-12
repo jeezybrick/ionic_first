@@ -1,3 +1,34 @@
-<p>
-  create-card-modal works!
-</p>
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Добавить карточку</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Закрыть</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-item>
+    <ion-label position="floating">Имя карточки</ion-label>
+    <ion-input type="text" [(ngModel)]="cardName"></ion-input>
+  </ion-item>
+
+  <div class="ion-padding" *ngIf="selectedUsers.length">
+    <ion-chip *ngFor="let selectedUser of selectedUsers">
+      <ion-avatar>
+        <img [src]="selectedUser.avatar">
+      </ion-avatar>
+      <ion-label>{{selectedUser.fullname}}</ion-label>
+      <ion-icon name="close-circle" (click)="removeSelectedUser(selectedUser)"></ion-icon>
+    </ion-chip>
+  </div>
+
+  <app-users-autocomplete [selectedUsers]="selectedUsers"
+                          [placeholder]="'Добавить пользователя к карточке'"
+                          (userSelected)="onUserSelected($event)"></app-users-autocomplete>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="createCard()" [disabled]="!cardName.length">Создать карточку</ion-button>
+  </div>
+</ion-content>
+
