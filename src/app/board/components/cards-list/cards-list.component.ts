@@ -62,6 +62,10 @@ export class CardsListComponent implements OnInit, OnDestroy {
     ev.detail.complete();
   }
 
+  public reloadData(event): void {
+    this.getCards(this.route.snapshot.params.columnId, event);
+  }
+
   async addCard() {
     const modal = await this.modalController.create({
       component: CreateCardModalComponent,
@@ -118,10 +122,14 @@ export class CardsListComponent implements OnInit, OnDestroy {
             });
   }
 
-  private getCards(columnId): void {
+  private getCards(columnId, event?): void {
     this.subs.sink = this.cardService.getAllCards(columnId).subscribe((response: Card[]) => {
       this.cards = response;
       this.isCardsLoading = false;
+
+      if (event) {
+        event.target.complete();
+      }
     }, (error) => {
       this.toastService.presentErrorToast();
     });

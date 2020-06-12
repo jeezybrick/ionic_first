@@ -105,16 +105,19 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         await actionSheet.present();
     }
 
-    private getBoardDetail(boardId): void {
-        this.subs.sink = this.boardService.getBoardDetail(boardId).subscribe((response: Board) => {
-            if (response) {
-                this.board = response;
-                this.columns = [...response.columns];
-            } else {
-                this.router.navigate(['boards']);
-            }
+    public reloadData(event): void {
+        this.getBoardDetail(this.route.snapshot.params.boardId, event);
+    }
 
+    private getBoardDetail(boardId, event?): void {
+        this.subs.sink = this.boardService.getBoardDetail(boardId).subscribe((response: Board) => {
+            this.board = response;
+            this.columns = [...response.columns];
             this.isBoardLoading = false;
+
+            if (event) {
+                event.target.complete();
+            }
         }, (error) => {
             this.router.navigate(['boards']);
         });

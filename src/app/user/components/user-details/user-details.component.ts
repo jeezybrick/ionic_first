@@ -17,14 +17,26 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.subs.sink = this.userService.getUserDetails(this.route.snapshot.params.id).subscribe((userDetails) => {
-      this.userDetails = userDetails;
-      this.isUserLoading = false;
-    });
+    this.getUserDetails();
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  public reloadData(event): void {
+    this.getUserDetails(event);
+  }
+
+  private getUserDetails(event?): void {
+    this.subs.sink = this.userService.getUserDetails(this.route.snapshot.params.id).subscribe((userDetails) => {
+      this.userDetails = userDetails;
+      this.isUserLoading = false;
+
+      if (event) {
+        event.target.complete();
+      }
+    });
   }
 
 }

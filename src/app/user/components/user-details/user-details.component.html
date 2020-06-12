@@ -15,6 +15,10 @@
     </ion-row>
   </ion-grid>
 
+  <ion-refresher slot="fixed" (ionRefresh)="reloadData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ng-container *ngIf="!isUserLoading">
 
     <ion-grid>

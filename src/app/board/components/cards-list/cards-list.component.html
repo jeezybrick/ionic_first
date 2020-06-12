@@ -14,6 +14,10 @@
     </ion-row>
   </ion-grid>
 
+  <ion-refresher slot="fixed" (ionRefresh)="reloadData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length < 2">
 
     <ion-reorder *ngFor="let card of cards">

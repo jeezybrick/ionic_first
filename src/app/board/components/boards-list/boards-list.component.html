@@ -4,12 +4,17 @@
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true" *ngIf="(currentUser$ | async) as currentUser">
   <ion-grid *ngIf="isBoardsListLoading">
     <ion-row class="ion-justify-content-center ion-align-items-center">
       <ion-spinner ></ion-spinner>
     </ion-row>
   </ion-grid>
+
+  <ion-refresher slot="fixed" (ionRefresh)="reloadData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <ion-list *ngIf="!isBoardsListLoading">
     <ion-item-sliding *ngFor="let board of boards" [routerLink]="[board._id, 'columns']">

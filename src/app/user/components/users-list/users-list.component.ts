@@ -18,15 +18,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.subs.sink = this.userService.getAllUsers().subscribe((users) => {
-      this.users = users;
-      this.filteredUsers = [...this.users];
-      this.isUsersLoading = false;
-    });
+    this.getAllUsers();
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  public reloadData(event): void {
+    this.getAllUsers(event);
   }
 
   public searchUsers(value: string): void {
@@ -35,6 +35,18 @@ export class UsersListComponent implements OnInit, OnDestroy {
     }
 
     this.filteredUsers = this.users.filter(option => option.fullname.toLowerCase().indexOf(value.toLowerCase()) > -1);
+  }
+
+  private getAllUsers(event?): void {
+    this.subs.sink = this.userService.getAllUsers().subscribe((users) => {
+      this.users = users;
+      this.filteredUsers = [...this.users];
+      this.isUsersLoading = false;
+
+      if (event) {
+        event.target.complete();
+      }
+    });
   }
 
 }
