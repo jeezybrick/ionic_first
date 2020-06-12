@@ -68,7 +68,14 @@ export class CardsListComponent implements OnInit, OnDestroy {
       cardId: this.cards[fromIndex]._id,
     };
 
-    this.subs.sink = this.cardService.updatePosition(data).subscribe((res) => {
+    this.subs.sink = this.cardService.updatePosition(data)
+        .pipe(
+            map((cards: Card[]) => cards.map(item => {
+              const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
+              return {...item, priorityName };
+            }))
+        )
+        .subscribe((res) => {
       this.cards = res;
     });
     ev.detail.complete();
