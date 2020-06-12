@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../../shared/models/card.model';
 import { delay, finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { CardService } from '../../../shared/services/card.service';
+import { CardService, UpdateCardPositionInterface } from '../../../shared/services/card.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 
@@ -22,6 +22,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
   public currentUser$: Observable<User>;
   public isCardsLoading = true;
   public currentUserId: string;
+  public columnId: string;
   private subs = new SubSink();
 
   constructor(
@@ -38,8 +39,11 @@ export class CardsListComponent implements OnInit, OnDestroy {
     this.currentUser$ = this.authService.getUser();
     this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
     this.subs.sink = this.route.params.subscribe((params) => {
-      if (!params.columnId) {
+      this.columnId = params.columnId;
+
+      if (!this.columnId) {
         this.router.navigate(['boards']);
+        return;
       }
 
       this.getCards(params.columnId);
@@ -52,18 +56,23 @@ export class CardsListComponent implements OnInit, OnDestroy {
   }
 
   public doReorder(ev: any) {
-    // The `from` and `to` properties contain the index of the item
-    // when the drag started and ended, respectively
-    console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
 
-    // Finish the reorder and position the item in the DOM based on
-    // where the gesture ended. This method can also be called directly
-    // by the reorder group
+    const data: UpdateCardPositionInterface = {
+      currentColumnId: this.columnId,
+      previousColumnId: this.columnId,
+      currentIndex: ev.detail.to,
+      previousIndex: ev.detail.from,
+      cardId: this.cards[ev.detail.from]._id,
+    };
+    this.subs.sink = this.cardService.updatePosition(data).subscribe((res) => {
+      console.log(res);
+    });
     ev.detail.complete();
+    console.log(this.cards);
   }
 
   public reloadData(event): void {
-    this.getCards(this.route.snapshot.params.columnId, event);
+    this.getCards(this.columnId, event);
   }
 
   async addCard() {

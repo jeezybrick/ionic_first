@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface UpdateCardPositionInterface {
+  currentColumnId: string;
+  previousColumnId: string;
+  currentIndex: number;
+  previousIndex: number;
+  cardId: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +25,7 @@ export class CardService {
     return this.http.post(`/api/columns/${columnId}/cards`, data);
   }
 
-  public updatePosition(data): any {
+  public updatePosition(data: UpdateCardPositionInterface): any {
     return this.http.patch(`/api/cards/${data.cardId}/update-position`, data);
   }
 
