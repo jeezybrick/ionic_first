@@ -14,6 +14,7 @@ import { Card } from '../../../shared/models/card.model';
 })
 export class UpsertCardModalComponent implements OnInit, OnDestroy {
   public cardName = '';
+  public cardDescription = '';
   public selectedUsers = [];
   public cardPriorities: CardPrioritiesInterface[] = [...cardPriorities];
   public cardPriority: CardPrioritiesEnum;
@@ -78,6 +79,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
     await this.loaderService.presentLoading('Редактирование...');
     const data = {
       name: this.cardName,
+      description: this.cardDescription,
       priority: this.cardPriority,
       users: this.selectedUsers.map(item => item._id),
     };
@@ -103,6 +105,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
     const data = {
       name: this.cardName,
       priority: this.cardPriority,
+      description: this.cardDescription,
       users: this.selectedUsers.map(item => item._id),
     };
 

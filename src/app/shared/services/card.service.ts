@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Card } from '../models/card.model';
 
 export interface UpdateCardPositionInterface {
     currentColumnId: string;
@@ -65,8 +66,8 @@ export class CardService {
         return this.http.delete(`/api/cards/${cardId}`);
     }
 
-    public updateCard(cardId, data): Observable<any> {
-        return this.http.patch(`/api/cards/${cardId}`, data);
+    public updateCard(cardId, data): Observable<Card> {
+        return this.http.patch<Card>(`/api/cards/${cardId}`, data);
     }
 
 }

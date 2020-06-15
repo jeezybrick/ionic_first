@@ -30,8 +30,9 @@
           <img [src]="note.owner.avatar">
         </ion-avatar>
         <ion-label>
+          <p>{{note.createdAt | date: 'short'}}</p>
           <p>{{note.owner.fullname}}</p>
-          <h3 class="ion-text-wrap">{{note.name}}</h3>
+          <h2 class="ion-text-wrap">{{note.name}}</h2>
         </ion-label>
 
         <ion-note slot="end">

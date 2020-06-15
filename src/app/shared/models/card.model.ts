@@ -7,6 +7,7 @@ export class Card extends Base {
   notes: Note[];
   position: number;
   columnId: string;
+  description: string;
   priority: CardPrioritiesEnum;
   priorityName?: string;
   users?: User[];
