@@ -96,7 +96,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
 
     modal.onWillDismiss().then((res) => {
       if (res && res.data) {
-        this.cards = [...this.cards, res.data.createdCard];
+        this.cards = [...this.cards, res.data.card];
       }
     });
 
@@ -122,6 +122,17 @@ export class CardsListComponent implements OnInit, OnDestroy {
         card,
         columnId: card.columnId,
       },
+    });
+
+    modal.onWillDismiss().then((res) => {
+      if (res && res.data) {
+        const editedCard = res.data.card;
+        const index = this.cards.findIndex(item => item._id === editedCard._id);
+
+        if (index > -1) {
+          this.cards[index] = {...this.cards[index], ...editedCard};
+        }
+      }
     });
 
     return await modal.present();

@@ -1,6 +1,6 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>Добавить карточку</ion-title>
+    <ion-title>{{headerText}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">Закрыть</ion-button>
     </ion-buttons>
@@ -37,7 +37,7 @@
                           (userSelected)="onUserSelected($event)"></app-users-autocomplete>
 
   <div class="ion-padding">
-    <ion-button expand="block" (click)="createCard()" [disabled]="!cardName.length">Создать карточку</ion-button>
+    <ion-button expand="block" (click)="submitForm()" [disabled]="!cardName.length">{{submitFormText}}</ion-button>
   </div>
 </ion-content>
 

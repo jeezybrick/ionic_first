@@ -17,6 +17,8 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
   public selectedUsers = [];
   public cardPriorities: CardPrioritiesInterface[] = [...cardPriorities];
   public cardPriority: CardPrioritiesEnum;
+  public headerText: string;
+  public submitFormText: string;
   private subs = new SubSink();
 
   @Input() columnId: string;
@@ -29,7 +31,20 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
               private loaderService: LoaderService) {}
 
   ngOnInit() {
-    this.cardPriority = this.cardPriorities[0].value;
+    if (this.isEdit) {
+      this.cardName = this.card.name;
+      this.selectedUsers = [...this.card.users];
+      this.cardPriority = this.card.priority;
+      this.headerText = 'Редактировать карточку';
+      this.submitFormText = 'Редактировать карточку';
+    }
+
+    if (!this.isEdit) {
+      this.cardPriority = this.cardPriorities[0].value;
+      this.headerText = 'Добавить карточку';
+      this.submitFormText = 'Создать карточку';
+    }
+
   }
 
   ngOnDestroy() {
@@ -49,6 +64,40 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
     this.selectedUsers = this.selectedUsers.filter(item => item._id !== user._id);
   }
 
+  public submitForm(): void {
+    if (this.isEdit) {
+      this.editCard();
+    }
+
+    if (!this.isEdit) {
+      this.createCard();
+    }
+  }
+
+  public async editCard() {
+    await this.loaderService.presentLoading('Редактирование...');
+    const data = {
+      name: this.cardName,
+      priority: this.cardPriority,
+      users: this.selectedUsers.map(item => item._id),
+    };
+
+    this.subs.sink = this.cardService.updateCard(this.card._id, data)
+        .pipe(
+            finalize(() => this.loaderService.dismissLoading()),
+            map((card: Card) => {
+              const priorityName: string = cardPriorities.find(option => option.value === card.priority).name;
+              return {...card, priorityName };
+            })
+        )
+        .subscribe((response: Card) => {
+          this.dismiss({card: response});
+          this.toastService.presentToast('Карточка упешно отредактирована');
+        }, (error) => {
+          this.toastService.presentErrorToast();
+        });
+  }
+
   public async createCard() {
     await this.loaderService.presentLoading('Cохранение...');
     const data = {
@@ -66,7 +115,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
             })
         )
         .subscribe((response: Card) => {
-          this.dismiss({createdCard: response});
+          this.dismiss({card: response});
           this.toastService.presentToast('Карточка упешно создана');
         }, (error) => {
           this.toastService.presentErrorToast();
