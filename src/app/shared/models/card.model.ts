@@ -11,4 +11,5 @@ export class Card extends Base {
   priority: CardPrioritiesEnum;
   priorityName?: string;
   users?: User[];
+  owner?: User | string;
 }

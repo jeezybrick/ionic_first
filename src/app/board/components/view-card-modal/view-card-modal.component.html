@@ -9,6 +9,22 @@
 
 <ion-content fullscreen *ngIf="(currentUser$ | async) as currentUser">
 
+  <ion-grid class="ion-padding-end">
+    <ion-row class="ion-justify-content-start ion-align-items-center">
+      <ng-container *ngFor="let user of card.users">
+        <ion-chip [routerLink]="['/tabs/users', user._id]">
+          <ion-avatar>
+            <img [src]="user.avatar" />
+          </ion-avatar>
+          <ion-label>{{user.fullname}}</ion-label>
+          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle"></ion-icon>
+        </ion-chip>
+      </ng-container>
+
+      <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline">Добавить</ion-button>
+    </ion-row>
+  </ion-grid>
+
   <ion-item>
     <ion-label position="floating">Добавить заметку</ion-label>
     <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
