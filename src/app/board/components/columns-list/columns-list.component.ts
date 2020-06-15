@@ -3,7 +3,6 @@ import { Column } from '../../../shared/models/column.model';
 import { BoardService } from '../../../shared/services/board.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColumnService } from '../../../shared/services/column.service';
-import { CardService } from '../../../shared/services/card.service';
 import { Board } from '../../../shared/models/board.model';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { CreateColumnModalComponent } from '../create-column-modal/create-column-modal.component';

@@ -17,11 +17,11 @@
             <img [src]="user.avatar" />
           </ion-avatar>
           <ion-label>{{user.fullname}}</ion-label>
-          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle" (click)="$event.preventDefault()"></ion-icon>
+          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle" (click)="removeUserFromCard($event, user)"></ion-icon>
         </ion-chip>
       </ng-container>
 
-      <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline">Добавить</ion-button>
+      <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline" (click)="addUsersToCard()">Добавить</ion-button>
     </ion-row>
   </ion-grid>
 

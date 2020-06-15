@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Card } from '../models/card.model';
+import { User } from '../models/user.model';
 
 export interface UpdateCardPositionInterface {
     currentColumnId: string;
@@ -68,6 +69,14 @@ export class CardService {
 
     public updateCard(cardId, data): Observable<Card> {
         return this.http.patch<Card>(`/api/cards/${cardId}`, data);
+    }
+
+    public addUsersToCard(cardId: string, ids: string[]): Observable<User[]> {
+        return this.http.post<User[]>(`/api/cards/${cardId}/add-users`, {users: ids});
+    }
+
+    public removeUsersFromCard(cardId: string, ids: string[]): Observable<User[]> {
+        return this.http.post<User[]>(`/api/cards/${cardId}/remove-users`, {users: ids});
     }
 
 }

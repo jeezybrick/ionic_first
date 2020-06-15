@@ -1,0 +1,28 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Добавить пользователей к карточке {{card?.name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Закрыть</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+  <div class="ion-padding" *ngIf="selectedUsers.length">
+    <ion-chip *ngFor="let selectedUser of selectedUsers">
+      <ion-avatar>
+        <img [src]="selectedUser.avatar">
+      </ion-avatar>
+      <ion-label>{{selectedUser.fullname}}</ion-label>
+      <ion-icon name="close-circle" (click)="removeSelectedUser(selectedUser)"></ion-icon>
+    </ion-chip>
+  </div>
+
+  <app-users-autocomplete [selectedUsers]="excludedUsers" (userSelected)="onUserSelected($event)" [placeholder]="'Добавить пользователя к карточке'"></app-users-autocomplete>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="submit()" [disabled]="!selectedUsers.length">Добавить</ion-button>
+  </div>
+</ion-content>
+

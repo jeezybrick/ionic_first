@@ -1,26 +1,26 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { Board } from '../../../shared/models/board.model';
 import { SubSink } from 'subsink';
 import { ModalController } from '@ionic/angular';
-import { BoardService } from '../../../shared/services/board.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
 import { User } from '../../../shared/models/user.model';
+import { Card } from '../../../shared/models/card.model';
+import { CardService } from '../../../shared/services/card.service';
 
 @Component({
-  selector: 'app-add-user-to-board-modal',
-  templateUrl: './add-user-to-board-modal.component.html',
-  styleUrls: ['./add-user-to-board-modal.component.scss'],
+  selector: 'app-add-user-to-card-modal',
+  templateUrl: './add-user-to-card-modal.component.html',
+  styleUrls: ['./add-user-to-card-modal.component.scss'],
 })
-export class AddUserToBoardModalComponent implements OnDestroy {
+export class AddUserToCardModalComponent implements OnDestroy {
   public selectedUsers = [];
   private subs = new SubSink();
 
-  @Input() board: Board;
+  @Input() card: Card;
 
   constructor(public modalController: ModalController,
-              private boardService: BoardService,
+              private cardService: CardService,
               private toastService: ToastService,
               private loaderService: LoaderService) {
   }
@@ -30,7 +30,7 @@ export class AddUserToBoardModalComponent implements OnDestroy {
   }
 
   get excludedUsers(): User[] {
-    return [...this.board.users, ...this.selectedUsers];
+    return [...this.card.users, ...this.selectedUsers];
   }
 
   public dismiss(data?) {
@@ -49,7 +49,7 @@ export class AddUserToBoardModalComponent implements OnDestroy {
   public async submit() {
     await this.loaderService.presentLoading('Добавление...');
 
-    this.subs.sink = this.boardService.addUsersToBoard(this.board._id, this.selectedUsers.map(item => item._id))
+    this.subs.sink = this.cardService.addUsersToCard(this.card._id, this.selectedUsers.map(item => item._id))
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: User[]) => {
           this.dismiss(response);

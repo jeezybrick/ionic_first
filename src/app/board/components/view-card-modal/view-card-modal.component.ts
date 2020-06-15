@@ -11,6 +11,8 @@ import { SubSink } from 'subsink';
 import { NoteService } from '../../../shared/services/note.service';
 import { finalize } from 'rxjs/operators';
 import { Note } from '../../../shared/models/note.model';
+import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-user-to-board-modal.component';
+import { AddUserToCardModalComponent } from '../add-user-to-card-modal/add-user-to-card-modal.component';
 
 @Component({
     selector: 'app-view-card-modal',
@@ -39,6 +41,23 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subs.unsubscribe();
+    }
+
+    public async addUsersToCard() {
+        const modal = await this.modalController.create({
+            component: AddUserToCardModalComponent,
+            componentProps: {
+                card: this.card,
+            }
+        });
+
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                this.card.users = [...res.data];
+            }
+        });
+
+        return await modal.present();
     }
 
     public dismiss(data?) {
@@ -84,6 +103,22 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
         this.toggleIsFavoriteStateSubscription = this.subs.sink =
             this.noteService.updateNote(note._id, {favorite: note.favorite})
                 .subscribe();
+    }
+
+    public async removeUserFromCard(event, user: User) {
+        event.stopPropagation();
+        event.preventDefault();
+        await this.loaderService.presentLoading('Удаление...');
+
+        this.subs.sink = this.cardService.removeUsersFromCard(this.card._id, [user._id])
+            .pipe(finalize(() => this.loaderService.dismissLoading()))
+            .subscribe((response: User[]) => {
+                    this.toastService.presentToast('Пользователь успешно удален с карточки');
+                    this.card.users = [...response];
+                },
+                (error) => {
+                    this.toastService.presentErrorToast();
+                });
     }
 
     private clearNoteText(): void {

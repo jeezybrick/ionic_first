@@ -14,6 +14,7 @@ import { UsersAutocompleteModule } from '../shared/components/users-autocomplete
 import { AddUserToBoardModalComponent } from './components/add-user-to-board-modal/add-user-to-board-modal.component';
 import { ViewCardModalComponent } from './components/view-card-modal/view-card-modal.component';
 import { UpsertCardModalComponent } from './components/upsert-card-modal/upsert-card-modal.component';
+import { AddUserToCardModalComponent } from './components/add-user-to-card-modal/add-user-to-card-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UpsertCardModalComponent } from './components/upsert-card-modal/upsert-
     AddUserToBoardModalComponent,
     ViewCardModalComponent,
     UpsertCardModalComponent,
+    AddUserToCardModalComponent,
   ],
   imports: [
     IonicModule,
