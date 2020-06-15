@@ -18,7 +18,7 @@ export class NoteService {
     return this.http.get(`/api/cards/${cardId}/notes`);
   }
 
-  public createNote(cardId: string, data: any): any {
+  public createNote(cardId: string, data: { name: string; }): any {
     return this.http.post(`/api/cards/${cardId}/notes`, data);
   }
 

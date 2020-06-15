@@ -1,27 +1,65 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ToastService } from '../../../shared/services/toast.service';
 import { CardService } from '../../../shared/services/card.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { Card } from '../../../shared/models/card.model';
+import { Observable } from 'rxjs';
+import { User } from '../../../shared/models/user.model';
+import { AuthService } from '../../../shared/services/auth.service';
+import { SubSink } from 'subsink';
+import { NoteService } from '../../../shared/services/note.service';
+import { finalize } from 'rxjs/operators';
+import { Note } from '../../../shared/models/note.model';
 
 @Component({
-  selector: 'app-view-card-modal',
-  templateUrl: './view-card-modal.component.html',
-  styleUrls: ['./view-card-modal.component.scss'],
+    selector: 'app-view-card-modal',
+    templateUrl: './view-card-modal.component.html',
+    styleUrls: ['./view-card-modal.component.scss'],
 })
-export class ViewCardModalComponent implements OnInit {
-  @Input() card: Card;
+export class ViewCardModalComponent implements OnInit, OnDestroy {
+    public noteText = '';
+    public currentUser$: Observable<User>;
+    private subs = new SubSink();
 
-  constructor(public modalController: ModalController,
-              private toastService: ToastService,
-              private cardService: CardService,
-              private loaderService: LoaderService) {}
+    @Input() card: Card;
 
-  ngOnInit() {}
+    constructor(private modalController: ModalController,
+                private authService: AuthService,
+                private toastService: ToastService,
+                private cardService: CardService,
+                private noteService: NoteService,
+                private loaderService: LoaderService) {
+    }
 
-  public dismiss(data?) {
-    this.modalController.dismiss(data);
-  }
+    ngOnInit() {
+        this.currentUser$ = this.authService.getUser();
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
+    }
+
+    public dismiss(data?) {
+        this.modalController.dismiss(data);
+    }
+
+    public async addNote() {
+        await this.loaderService.presentLoading('Добавление...');
+
+        this.subs.sink = this.noteService.createNote(this.card._id, {name: this.noteText})
+            .pipe(finalize(() => this.loaderService.dismissLoading()))
+            .subscribe((response: Note) => {
+                this.clearNoteText();
+                this.card.notes.push(response);
+                this.toastService.presentToast('Заметка упешно добавлена');
+            }, (error) => {
+                this.toastService.presentErrorToast();
+            });
+    }
+
+    private clearNoteText(): void {
+        this.noteText = '';
+    }
 
 }
