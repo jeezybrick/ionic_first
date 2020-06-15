@@ -58,6 +58,22 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
             });
     }
 
+  public async deleteNote(event, noteId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    await this.loaderService.presentLoading('Удаление...');
+
+    this.subs.sink = this.noteService.deleteNote(noteId)
+        .pipe(finalize(() => this.loaderService.dismissLoading()))
+        .subscribe((response: Note) => {
+              this.toastService.presentToast('Заметка упешно удалена');
+              this.card.notes = this.card.notes.filter(item => item._id !== response._id);
+            },
+            (error) => {
+              this.toastService.presentErrorToast();
+            });
+  }
+
     private clearNoteText(): void {
         this.noteText = '';
     }
