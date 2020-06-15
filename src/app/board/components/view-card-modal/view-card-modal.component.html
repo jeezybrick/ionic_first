@@ -12,12 +12,12 @@
   <ion-grid class="ion-padding-end">
     <ion-row class="ion-justify-content-start ion-align-items-center">
       <ng-container *ngFor="let user of card.users">
-        <ion-chip [routerLink]="['/tabs/users', user._id]">
+        <ion-chip [routerLink]="['/tabs/users', user._id]" (click)="dismiss()">
           <ion-avatar>
             <img [src]="user.avatar" />
           </ion-avatar>
           <ion-label>{{user.fullname}}</ion-label>
-          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle"></ion-icon>
+          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle" (click)="$event.preventDefault()"></ion-icon>
         </ion-chip>
       </ng-container>
 

@@ -88,7 +88,9 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         return await modal.present();
     }
 
-    public async removeUserFromBoard(user: User) {
+    public async removeUserFromBoard(event, user: User) {
+        event.stopPropagation();
+        event.preventDefault();
         await this.loaderService.presentLoading('Удаление...');
 
         this.subs.sink = this.boardService.removeUsersFromBoard(this.boardId, [user._id])

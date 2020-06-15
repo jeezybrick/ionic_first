@@ -31,7 +31,7 @@
               <img [src]="user.avatar" />
             </ion-avatar>
             <ion-label>{{user.fullname}}</ion-label>
-            <ion-icon *ngIf="currentUser._id === board.owner && currentUser._id !== user._id" name="close-circle" (click)="removeUserFromBoard(user)"></ion-icon>
+            <ion-icon *ngIf="currentUser._id === board.owner && currentUser._id !== user._id" name="close-circle" (click)="removeUserFromBoard($event, user)"></ion-icon>
           </ion-chip>
         </ng-container>
 
