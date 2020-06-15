@@ -9,9 +9,8 @@ import { User } from '../../../shared/models/user.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { SubSink } from 'subsink';
 import { NoteService } from '../../../shared/services/note.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { Note } from '../../../shared/models/note.model';
-import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-user-to-board-modal.component';
 import { AddUserToCardModalComponent } from '../add-user-to-card-modal/add-user-to-card-modal.component';
 
 @Component({
@@ -22,8 +21,10 @@ import { AddUserToCardModalComponent } from '../add-user-to-card-modal/add-user-
 export class ViewCardModalComponent implements OnInit, OnDestroy {
     public noteText = '';
     public currentUser$: Observable<User>;
-    private subs = new SubSink();
+    public isFavorite: Map<string, boolean>;
+
     private toggleIsFavoriteStateSubscription: Subscription;
+    private subs = new SubSink();
 
     @Input() card: Card;
 
@@ -36,7 +37,14 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.currentUser$ = this.authService.getUser();
+        this.currentUser$ = this.authService.getUser().pipe(tap((currentUser) => {
+            this.isFavorite = new Map<string, boolean>(this.card.notes.map(note => {
+                const isFavorite = note.likes.find(item => item === currentUser._id);
+                return [note._id, !!isFavorite];
+            }));
+        }));
+
+
     }
 
     ngOnDestroy() {
@@ -95,14 +103,25 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
     }
 
     public toggleIsFavoriteState(note: Note) {
-        note.favorite = !note.favorite;
+        let obs: Observable<Note>;
+        this.isFavorite.set(note._id, !this.isFavorite.get(note._id));
+
         if (this.toggleIsFavoriteStateSubscription) {
             this.toggleIsFavoriteStateSubscription.unsubscribe();
         }
 
-        this.toggleIsFavoriteStateSubscription = this.subs.sink =
-            this.noteService.updateNote(note._id, {favorite: note.favorite})
-                .subscribe();
+        if (this.isFavorite.get(note._id)) {
+            obs =
+                this.noteService.addLike(note._id);
+        } else {
+            if (!this.isFavorite.get(note._id)) {
+                obs =
+                    this.noteService.removeLike(note._id);
+            }
+        }
+
+        this.toggleIsFavoriteStateSubscription = this.subs.sink = obs.subscribe();
+
     }
 
     public async removeUserFromCard(event, user: User) {

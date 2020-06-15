@@ -53,8 +53,8 @@
 
         <ion-note slot="end">
           <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
-            <ion-icon *ngIf="!note.favorite" name="heart-outline"></ion-icon>
-            <ion-icon color="primary" *ngIf="note.favorite" name="heart"></ion-icon>
+            <ion-icon *ngIf="!isFavorite.get(note._id)" name="heart-outline"></ion-icon>
+            <ion-icon color="primary" *ngIf="isFavorite.get(note._id)" name="heart"></ion-icon>
           </ion-button>
         </ion-note>
 

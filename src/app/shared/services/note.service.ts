@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { Note } from '../models/note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,12 @@ export class NoteService {
     return this.http.delete(`/api/notes/${noteId}`);
   }
 
-  public updateNote(noteId, data): Observable<any> {
-    return this.http.patch(`/api/notes/${noteId}`, data);
+  public addLike(noteId: string): Observable<Note> {
+    return this.http.post<Note>(`/api/notes/${noteId}/add-like`, null);
+  }
+
+  public removeLike(noteId: string): Observable<Note> {
+    return this.http.post<Note>(`/api/notes/${noteId}/remove-like`, null);
   }
 
 }
