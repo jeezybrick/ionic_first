@@ -25,6 +25,8 @@
     </ion-row>
   </ion-grid>
 
+  <p class="ion-padding" *ngIf="card.description && card.description.length">{{card.description}}</p>
+
   <ion-item>
     <ion-label position="floating">Добавить заметку</ion-label>
     <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
