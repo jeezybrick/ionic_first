@@ -18,7 +18,7 @@
     <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
   </div>
 
-  <ion-list>
+  <ion-list *ngIf="card.notes.length">
 
     <ion-list-header>
       Заметки
@@ -33,10 +33,14 @@
           <p>{{note.owner.fullname}}</p>
           <h3 class="ion-text-wrap">{{note.name}}</h3>
         </ion-label>
-        <ion-note slot="end" (click)="toggleIsFavoriteState(note)">
-          <ion-icon *ngIf="!note.favorite" name="heart-outline"></ion-icon>
-          <ion-icon color="primary" *ngIf="note.favorite" name="heart"></ion-icon>
+
+        <ion-note slot="end">
+          <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
+            <ion-icon *ngIf="!note.favorite" name="heart-outline"></ion-icon>
+            <ion-icon color="primary" *ngIf="note.favorite" name="heart"></ion-icon>
+          </ion-button>
         </ion-note>
+
       </ion-item>
       <ion-item-options side="end" *ngIf="currentUser._id === note.owner._id">
         <ion-item-option>
