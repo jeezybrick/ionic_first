@@ -31,6 +31,9 @@
           <h3>{{board.name}}</h3>
           <p>{{board.createdAt | date: 'longDate'}}</p>
         </ion-label>
+        <ion-note color="primary" *ngIf="currentUser._id === board.owner" slot="end">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-note>
       </ion-item>
       <ion-item-options side="end">
         <ion-item-option *ngIf="currentUser._id === board.owner" color="danger" (click)="deleteBoard($event, board._id)">

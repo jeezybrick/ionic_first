@@ -34,6 +34,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.isEdit) {
       this.cardName = this.card.name;
+      this.cardDescription = this.card.description;
       this.selectedUsers = [...this.card.users];
       this.cardPriority = this.card.priority;
       this.headerText = 'Редактировать карточку';
