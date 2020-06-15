@@ -9,7 +9,7 @@ import { ActionSheetController, ModalController } from '@ionic/angular';
 import { CreateColumnModalComponent } from '../create-column-modal/create-column-modal.component';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { ToastService } from '../../../shared/services/toast.service';
-import { delay, finalize } from 'rxjs/operators';
+import { delay, finalize, shareReplay } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-user-to-board-modal.component';
 import { Observable } from 'rxjs';
@@ -24,6 +24,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 export class ColumnsListComponent implements OnInit, OnDestroy {
     public columns: Column[] = [];
     public board: Board;
+    public boardId: string;
     public isBoardLoading = true;
     public currentUser$: Observable<User>;
     public currentUserId: string;
@@ -41,15 +42,11 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.currentUser$ = this.authService.getUser();
+        this.currentUser$ = this.authService.getUser().pipe(shareReplay(1));
         this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
         this.subs.sink = this.route.params.subscribe((params) => {
-            if (!params.boardId) {
-                this.router.navigate(['boards']);
-            }
-
-            this.getBoardDetail(params.boardId);
-
+            this.boardId = params.boardId;
+            this.getBoardDetail(this.boardId);
         });
     }
 
@@ -61,7 +58,7 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         const modal = await this.modalController.create({
             component: CreateColumnModalComponent,
             componentProps: {
-                boardId: this.board._id,
+                boardId: this.boardId,
             }
         });
 
@@ -82,7 +79,27 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
             }
         });
 
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                this.board.users = [...res.data];
+            }
+        });
+
         return await modal.present();
+    }
+
+    public async removeUserFromBoard(user: User) {
+        await this.loaderService.presentLoading('Удаление...');
+
+        this.subs.sink = this.boardService.removeUsersFromBoard(this.boardId, [user._id])
+            .pipe(finalize(() => this.loaderService.dismissLoading()))
+            .subscribe((response: User[]) => {
+                    this.toastService.presentToast('Пользователь успешно удален с доски');
+                    this.board.users = [...response];
+                },
+                (error) => {
+                    this.toastService.presentErrorToast();
+                });
     }
 
     async presentActionSheet(event, columnId: string) {
@@ -109,7 +126,7 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         this.getBoardDetail(this.route.snapshot.params.boardId, event);
     }
 
-    private getBoardDetail(boardId, event?): void {
+    private getBoardDetail(boardId: string = this.boardId, event?): void {
         this.subs.sink = this.boardService.getBoardDetail(boardId)
             .pipe(
                 delay(1000)

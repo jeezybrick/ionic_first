@@ -7,15 +7,7 @@
   <ion-title>{{board?.name}}</ion-title>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-
-  <ion-card (click)="createColumn()" *ngIf="!columns.length">
-    <ion-card-content>
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-        <ion-icon name="add" size="large"></ion-icon>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+<ion-content [fullscreen]="true" *ngIf="(currentUser$ | async) as currentUser">
 
   <ng-container *ngIf="isBoardLoading">
     <ion-card *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
@@ -30,6 +22,23 @@
   </ion-refresher>
 
   <div *ngIf="!isBoardLoading">
+
+    <ion-grid class="ion-padding-end">
+      <ion-row class="ion-justify-content-start ion-align-items-center">
+        <ng-container *ngFor="let user of board.users">
+          <ion-chip>
+            <ion-avatar>
+              <img [src]="user.avatar" />
+            </ion-avatar>
+            <ion-label>{{user.fullname}}</ion-label>
+            <ion-icon *ngIf="currentUser._id !== user._id" name="close-circle" (click)="removeUserFromBoard(user)"></ion-icon>
+          </ion-chip>
+        </ng-container>
+
+        <ion-button size="small" *ngIf="currentUser._id === board?.owner" (click)="addUsersToBoard()" fill="outline">Пригласить</ion-button>
+      </ion-row>
+    </ion-grid>
+
     <ion-card *ngFor="let column of columns" [routerLink]="[column._id]">
       <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
         <ion-card-subtitle>
@@ -65,20 +74,20 @@
     </ion-card>
   </div>
 
+  <ion-card (click)="createColumn()" *ngIf="!columns.length">
+    <ion-card-content>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-icon name="add" size="large"></ion-icon>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
 
-<ion-fab vertical="bottom" horizontal="end" *ngIf="(currentUser$ | async) as currentUser">
-  <ion-fab-button><ion-icon name="ellipsis-horizontal"></ion-icon></ion-fab-button>
-  <ion-fab-list side="top">
-    <ion-fab-button *ngIf="currentUser._id === board?.owner" (click)="addUsersToBoard()">
-      <ion-icon name="person-add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-button (click)="createColumn()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab-list>
-
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button (click)="createColumn()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
 </ion-fab>
-
 
 

@@ -35,8 +35,8 @@ export class AddUserToBoardModalComponent implements OnInit, OnDestroy {
     return [...this.board.users, ...this.selectedUsers];
   }
 
-  public dismiss() {
-    this.modalController.dismiss();
+  public dismiss(data?) {
+    this.modalController.dismiss(data);
   }
 
   public onUserSelected(selectedUser): void {
@@ -53,8 +53,8 @@ export class AddUserToBoardModalComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.boardService.addUsersToBoard(this.board._id, this.selectedUsers.map(item => item._id))
         .pipe(finalize(() => this.loaderService.dismissLoading()))
-        .subscribe((response: Board) => {
-          this.dismiss();
+        .subscribe((response: User[]) => {
+          this.dismiss(response);
           this.toastService.presentToast('Пользователи упешно добавлены');
         }, (error) => {
           this.toastService.presentErrorToast();

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { filter, tap } from 'rxjs/operators';
 import { Observable, Subject, Subscription, timer } from 'rxjs';
 import { Board } from '../models/board.model';
+import { User } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root'
@@ -48,8 +49,12 @@ export class BoardService {
         );
     }
 
-    public addUsersToBoard(boardId: string, ids: string[]): any {
-        return this.http.post(`/api/boards/${boardId}/add-users`, {users: ids});
+    public addUsersToBoard(boardId: string, ids: string[]): Observable<User[]> {
+        return this.http.post<User[]>(`/api/boards/${boardId}/add-users`, {users: ids});
+    }
+
+    public removeUsersFromBoard(boardId: string, ids: string[]): Observable<User[]> {
+        return this.http.post<User[]>(`/api/boards/${boardId}/remove-users`, {users: ids});
     }
 
     public startPollingInviteToBoard(): Observable<boolean> {
