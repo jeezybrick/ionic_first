@@ -4,7 +4,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { CardService } from '../../../shared/services/card.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { Card } from '../../../shared/models/card.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { SubSink } from 'subsink';
@@ -21,6 +21,7 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
     public noteText = '';
     public currentUser$: Observable<User>;
     private subs = new SubSink();
+    private toggleIsFavoriteStateSubscription: Subscription;
 
     @Input() card: Card;
 
@@ -58,21 +59,32 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
             });
     }
 
-  public async deleteNote(event, noteId: string) {
-    event.stopPropagation();
-    event.preventDefault();
-    await this.loaderService.presentLoading('Удаление...');
+    public async deleteNote(event, noteId: string) {
+        event.stopPropagation();
+        event.preventDefault();
+        await this.loaderService.presentLoading('Удаление...');
 
-    this.subs.sink = this.noteService.deleteNote(noteId)
-        .pipe(finalize(() => this.loaderService.dismissLoading()))
-        .subscribe((response: Note) => {
-              this.toastService.presentToast('Заметка упешно удалена');
-              this.card.notes = this.card.notes.filter(item => item._id !== response._id);
-            },
-            (error) => {
-              this.toastService.presentErrorToast();
-            });
-  }
+        this.subs.sink = this.noteService.deleteNote(noteId)
+            .pipe(finalize(() => this.loaderService.dismissLoading()))
+            .subscribe((response: Note) => {
+                    this.toastService.presentToast('Заметка упешно удалена');
+                    this.card.notes = this.card.notes.filter(item => item._id !== response._id);
+                },
+                (error) => {
+                    this.toastService.presentErrorToast();
+                });
+    }
+
+    public toggleIsFavoriteState(note: Note) {
+        note.favorite = !note.favorite;
+        if (this.toggleIsFavoriteStateSubscription) {
+            this.toggleIsFavoriteStateSubscription.unsubscribe();
+        }
+
+        this.toggleIsFavoriteStateSubscription = this.subs.sink =
+            this.noteService.updateNote(note._id, {favorite: note.favorite})
+                .subscribe();
+    }
 
     private clearNoteText(): void {
         this.noteText = '';
