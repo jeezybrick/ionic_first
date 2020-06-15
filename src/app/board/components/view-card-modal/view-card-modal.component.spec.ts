@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CreateCardModalComponent } from './create-card-modal.component';
+import { ViewCardModalComponent } from './view-card-modal.component';
 
-describe('CreateCardModalComponent', () => {
-  let component: CreateCardModalComponent;
-  let fixture: ComponentFixture<CreateCardModalComponent>;
+describe('ViewCardModalComponent', () => {
+  let component: ViewCardModalComponent;
+  let fixture: ComponentFixture<ViewCardModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateCardModalComponent ],
+      declarations: [ ViewCardModalComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateCardModalComponent);
+    fixture = TestBed.createComponent(ViewCardModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

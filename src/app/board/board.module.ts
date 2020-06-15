@@ -9,10 +9,11 @@ import { CreateBoardModalComponent } from './components/create-board-modal/creat
 import { FormsModule } from '@angular/forms';
 import { ColumnsListComponent } from './components/columns-list/columns-list.component';
 import { CreateColumnModalComponent } from './components/create-column-modal/create-column-modal.component';
-import { CreateCardModalComponent } from './components/create-card-modal/create-card-modal.component';
 import { AutoCompleteModule } from 'ionic4-auto-complete';
 import { UsersAutocompleteModule } from '../shared/components/users-autocomplete/users-autocomplete.module';
 import { AddUserToBoardModalComponent } from './components/add-user-to-board-modal/add-user-to-board-modal.component';
+import { ViewCardModalComponent } from './components/view-card-modal/view-card-modal.component';
+import { UpsertCardModalComponent } from './components/upsert-card-modal/upsert-card-modal.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +22,9 @@ import { AddUserToBoardModalComponent } from './components/add-user-to-board-mod
     CreateBoardModalComponent,
     ColumnsListComponent,
     CreateColumnModalComponent,
-    CreateCardModalComponent,
     AddUserToBoardModalComponent,
+    ViewCardModalComponent,
+    UpsertCardModalComponent,
   ],
   imports: [
     IonicModule,

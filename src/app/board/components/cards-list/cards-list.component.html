@@ -40,7 +40,7 @@
                   <span>{{card.createdAt | date: 'longDate'}}</span>
                 </ion-reorder>
 
-                <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card._id)" fill="clear">
+                <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card)" fill="clear">
                   <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
                 </ion-button>
               </ion-row>

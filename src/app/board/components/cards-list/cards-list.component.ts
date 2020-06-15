@@ -3,7 +3,6 @@ import { ActionSheetController, ModalController } from '@ionic/angular';
 import { ToastService } from '../../../shared/services/toast.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { LoaderService } from '../../../shared/services/loader.service';
-import { CreateCardModalComponent } from '../create-card-modal/create-card-modal.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../../shared/models/card.model';
 import { delay, finalize, map } from 'rxjs/operators';
@@ -11,6 +10,8 @@ import { SubSink } from 'subsink';
 import { cardPriorities, CardService, UpdateCardPositionInterface } from '../../../shared/services/card.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
+import { UpsertCardModalComponent } from '../upsert-card-modal/upsert-card-modal.component';
+import { ViewCardModalComponent } from '../view-card-modal/view-card-modal.component';
 
 @Component({
   selector: 'app-cards-list',
@@ -87,7 +88,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
 
   async addCard() {
     const modal = await this.modalController.create({
-      component: CreateCardModalComponent,
+      component: UpsertCardModalComponent,
       componentProps: {
         columnId: this.route.snapshot.params.columnId,
       },
@@ -102,22 +103,51 @@ export class CardsListComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  async presentActionSheet(event, cardId: string) {
+  async viewCard(card: Card) {
+    const modal = await this.modalController.create({
+      component: ViewCardModalComponent,
+      componentProps: {
+        card,
+      },
+    });
+
+    return await modal.present();
+  }
+
+  async editCard(card: Card) {
+    const modal = await this.modalController.create({
+      component: UpsertCardModalComponent,
+      componentProps: {
+        isEdit: true,
+        card,
+        columnId: card.columnId,
+      },
+    });
+
+    return await modal.present();
+  }
+
+  async presentActionSheet(event, card: Card) {
     event.stopPropagation();
     event.preventDefault();
 
     const actionSheet = await this.actionSheetController.create({
       header: 'Карточки',
       buttons: [{
+        text: 'Посмотреть',
+        handler: () => {
+          this.viewCard(card);
+        }
+      }, {
         text: 'Редактировать',
         handler: () => {
-
+          this.editCard(card);
         }
       }, {
         text: 'Удалить',
         role: 'destructive',
         handler: () => {
-          this.removeCard(cardId);
+          this.removeCard(card._id);
         }
       }, {
         text: 'Отмена',

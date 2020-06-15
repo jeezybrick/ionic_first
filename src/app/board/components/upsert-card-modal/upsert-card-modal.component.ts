@@ -8,11 +8,11 @@ import { CardPrioritiesEnum, CardPrioritiesInterface, CardService, cardPrioritie
 import { Card } from '../../../shared/models/card.model';
 
 @Component({
-  selector: 'app-create-card-modal',
-  templateUrl: './create-card-modal.component.html',
-  styleUrls: ['./create-card-modal.component.scss'],
+  selector: 'app-upsert-card-modal',
+  templateUrl: './upsert-card-modal.component.html',
+  styleUrls: ['./upsert-card-modal.component.scss'],
 })
-export class CreateCardModalComponent implements OnInit, OnDestroy {
+export class UpsertCardModalComponent implements OnInit, OnDestroy {
   public cardName = '';
   public selectedUsers = [];
   public cardPriorities: CardPrioritiesInterface[] = [...cardPriorities];
@@ -20,6 +20,8 @@ export class CreateCardModalComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
 
   @Input() columnId: string;
+  @Input() isEdit: boolean = false;
+  @Input() card: Card;
 
   constructor(public modalController: ModalController,
               private toastService: ToastService,
