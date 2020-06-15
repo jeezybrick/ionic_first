@@ -24,7 +24,7 @@ $high-priority-color: #f75630;
 
   .comments-count {
      position: relative;
-     top: 1px;
+     bottom: 1px;
   }
 
   &.low {
@@ -51,4 +51,9 @@ $high-priority-color: #f75630;
     }
   }
 
+}
+
+.user-card-avatar-wrap {
+  width: 24px;
+  height: 24px;
 }

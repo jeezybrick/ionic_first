@@ -55,10 +55,20 @@
           <p *ngIf="card.description && card.description.length" class="ion-padding-bottom">{{card.description}}</p>
 
           <ion-grid class="ion-no-padding">
-            <ion-row class="ion-justify-content-start ion-align-items-center">
-              <ion-icon class="priority-icon" name="arrow-up" (click)="viewCard(card)"></ion-icon>
-              <ion-icon class="comments-icon" name="chatbubble-outline" (click)="viewCard(card)"></ion-icon>
-              <span class="comments-count" (click)="viewCard(card)">{{card.notes.length}}</span>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+
+              <div class="ion-justify-content-start ion-align-items-center">
+                <ion-icon class="priority-icon" name="arrow-up" (click)="viewCard(card)"></ion-icon>
+                <ion-icon class="comments-icon" name="chatbubble-outline" (click)="viewCard(card)"></ion-icon>
+                <span class="comments-count" (click)="viewCard(card)">{{card.notes.length}}</span>
+              </div>
+
+              <ion-row class="ion-justify-content-start ion-align-items-center">
+                <ion-avatar class="user-card-avatar-wrap" *ngFor="let user of card.users" [routerLink]="['/tabs/users', user._id]">
+                  <img [src]="user.avatar">
+                </ion-avatar>
+              </ion-row>
+
             </ion-row>
           </ion-grid>
 
