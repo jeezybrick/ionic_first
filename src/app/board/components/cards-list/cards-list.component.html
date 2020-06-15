@@ -55,8 +55,8 @@
 
           <ion-grid class="ion-no-padding">
             <ion-row class="ion-justify-content-start ion-align-items-center">
-              <ion-icon class="priority-icon" name="arrow-up"></ion-icon>
-              <ion-icon class="comments-icon" name="chatbubble-outline"></ion-icon>
+              <ion-icon class="priority-icon" name="arrow-up" (click)="viewCard(card)"></ion-icon>
+              <ion-icon class="comments-icon" name="chatbubble-outline" (click)="viewCard(card)"></ion-icon>
               <span class="comments-count" (click)="viewCard(card)">{{card.notes.length}}</span>
             </ion-row>
           </ion-grid>

@@ -30,8 +30,8 @@
           <img [src]="note.owner.avatar">
         </ion-avatar>
         <ion-label>
-          <h2>{{note.owner.fullname}}</h2>
-          <h3>{{note.name}}</h3>
+          <p>{{note.owner.fullname}}</p>
+          <h3 class="ion-text-wrap">{{note.name}}</h3>
         </ion-label>
         <ion-note slot="end" (click)="toggleIsFavoriteState(note)">
           <ion-icon *ngIf="!note.favorite" name="heart-outline"></ion-icon>
