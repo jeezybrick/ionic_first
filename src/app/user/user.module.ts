@@ -11,7 +11,7 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
   imports: [
     IonicModule,
     CommonModule,
-    UserRoutingModule
+    UserRoutingModule,
   ]
 })
 export class UserModule { }

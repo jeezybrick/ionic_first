@@ -20,6 +20,15 @@
 
   <form novalidate *ngIf="!isUserLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)">
 
+    <ion-grid>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-avatar class="user-avatar-wrap" (click)="fileInput.click()">
+          <img [src]="userAvatarUrl" alt="Аватар">
+        </ion-avatar>
+      </ion-row>
+
+    </ion-grid>
+
     <ion-item>
       <ion-label position="floating" >Полное имя</ion-label>
       <ion-input formControlName="fullname"></ion-input>
@@ -51,5 +60,10 @@
     </ion-row>
   </ion-grid>
 
-
+  <span class="hidden-image-upload-input">
+  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+</span>
 </ion-content>
+
+
+
