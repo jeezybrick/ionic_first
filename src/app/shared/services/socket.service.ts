@@ -5,6 +5,7 @@ import { TokenStorage } from './token.storage';
 import { SubSink } from 'subsink';
 import { ToastService } from './toast.service';
 import { AuthService } from './auth.service';
+import { Board } from '../models/board.model';
 
 export const socketConfig: SocketIoConfig = {
   url: environment.api,
@@ -40,9 +41,9 @@ export class SocketService extends Socket implements OnDestroy {
     });
 
     this.subs.add(
-        this.socket.fromEvent(attachedToBoard).subscribe((res) => {
-          console.log(res);
-          this.toastService.presentToast('Вы были добавлены к доске');
+        this.socket.fromEvent(attachedToBoard).subscribe((board: Board) => {
+          console.log(board);
+          this.toastService.presentToast(`Вы были добавлены к доске ${board.name}`);
         }),
         this.socket.fromEvent(deAttachedFromBoard).subscribe((res) => {
           console.log(res);
