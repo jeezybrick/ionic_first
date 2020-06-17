@@ -27,6 +27,7 @@
     "express": "^4.16.4",
     "ionic4-auto-complete": "^2.7.2",
     "ng2-file-upload": "^1.4.0",
+    "ngx-socket-io": "^3.0.1",
     "rxjs": "~6.5.1",
     "subsink": "^1.0.1",
     "tslib": "^1.10.0",

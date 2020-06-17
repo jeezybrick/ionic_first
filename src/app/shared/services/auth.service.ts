@@ -6,15 +6,21 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BoardService } from './board.service';
 import { TokenStorage } from './token.storage';
 import { filter } from 'rxjs/operators';
+import { User } from '../models/user.model';
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public $userSource: Subject<any> = new BehaviorSubject(null);
+  public user: User;
 
-  constructor(private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {
-    this.me().subscribe();
+  constructor(private socket: Socket, private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {
+    this.me().subscribe((data) => {
+      this.user = data.user;
+      this.socket.emit('set-id', data.user._id);
+    });
   }
 
   login(email: string, password: string): Observable<any> {
