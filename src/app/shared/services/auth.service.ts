@@ -102,6 +102,7 @@ export class AuthService {
   signOut(): void {
     this.token.signOut();
     this.setUser(null);
+    this.user = null;
     this.boardService.stopPollingInviteToBoard();
 
   }

@@ -4,6 +4,8 @@ import { filter, tap } from 'rxjs/operators';
 import { Observable, Subject, Subscription, timer } from 'rxjs';
 import { Board } from '../models/board.model';
 import { User } from '../models/user.model';
+import { AuthService } from './auth.service';
+import { TokenStorage } from './token.storage';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +16,7 @@ export class BoardService {
     private pollingInviteToBoardSubscription: Subscription;
     private pollingInviteToBoardInterval: number = 15 * 1000;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private tokenStorage: TokenStorage) {
     }
 
     public getBoards(sortBy = 'createdAt', sortDirection = '1'): any {
@@ -59,13 +61,17 @@ export class BoardService {
 
     public startPollingInviteToBoard(): Observable<boolean> {
         this.stopPollingInviteToBoard();
-        this.pollingInviteToBoardSubscription = timer(0, this.pollingInviteToBoardInterval).subscribe((res) => {
-            this.http.get<boolean>('/api/boards/checkIsNotified').pipe(
-                filter(value => !value),
-            ).subscribe((value) => {
-                this.pollingInviteToBoard$.next(value);
+
+        if (!!this.tokenStorage.getToken()) {
+            this.pollingInviteToBoardSubscription = timer(0, this.pollingInviteToBoardInterval).subscribe((res) => {
+                this.http.get<boolean>('/api/boards/checkIsNotified').pipe(
+                    filter(value => !value),
+                ).subscribe((value) => {
+                    this.pollingInviteToBoard$.next(value);
+                });
             });
-        });
+        }
+
 
         return this.pollingInviteToBoard$.asObservable();
     }

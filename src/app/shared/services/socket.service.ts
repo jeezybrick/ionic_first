@@ -41,14 +41,14 @@ export class SocketService extends Socket implements OnDestroy {
     });
 
     this.subs.add(
-        this.socket.fromEvent(attachedToBoard).subscribe((board: Board) => {
-          console.log(board);
-          this.toastService.presentToast(`Вы были добавлены к доске ${board.name}`);
-        }),
-        this.socket.fromEvent(deAttachedFromBoard).subscribe((res) => {
-          console.log(res);
-          this.toastService.presentToast('Вы были удалены с доски');
-        }),
+        // this.socket.fromEvent(attachedToBoard).subscribe((board: Board) => {
+        //   console.log(board);
+        //   this.toastService.presentToast(`Вы были добавлены к доске ${board.name}`);
+        // }),
+        // this.socket.fromEvent(deAttachedFromBoard).subscribe((res) => {
+        //   console.log(res);
+        //   this.toastService.presentToast('Вы были удалены с доски');
+        // }),
     );
   }
 
