@@ -126,7 +126,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private onAfterAddingAttachment(fileItem: FileItem): void {
-    console.log(fileItem);
     fileItem.withCredentials = false;
     this.attachmentAddingErrorMessage = null;
 
