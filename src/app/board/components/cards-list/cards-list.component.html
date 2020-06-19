@@ -4,7 +4,7 @@
       <ion-back-button text="Назад"></ion-back-button>
     </ion-buttons>
     <ion-title>Карточки</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="cards.length > 1">
       <ion-button (click)="toggleReorder()">Сортировать</ion-button>
     </ion-buttons>
   </ion-toolbar>
