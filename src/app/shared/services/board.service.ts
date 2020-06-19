@@ -27,7 +27,7 @@ export class BoardService {
         );
     }
 
-    public getBoardDetail(boardId): any {
+    public getBoardDetail(boardId: string): Observable<Board> {
         return this.http.get<Board>(`/api/boards/${boardId}`);
     }
 

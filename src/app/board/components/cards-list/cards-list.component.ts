@@ -14,6 +14,7 @@ import { UpsertCardModalComponent } from '../upsert-card-modal/upsert-card-modal
 import { ViewCardModalComponent } from '../view-card-modal/view-card-modal.component';
 import { CardLogTimeComponent } from '../card-log-time/card-log-time.component';
 import { CardAddEstimateTimeComponent } from '../card-add-estimate-time/card-add-estimate-time.component';
+import { CardMoveToColumnModalComponent } from '../card-move-to-column-modal/card-move-to-column-modal.component';
 
 @Component({
   selector: 'app-cards-list',
@@ -50,7 +51,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.getCards(params.columnId);
+      this.getCards(this.columnId);
 
     });
   }
@@ -185,6 +186,24 @@ export class CardsListComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
+  async showMoveToColumnModal(card: Card) {
+    const modal = await this.modalController.create({
+      component: CardMoveToColumnModalComponent,
+      componentProps: {
+        card,
+      },
+    });
+
+    modal.onWillDismiss().then((res) => {
+      if (res && res.data) {
+        this.isCardsLoading = true;
+        this.getCards();
+      }
+    });
+
+    return await modal.present();
+  }
+
   async presentActionSheet(event, card: Card) {
     event.stopPropagation();
     event.preventDefault();
@@ -201,7 +220,12 @@ export class CardsListComponent implements OnInit, OnDestroy {
         handler: () => {
           this.logTime(card);
         }
-      },{
+      }, {
+        text: 'Переместить в колонку',
+        handler: () => {
+          this.showMoveToColumnModal(card);
+        }
+      }, {
         text: 'Посмотреть',
         handler: () => {
           this.viewCard(card);
@@ -243,7 +267,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
           });
   }
 
-  private getCards(columnId, event?): void {
+  private getCards(columnId = this.columnId, event?): void {
     this.subs.sink = this.cardService.getAllCards(columnId)
         .pipe(
             delay(1000),

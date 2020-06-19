@@ -1,0 +1,31 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Переместить {{card?.name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Закрыть</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+  <ion-list>
+    <ion-radio-group [value]="checkedColumnId">
+      <ion-list-header>
+        <ion-label>Выберете колонку</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let column of columns" (click)="chooseColumn(column._id)">
+        <ion-label>{{column.name}}</ion-label>
+        <ion-radio slot="end" [value]="column._id"></ion-radio>
+      </ion-item>
+
+    </ion-radio-group>
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="submit()">Переместить</ion-button>
+  </div>
+</ion-content>
+
+

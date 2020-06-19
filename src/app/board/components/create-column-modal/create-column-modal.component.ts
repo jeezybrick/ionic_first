@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { BoardService } from '../../../shared/services/board.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
-import { Board } from '../../../shared/models/board.model';
 import { ColumnService } from '../../../shared/services/column.service';
 import { Column } from '../../../shared/models/column.model';
 
@@ -14,7 +13,7 @@ import { Column } from '../../../shared/models/column.model';
   templateUrl: './create-column-modal.component.html',
   styleUrls: ['./create-column-modal.component.scss'],
 })
-export class CreateColumnModalComponent implements OnInit {
+export class CreateColumnModalComponent {
   public columnName = '';
   @Input() boardId: string;
 
@@ -24,9 +23,6 @@ export class CreateColumnModalComponent implements OnInit {
               private toastService: ToastService,
               private columnService: ColumnService,
               private loaderService: LoaderService) {
-  }
-
-  ngOnInit() {
   }
 
   public dismiss(data?) {
