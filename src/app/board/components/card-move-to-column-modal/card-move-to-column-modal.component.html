@@ -15,6 +15,12 @@
         <ion-label>Выберете колонку</ion-label>
       </ion-list-header>
 
+      <ion-grid *ngIf="isColumnsLoading">
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-spinner></ion-spinner>
+        </ion-row>
+      </ion-grid>
+
       <ion-item *ngFor="let column of columns" (click)="chooseColumn(column._id)">
         <ion-label>{{column.name}}</ion-label>
         <ion-radio slot="end" [value]="column._id"></ion-radio>
@@ -24,7 +30,7 @@
   </ion-list>
 
   <div class="ion-padding">
-    <ion-button expand="block" (click)="submit()">Переместить</ion-button>
+    <ion-button expand="block" (click)="submit()" [disabled]="isColumnsLoading">Переместить</ion-button>
   </div>
 </ion-content>
 
