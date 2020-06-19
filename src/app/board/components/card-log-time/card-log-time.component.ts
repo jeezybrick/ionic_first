@@ -9,6 +9,7 @@ import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
 import { User } from '../../../shared/models/user.model';
 import { CardService } from '../../../shared/services/card.service';
+import { CardLogTimeSubmitDataInterface } from '../../../shared/interfaces/card-log-time-submit-data.interface';
 
 @Component({
   selector: 'app-card-log-time',
@@ -41,10 +42,10 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.logTimeForm = this.fb.group({
       date: [new Date().toISOString(), Validators.required],
-      worked: [0, Validators.required],
-      workedTimeSuffix: [this.logTimeValues[0].value, Validators.required],
-      estimate: [null, Validators.required],
-      estimateTimeSuffix: [null, Validators.required],
+      workedValue: [0, Validators.required],
+      workedSuffix: [this.logTimeValues[0].value, Validators.required],
+      estimateValue: [null, Validators.required],
+      estimateSuffix: [null, Validators.required],
     });
   }
 
@@ -58,22 +59,19 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
 
   public async submit() {
     await this.loaderService.presentLoading('Сохранение...');
+    const data: CardLogTimeSubmitDataInterface = {
+      ...this.logTimeForm.value,
+      date: new Date(this.logTimeForm.value.date).toISOString(),
+    };
 
-    setTimeout(() => {
-      this.loaderService.dismissLoading();
-      this.toastService.presentToast('Время успешно залогировано');
-      this.dismiss();
-    }, 1000);
-
-
-    // this.subs.sink = this.boardService.addUsersToBoard(this.board._id, this.selectedUsers.map(item => item._id))
-    //     .pipe(finalize(() => this.loaderService.dismissLoading()))
-    //     .subscribe((response: User[]) => {
-    //       this.dismiss(response);
-    //       this.toastService.presentToast('Пользователи упешно добавлены');
-    //     }, (error) => {
-    //       this.toastService.presentErrorToast();
-    //     });
+    this.subs.sink = this.cardService.logTime(this.card._id, data)
+        .pipe(finalize(() => this.loaderService.dismissLoading()))
+        .subscribe((response: Card) => {
+          this.dismiss(response);
+          this.toastService.presentToast('Время успешно залогировано');
+        }, (error) => {
+          this.toastService.presentErrorToast();
+        });
   }
 
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Card } from '../models/card.model';
 import { User } from '../models/user.model';
+import { CardLogTimeSubmitDataInterface } from '../interfaces/card-log-time-submit-data.interface';
 
 export interface UpdateCardPositionInterface {
     currentColumnId: string;
@@ -78,5 +79,10 @@ export class CardService {
     public removeUsersFromCard(cardId: string, ids: string[]): Observable<User[]> {
         return this.http.post<User[]>(`/api/cards/${cardId}/remove-users`, {users: ids});
     }
+
+    public logTime(cardId: string, data: CardLogTimeSubmitDataInterface): Observable<Card> {
+        return this.http.post<Card>(`/api/cards/${cardId}/log-time`, data);
+    }
+
 
 }
