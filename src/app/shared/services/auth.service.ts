@@ -5,9 +5,10 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { BoardService } from './board.service';
 import { TokenStorage } from './token.storage';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Socket } from 'ngx-socket-io';
+import { Board } from '../models/board.model';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +84,14 @@ export class AuthService {
         observer.complete();
       });
     });
+  }
+
+  uploadAvatar(file: File): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('avatar', file, file.name);
+
+    return this.http.post<boolean>(`/api/users/${this.user._id}/upload-avatar`, formData);
+
   }
 
   me(): Observable<any> {

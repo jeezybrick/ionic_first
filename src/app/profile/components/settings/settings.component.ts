@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { FileItem, FileLikeObject, FileUploader } from 'ng2-file-upload';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { FileUploaderOptions } from 'ng2-file-upload/file-upload/file-uploader.class';
+import { IonSearchbar } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -35,6 +36,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     'image/gif'
   ];
 
+  @ViewChild('fileInput') fileInput: ElementRef;
+
   constructor(private authService: AuthService,
               private loaderService: LoaderService,
               private toastService: ToastService,
@@ -56,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     if (!this.newUserAvatarObj) {
-      return this.user.avatar;
+      return this.user.avatar.path;
     }
   }
 
@@ -70,17 +73,26 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   public async onSubmit({value, invalid}: any) {
-
     if (invalid) {
       return;
+    }
+
+    const files = Array.from(this.fileInput.nativeElement.files);
+    const formData = new FormData();
+    formData.append('email', value.email);
+    formData.append('fullname', value.fullname);
+
+    if (files.length) {
+      this.uploadAvatar(files[0] as File);
+      // formData.append('avatar', files[0] as any);
     }
 
     this.errors = null;
     await this.loaderService.presentLoading();
 
-    this.subs.sink = this.authService.updateProfile({...value, files: [this.newUserAvatarObj]})
+    this.subs.sink = this.authService.updateProfile(formData)
         .pipe(
-            finalize(() => this.loaderService.dismissLoading())
+           finalize(() => this.loaderService.dismissLoading())
         )
         .subscribe((response: any) => {
               this.toastService.presentToast('Профіль успішно відредагований');
@@ -157,6 +169,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
       allowedMimeType: this.allowedMimeType,
       url: `${environment.api}/api/users/${this.user._id}/upload-avatar`,
     };
+  }
+
+  private uploadAvatar(file: File): void {
+    this.subs.sink = this.authService.uploadAvatar(file).subscribe((res) => {
+
+    });
   }
 
 }

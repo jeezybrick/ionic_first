@@ -14,10 +14,6 @@
     </ion-row>
   </ion-grid>
 
-  <ion-refresher slot="fixed" (ionRefresh)="reloadData($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
   <form novalidate *ngIf="!isUserLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)">
 
     <ion-grid>
