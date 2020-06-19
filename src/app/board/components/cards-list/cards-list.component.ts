@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 import { UpsertCardModalComponent } from '../upsert-card-modal/upsert-card-modal.component';
 import { ViewCardModalComponent } from '../view-card-modal/view-card-modal.component';
+import { CardLogTimeComponent } from '../card-log-time/card-log-time.component';
 
 @Component({
   selector: 'app-cards-list',
@@ -138,6 +139,17 @@ export class CardsListComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
+  async logTime(card: Card) {
+    const modal = await this.modalController.create({
+      component: CardLogTimeComponent,
+      componentProps: {
+        card,
+      },
+    });
+
+    return await modal.present();
+  }
+
   async presentActionSheet(event, card: Card) {
     event.stopPropagation();
     event.preventDefault();
@@ -153,6 +165,11 @@ export class CardsListComponent implements OnInit, OnDestroy {
         text: 'Редактировать',
         handler: () => {
           this.editCard(card);
+        }
+      },{
+        text: 'Залогировать время',
+        handler: () => {
+          this.logTime(card);
         }
       }, {
         text: 'Удалить',
