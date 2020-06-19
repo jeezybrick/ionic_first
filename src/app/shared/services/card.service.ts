@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Card } from '../models/card.model';
 import { User } from '../models/user.model';
-import { CardLogTimeSubmitDataInterface } from '../interfaces/card-log-time-submit-data.interface';
+import { CardLogTimeSubmitDataInterface, CardLogTimeSuffixType } from '../interfaces/card-log-time-submit-data.interface';
 
 export interface UpdateCardPositionInterface {
     currentColumnId: string;
@@ -41,6 +41,17 @@ export const cardPriorities: CardPrioritiesInterface[] = [
     {
         name: 'Высокий',
         value: CardPrioritiesEnum.HIGH,
+    },
+];
+
+export const logTimeValues: { value: CardLogTimeSuffixType; viewValue: string; }[] = [
+    {
+        value: 'm',
+        viewValue: 'Минут',
+    },
+    {
+        value: 'h',
+        viewValue: 'Часов',
     },
 ];
 

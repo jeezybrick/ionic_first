@@ -13,6 +13,7 @@ import { User } from '../../../shared/models/user.model';
 import { UpsertCardModalComponent } from '../upsert-card-modal/upsert-card-modal.component';
 import { ViewCardModalComponent } from '../view-card-modal/view-card-modal.component';
 import { CardLogTimeComponent } from '../card-log-time/card-log-time.component';
+import { CardAddEstimateTimeComponent } from '../card-add-estimate-time/card-add-estimate-time.component';
 
 @Component({
   selector: 'app-cards-list',
@@ -151,6 +152,17 @@ export class CardsListComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
+  async addEstimate(card: Card) {
+    const modal = await this.modalController.create({
+      component: CardAddEstimateTimeComponent,
+      componentProps: {
+        card,
+      },
+    });
+
+    return await modal.present();
+  }
+
   async presentActionSheet(event, card: Card) {
     event.stopPropagation();
     event.preventDefault();
@@ -158,6 +170,16 @@ export class CardsListComponent implements OnInit, OnDestroy {
     const actionSheet = await this.actionSheetController.create({
       header: 'Карточки',
       buttons: [{
+        text: 'Оценка времени',
+        handler: () => {
+          this.addEstimate(card);
+        }
+      }, {
+        text: 'Залогировать время',
+        handler: () => {
+          this.logTime(card);
+        }
+      },{
         text: 'Посмотреть',
         handler: () => {
           this.viewCard(card);
@@ -166,11 +188,6 @@ export class CardsListComponent implements OnInit, OnDestroy {
         text: 'Редактировать',
         handler: () => {
           this.editCard(card);
-        }
-      },{
-        text: 'Залогировать время',
-        handler: () => {
-          this.logTime(card);
         }
       }, {
         text: 'Удалить',

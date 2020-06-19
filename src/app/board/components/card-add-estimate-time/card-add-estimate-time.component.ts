@@ -1,33 +1,22 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { BoardService } from '../../../shared/services/board.service';
 import { ToastService } from '../../../shared/services/toast.service';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Card } from '../../../shared/models/card.model';
 import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
-import { User } from '../../../shared/models/user.model';
-import { CardService } from '../../../shared/services/card.service';
-import { CardLogTimeSubmitDataInterface } from '../../../shared/interfaces/card-log-time-submit-data.interface';
+import { CardService, logTimeValues } from '../../../shared/services/card.service';
+import { CardLogTimeSubmitDataInterface, CardLogTimeSuffixType } from '../../../shared/interfaces/card-log-time-submit-data.interface';
 
 @Component({
-  selector: 'app-card-log-time',
-  templateUrl: './card-log-time.component.html',
-  styleUrls: ['./card-log-time.component.scss'],
+  selector: 'app-card-add-estimate-time',
+  templateUrl: './card-add-estimate-time.component.html',
+  styleUrls: ['./card-add-estimate-time.component.scss'],
 })
-export class CardLogTimeComponent implements OnInit, OnDestroy {
-  public logTimeValues: { value: string; viewValue: string; }[] = [
-    {
-      value: 'm',
-      viewValue: 'Минут',
-    },
-    {
-      value: 'h',
-      viewValue: 'Часов',
-    },
-  ];
-  public logTimeForm: FormGroup;
+export class CardAddEstimateTimeComponent implements OnInit, OnDestroy {
+  public logTimeValues: { value: CardLogTimeSuffixType; viewValue: string; }[] = [...logTimeValues];
+  public estimateTimeForm: FormGroup;
   private subs = new SubSink();
 
   @Input() card: Card;
@@ -40,10 +29,9 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.logTimeForm = this.fb.group({
-      date: [new Date().toISOString(), Validators.required],
-      workedValue: [null],
-      workedSuffix: [this.logTimeValues[0].value, Validators.required],
+    this.estimateTimeForm = this.fb.group({
+      estimateValue: [null],
+      estimateSuffix: [this.logTimeValues[0].value, Validators.required],
     });
   }
 
@@ -58,8 +46,8 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
   public async submit() {
     await this.loaderService.presentLoading('Сохранение...');
     const data: CardLogTimeSubmitDataInterface = {
-      ...this.logTimeForm.value,
-      date: new Date(this.logTimeForm.value.date).toISOString(),
+      ...this.estimateTimeForm.value,
+      date: new Date(this.estimateTimeForm.value.date).toISOString(),
     };
 
     this.subs.sink = this.cardService.logTime(this.card._id, data)

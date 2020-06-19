@@ -16,6 +16,7 @@ import { ViewCardModalComponent } from './components/view-card-modal/view-card-m
 import { UpsertCardModalComponent } from './components/upsert-card-modal/upsert-card-modal.component';
 import { AddUserToCardModalComponent } from './components/add-user-to-card-modal/add-user-to-card-modal.component';
 import { CardLogTimeComponent } from './components/card-log-time/card-log-time.component';
+import { CardAddEstimateTimeComponent } from './components/card-add-estimate-time/card-add-estimate-time.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CardLogTimeComponent } from './components/card-log-time/card-log-time.c
     UpsertCardModalComponent,
     AddUserToCardModalComponent,
     CardLogTimeComponent,
+    CardAddEstimateTimeComponent,
   ],
   imports: [
     IonicModule,

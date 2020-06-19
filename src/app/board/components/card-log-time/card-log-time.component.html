@@ -43,36 +43,6 @@
             </ion-grid>
         </ion-item>
 
-        <ion-item>
-            <ion-grid class="ion-no-padding">
-                <ion-row class="ion-justify-content-start ion-align-items-center">
-
-                    <ion-col class="ion-no-padding">
-                        <ion-input type="number"
-                                   placeholder="Оценка"
-                                   formControlName="estimateValue"
-                                   required></ion-input>
-                    </ion-col>
-
-                    <ion-col class="ion-no-padding" size="100px">
-                        <ion-select placeholder="Промежуток"
-                                    formControlName="estimateSuffix"
-                                    required
-                                    style="max-width: 100%"
-                                    okText="Выбрать"
-                                    cancelText="Отмена">
-                            <ion-select-option
-                                    *ngFor="let option of logTimeValues"
-                                    [value]="option.value">
-                                {{option.viewValue}}
-                            </ion-select-option>
-                        </ion-select>
-                    </ion-col>
-
-                </ion-row>
-            </ion-grid>
-        </ion-item>
-
         <div class="ion-padding">
             <ion-button expand="block" (click)="submit()" [disabled]="logTimeForm.invalid">Залогировать время</ion-button>
         </div>
