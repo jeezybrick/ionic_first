@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     if (!this.newUserAvatarObj) {
-      return this.user.avatar.path;
+      return this.user.avatar;
     }
   }
 
