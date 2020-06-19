@@ -25,6 +25,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
   public isCardsLoading = true;
   public currentUserId: string;
   public columnId: string;
+  public isReorderDisabled: boolean = true;
   private subs = new SubSink();
 
   constructor(
@@ -183,6 +184,10 @@ export class CardsListComponent implements OnInit, OnDestroy {
       }]
     });
     await actionSheet.present();
+  }
+
+  public toggleReorder(): void {
+    this.isReorderDisabled = !this.isReorderDisabled;
   }
 
   private async removeCard(cardId: string) {

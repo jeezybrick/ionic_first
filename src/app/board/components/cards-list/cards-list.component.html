@@ -3,8 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button text="Назад"></ion-back-button>
     </ion-buttons>
+    <ion-title>Карточки</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleReorder()">Сортировать</ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  <ion-title>Карточки</ion-title>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -27,54 +30,64 @@
   <ion-refresher slot="fixed" (ionRefresh)="reloadData($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <br>
 
-  <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="cards.length <= 1">
-
-      <ion-card class="card-item {{card.priority}}" *ngFor="let card of cards">
-
-        <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
-          <ion-card-subtitle>
-            <ion-grid>
-              <ion-row class="ion-justify-content-between ion-align-items-center">
-                <ion-reorder>
-                  <span>{{card.createdAt | date: 'longDate'}}</span>
-                </ion-reorder>
-
-                <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card)" fill="clear">
-                  <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
-                </ion-button>
-              </ion-row>
-            </ion-grid>
-          </ion-card-subtitle>
+  <ion-reorder-group *ngIf="!isCardsLoading" (ionItemReorder)="doReorder($event)" [disabled]="isReorderDisabled">
+    <ion-grid *ngFor="let card of cards">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="1" *ngIf="!isReorderDisabled">
           <ion-reorder>
-          <ion-card-title>{{card.name}}</ion-card-title>
+            <ion-icon size="large" name="reorder-three-outline"></ion-icon>
           </ion-reorder>
-        </ion-card-header>
+        </ion-col>
 
-        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
-          <p *ngIf="card.description && card.description.length" class="ion-padding-bottom">{{card.description}}</p>
+        <ion-col>
+          <ion-card class="card-item ion-no-margin ion-margin-horizontal {{card.priority}}" (click)="viewCard(card)">
 
-          <ion-grid class="ion-no-padding">
-            <ion-row class="ion-justify-content-between ion-align-items-center">
+            <ion-card-header class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
+              <ion-card-subtitle>
+                <ion-grid>
+                  <ion-row class="ion-justify-content-between ion-align-items-center">
+                    <span>{{card.createdAt | date: 'longDate'}}</span>
 
-              <div class="ion-justify-content-start ion-align-items-center">
-                <ion-icon class="priority-icon" name="arrow-up" (click)="viewCard(card)"></ion-icon>
-                <ion-icon class="comments-icon" name="chatbubble-outline" (click)="viewCard(card)"></ion-icon>
-                <span class="comments-count" (click)="viewCard(card)">{{card.notes.length}}</span>
-              </div>
+                    <ion-button class="more-button" size="default" (click)="presentActionSheet($event, card)" fill="clear">
+                      <ion-icon class="more-icon" slot="icon-only" name="ellipsis-vertical"></ion-icon>
+                    </ion-button>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-subtitle>
+              <ion-card-title>{{card.name}}</ion-card-title>
+            </ion-card-header>
 
-              <ion-row class="ion-justify-content-start ion-align-items-center">
-                <ion-avatar class="user-card-avatar-wrap" *ngFor="let user of card.users" [routerLink]="['/tabs/users', user._id]">
-                  <img [src]="user.avatar">
-                </ion-avatar>
-              </ion-row>
+            <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-horizontal">
+              <p *ngIf="card.description && card.description.length" class="ion-padding-bottom">{{card.description}}</p>
 
-            </ion-row>
-          </ion-grid>
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-justify-content-between ion-align-items-center">
 
-        </ion-card-content>
+                  <div class="ion-justify-content-start ion-align-items-center">
+                    <ion-icon class="priority-icon" name="arrow-up"></ion-icon>
+                    <ion-icon class="comments-icon" name="chatbubble-outline"></ion-icon>
+                    <span class="comments-count">{{card.notes.length}}</span>
+                  </div>
 
-      </ion-card>
+                  <ion-row class="ion-justify-content-start ion-align-items-center">
+                    <ion-avatar class="user-card-avatar-wrap" *ngFor="let user of card.users" [routerLink]="['/tabs/users', user._id]" (click)="$event.stopPropagation()">
+                      <img [src]="user.avatar">
+                    </ion-avatar>
+                  </ion-row>
+
+                </ion-row>
+              </ion-grid>
+
+            </ion-card-content>
+
+          </ion-card>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
   </ion-reorder-group>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="cards.length">
