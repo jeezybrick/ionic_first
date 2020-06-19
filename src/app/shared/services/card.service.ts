@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Card } from '../models/card.model';
 import { User } from '../models/user.model';
 import { CardLogTimeSubmitDataInterface, CardLogTimeSuffixType } from '../interfaces/card-log-time-submit-data.interface';
+import { CardEstimateTimeSubmitDataInterface } from '../interfaces/card-estimate-time-submit-data.interface';
 
 export interface UpdateCardPositionInterface {
     currentColumnId: string;
@@ -95,5 +96,8 @@ export class CardService {
         return this.http.post<Card>(`/api/cards/${cardId}/log-time`, data);
     }
 
+    public estimateTime(cardId: string, data: CardEstimateTimeSubmitDataInterface): Observable<Card> {
+        return this.http.post<Card>(`/api/cards/${cardId}/estimate-time`, data);
+    }
 
 }

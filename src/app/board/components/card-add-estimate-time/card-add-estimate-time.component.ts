@@ -7,7 +7,8 @@ import { Card } from '../../../shared/models/card.model';
 import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
 import { CardService, logTimeValues } from '../../../shared/services/card.service';
-import { CardLogTimeSubmitDataInterface, CardLogTimeSuffixType } from '../../../shared/interfaces/card-log-time-submit-data.interface';
+import { CardLogTimeSuffixType } from '../../../shared/interfaces/card-log-time-submit-data.interface';
+import { CardEstimateTimeSubmitDataInterface } from '../../../shared/interfaces/card-estimate-time-submit-data.interface';
 
 @Component({
   selector: 'app-card-add-estimate-time',
@@ -30,8 +31,8 @@ export class CardAddEstimateTimeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.estimateTimeForm = this.fb.group({
-      estimateValue: [null],
-      estimateSuffix: [this.logTimeValues[0].value, Validators.required],
+      value: [this.card.estimateTime ? this.card.estimateTime.value : null],
+      suffix: [this.card.estimateTime ? this.card.estimateTime.suffix : this.logTimeValues[0].value, Validators.required],
     });
   }
 
@@ -45,16 +46,15 @@ export class CardAddEstimateTimeComponent implements OnInit, OnDestroy {
 
   public async submit() {
     await this.loaderService.presentLoading('Сохранение...');
-    const data: CardLogTimeSubmitDataInterface = {
+    const data: CardEstimateTimeSubmitDataInterface = {
       ...this.estimateTimeForm.value,
-      date: new Date(this.estimateTimeForm.value.date).toISOString(),
     };
 
-    this.subs.sink = this.cardService.logTime(this.card._id, data)
+    this.subs.sink = this.cardService.estimateTime(this.card._id, data)
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: Card) => {
           this.dismiss(response);
-          this.toastService.presentToast('Время успешно залогировано');
+          this.toastService.presentToast('Время успешно сохранено');
         }, (error) => {
           this.toastService.presentErrorToast();
         });
