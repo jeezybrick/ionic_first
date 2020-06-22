@@ -4,7 +4,6 @@ import { filter, tap } from 'rxjs/operators';
 import { Observable, Subject, Subscription, timer } from 'rxjs';
 import { Board } from '../models/board.model';
 import { User } from '../models/user.model';
-import { AuthService } from './auth.service';
 import { TokenStorage } from './token.storage';
 
 @Injectable({
@@ -14,7 +13,7 @@ export class BoardService {
     private boards: Board[] = [];
     private pollingInviteToBoard$: Subject<boolean> = new Subject();
     private pollingInviteToBoardSubscription: Subscription;
-    private pollingInviteToBoardInterval: number = 15 * 1000;
+    private pollingInviteToBoardInterval: number = 30 * 1000;
 
     constructor(private http: HttpClient, private tokenStorage: TokenStorage) {
     }
