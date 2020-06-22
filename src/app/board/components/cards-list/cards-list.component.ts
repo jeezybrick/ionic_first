@@ -17,275 +17,286 @@ import { CardAddEstimateTimeComponent } from '../card-add-estimate-time/card-add
 import { CardMoveToColumnModalComponent } from '../card-move-to-column-modal/card-move-to-column-modal.component';
 
 @Component({
-  selector: 'app-cards-list',
-  templateUrl: './cards-list.component.html',
-  styleUrls: ['./cards-list.component.scss'],
+    selector: 'app-cards-list',
+    templateUrl: './cards-list.component.html',
+    styleUrls: ['./cards-list.component.scss'],
 })
 export class CardsListComponent implements OnInit, OnDestroy {
-  public cards: Card[] = [];
-  public currentUser$: Observable<User>;
-  public isCardsLoading = true;
-  public currentUserId: string;
-  public columnId: string;
-  public isReorderDisabled: boolean = true;
-  private subs = new SubSink();
+    public cards: Card[] = [];
+    public currentUser$: Observable<User>;
+    public isCardsLoading = true;
+    public currentUserId: string;
+    public columnId: string;
+    public isReorderDisabled: boolean = true;
+    private subs = new SubSink();
 
-  constructor(
-      private router: Router,
-      private route: ActivatedRoute,
-      private modalController: ModalController,
-      private cardService: CardService,
-      private toastService: ToastService,
-      private authService: AuthService,
-      private actionSheetController: ActionSheetController,
-      private loaderService: LoaderService) {}
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private modalController: ModalController,
+        private cardService: CardService,
+        private toastService: ToastService,
+        private authService: AuthService,
+        private actionSheetController: ActionSheetController,
+        private loaderService: LoaderService) {
+    }
 
-  ngOnInit() {
-    this.currentUser$ = this.authService.getUser();
-    this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
-    this.subs.sink = this.route.params.subscribe((params) => {
-      this.columnId = params.columnId;
+    ngOnInit() {
+        this.currentUser$ = this.authService.getUser();
+        this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
+        this.subs.sink = this.route.params.subscribe((params) => {
+            this.columnId = params.columnId;
 
-      if (!this.columnId) {
-        this.router.navigate(['boards']);
-        return;
-      }
+            if (!this.columnId) {
+                this.router.navigate(['boards']);
+                return;
+            }
 
-      this.getCards(this.columnId);
+            this.getCards(this.columnId);
 
-    });
-  }
+        });
+    }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.subs.unsubscribe();
+    }
 
-  public doReorder(ev: any) {
-    const cardsCountIndexes = this.cards.length - 1;
-    const toIndex = ev.detail.to > cardsCountIndexes ? cardsCountIndexes : ev.detail.to;
-    const fromIndex = ev.detail.from;
+    public doReorder(ev: any) {
+        const cardsCountIndexes = this.cards.length - 1;
+        const toIndex = ev.detail.to > cardsCountIndexes ? cardsCountIndexes : ev.detail.to;
+        const fromIndex = ev.detail.from;
 
-    const data: UpdateCardPositionInterface = {
-      currentColumnId: this.columnId,
-      previousColumnId: this.columnId,
-      currentIndex: toIndex,
-      previousIndex: fromIndex,
-      cardId: this.cards[fromIndex]._id,
-    };
+        const data: UpdateCardPositionInterface = {
+            currentColumnId: this.columnId,
+            previousColumnId: this.columnId,
+            currentIndex: toIndex,
+            previousIndex: fromIndex,
+            cardId: this.cards[fromIndex]._id,
+        };
 
-    this.subs.sink = this.cardService.updatePosition(data)
-        .pipe(
-            map((cards: Card[]) => cards.map(item => {
-              const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
-              return {...item, priorityName };
-            }))
-        )
-        .subscribe((res) => {
-      this.cards = res;
-    });
-    ev.detail.complete();
-  }
+        this.subs.sink = this.cardService.updatePosition(data)
+            .pipe(
+                map((cards: Card[]) => cards.map(item => {
+                    const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
+                    return {...item, priorityName};
+                }))
+            )
+            .subscribe((res) => {
+                this.cards = res;
+            });
+        ev.detail.complete();
+    }
 
-  public reloadData(event): void {
-    this.getCards(this.columnId, event);
-  }
+    public reloadData(event): void {
+        this.getCards(this.columnId, event);
+    }
 
-  async addCard() {
-    const modal = await this.modalController.create({
-      component: UpsertCardModalComponent,
-      componentProps: {
-        columnId: this.route.snapshot.params.columnId,
-      },
-    });
+    async addCard() {
+        const modal = await this.modalController.create({
+            component: UpsertCardModalComponent,
+            componentProps: {
+                columnId: this.route.snapshot.params.columnId,
+            },
+        });
 
-    modal.onWillDismiss().then((res) => {
-      if (res && res.data) {
-        this.cards = [...this.cards, res.data.card];
-      }
-    });
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                this.cards = [...this.cards, res.data.card];
+            }
+        });
 
-    return await modal.present();
-  }
+        return await modal.present();
+    }
 
-  async viewCard(card: Card) {
-    const modal = await this.modalController.create({
-      component: ViewCardModalComponent,
-      componentProps: {
-        card,
-      },
-    });
+    async viewCard(card: Card) {
+        const modal = await this.modalController.create({
+            component: ViewCardModalComponent,
+            componentProps: {
+                card,
+            },
+        });
 
-    return await modal.present();
-  }
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                const index = this.cards.findIndex(item => item._id === res.data._id);
 
-  async editCard(card: Card) {
-    const modal = await this.modalController.create({
-      component: UpsertCardModalComponent,
-      componentProps: {
-        isEdit: true,
-        card,
-        columnId: card.columnId,
-      },
-    });
+                if (index > -1) {
+                    this.cards[index] = {...this.cards[index], ...res.data};
+                }
+            }
+        });
 
-    modal.onWillDismiss().then((res) => {
-      if (res && res.data) {
-        const editedCard = res.data.card;
-        const index = this.cards.findIndex(item => item._id === editedCard._id);
+        return await modal.present();
+    }
 
-        if (index > -1) {
-          this.cards[index] = {...this.cards[index], ...editedCard};
-        }
-      }
-    });
+    async editCard(card: Card) {
+        const modal = await this.modalController.create({
+            component: UpsertCardModalComponent,
+            componentProps: {
+                isEdit: true,
+                card,
+                columnId: card.columnId,
+            },
+        });
 
-    return await modal.present();
-  }
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                const editedCard = res.data.card;
+                const index = this.cards.findIndex(item => item._id === editedCard._id);
 
-  async logTime(card: Card) {
-    const modal = await this.modalController.create({
-      component: CardLogTimeComponent,
-      componentProps: {
-        card,
-      },
-    });
+                if (index > -1) {
+                    this.cards[index] = {...this.cards[index], ...editedCard};
+                }
+            }
+        });
 
-    modal.onWillDismiss().then((res) => {
-      if (res && res.data) {
-        const editedCard = res.data;
-        const index = this.cards.findIndex(item => item._id === editedCard._id);
+        return await modal.present();
+    }
 
-        if (index > -1) {
-          this.cards[index] = {...this.cards[index], ...editedCard};
-        }
-      }
-    });
+    async logTime(card: Card) {
+        const modal = await this.modalController.create({
+            component: CardLogTimeComponent,
+            componentProps: {
+                card,
+            },
+        });
 
-    return await modal.present();
-  }
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                const editedCard = res.data;
+                const index = this.cards.findIndex(item => item._id === editedCard._id);
 
-  async addEstimate(card: Card) {
-    const modal = await this.modalController.create({
-      component: CardAddEstimateTimeComponent,
-      componentProps: {
-        card,
-      },
-    });
+                if (index > -1) {
+                    this.cards[index] = {...this.cards[index], ...editedCard};
+                }
+            }
+        });
 
-    modal.onWillDismiss().then((res) => {
-      if (res && res.data) {
-        const editedCard = res.data;
-        const index = this.cards.findIndex(item => item._id === editedCard._id);
+        return await modal.present();
+    }
 
-        if (index > -1) {
-          this.cards[index] = {...this.cards[index], ...editedCard};
-        }
-      }
-    });
+    async addEstimate(card: Card) {
+        const modal = await this.modalController.create({
+            component: CardAddEstimateTimeComponent,
+            componentProps: {
+                card,
+            },
+        });
 
-    return await modal.present();
-  }
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                const editedCard = res.data;
+                const index = this.cards.findIndex(item => item._id === editedCard._id);
 
-  async showMoveToColumnModal(card: Card) {
-    const modal = await this.modalController.create({
-      component: CardMoveToColumnModalComponent,
-      componentProps: {
-        card,
-      },
-    });
+                if (index > -1) {
+                    this.cards[index] = {...this.cards[index], ...editedCard};
+                }
+            }
+        });
 
-    modal.onWillDismiss().then((res) => {
-      if (res && res.data) {
-        this.isCardsLoading = true;
-        this.getCards();
-      }
-    });
+        return await modal.present();
+    }
 
-    return await modal.present();
-  }
+    async showMoveToColumnModal(card: Card) {
+        const modal = await this.modalController.create({
+            component: CardMoveToColumnModalComponent,
+            componentProps: {
+                card,
+            },
+        });
 
-  async presentActionSheet(event, card: Card) {
-    event.stopPropagation();
-    event.preventDefault();
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                this.isCardsLoading = true;
+                this.getCards();
+            }
+        });
 
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Карточки',
-      buttons: [{
-        text: 'Оценка времени',
-        handler: () => {
-          this.addEstimate(card);
-        }
-      }, {
-        text: 'Залогировать время',
-        handler: () => {
-          this.logTime(card);
-        }
-      }, {
-        text: 'Переместить в колонку',
-        handler: () => {
-          this.showMoveToColumnModal(card);
-        }
-      }, {
-        text: 'Посмотреть',
-        handler: () => {
-          this.viewCard(card);
-        }
-      }, {
-        text: 'Редактировать',
-        handler: () => {
-          this.editCard(card);
-        }
-      }, {
-        text: 'Удалить',
-        role: 'destructive',
-        handler: () => {
-          this.removeCard(card._id);
-        }
-      }, {
-        text: 'Отмена',
-        role: 'cancel'
-      }]
-    });
-    await actionSheet.present();
-  }
+        return await modal.present();
+    }
 
-  public toggleReorder(): void {
-    this.isReorderDisabled = !this.isReorderDisabled;
-  }
+    async presentActionSheet(event, card: Card) {
+        event.stopPropagation();
+        event.preventDefault();
 
-  private async removeCard(cardId: string) {
-    await this.loaderService.presentLoading('Удаление...');
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Карточки',
+            buttons: [{
+                text: 'Оценка времени',
+                handler: () => {
+                    this.addEstimate(card);
+                }
+            }, {
+                text: 'Залогировать время',
+                handler: () => {
+                    this.logTime(card);
+                }
+            }, {
+                text: 'Переместить в колонку',
+                handler: () => {
+                    this.showMoveToColumnModal(card);
+                }
+            }, {
+                text: 'Посмотреть',
+                handler: () => {
+                    this.viewCard(card);
+                }
+            }, {
+                text: 'Редактировать',
+                handler: () => {
+                    this.editCard(card);
+                }
+            }, {
+                text: 'Удалить',
+                role: 'destructive',
+                handler: () => {
+                    this.removeCard(card._id);
+                }
+            }, {
+                text: 'Отмена',
+                role: 'cancel'
+            }]
+        });
+        await actionSheet.present();
+    }
 
-    this.subs.sink = this.cardService.deleteCard(cardId)
-        .pipe(finalize(() => this.loaderService.dismissLoading()))
-        .subscribe((response: Card[]) => {
-          this.cards = response;
-          this.toastService.presentToast('Карточка упешно удалена');
-          },
-          (error) => {
-            this.toastService.presentErrorToast();
-          });
-  }
+    public toggleReorder(): void {
+        this.isReorderDisabled = !this.isReorderDisabled;
+    }
 
-  private getCards(columnId = this.columnId, event?): void {
-    this.subs.sink = this.cardService.getAllCards(columnId)
-        .pipe(
-            delay(1000),
-            map((cards: Card[]) => cards.map(item => {
-              const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
-              return {...item, priorityName };
-            }))
-        )
-        .subscribe((response: Card[]) => {
-      this.cards = response;
-      this.isCardsLoading = false;
+    private async removeCard(cardId: string) {
+        await this.loaderService.presentLoading('Удаление...');
 
-      if (event) {
-        event.target.complete();
-      }
-    }, (error) => {
-      this.toastService.presentErrorToast();
-    });
-  }
+        this.subs.sink = this.cardService.deleteCard(cardId)
+            .pipe(finalize(() => this.loaderService.dismissLoading()))
+            .subscribe((response: Card[]) => {
+                    this.cards = response;
+                    this.toastService.presentToast('Карточка упешно удалена');
+                },
+                (error) => {
+                    this.toastService.presentErrorToast();
+                });
+    }
+
+    private getCards(columnId = this.columnId, event?): void {
+        this.subs.sink = this.cardService.getAllCards(columnId)
+            .pipe(
+                delay(1000),
+                map((cards: Card[]) => cards.map(item => {
+                    const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
+                    return {...item, priorityName};
+                }))
+            )
+            .subscribe((response: Card[]) => {
+                this.cards = response;
+                this.isCardsLoading = false;
+
+                if (event) {
+                    event.target.complete();
+                }
+            }, (error) => {
+                this.toastService.presentErrorToast();
+            });
+    }
 
 }

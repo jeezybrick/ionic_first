@@ -90,7 +90,7 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
         return await modal.present();
     }
 
-    public dismiss(data?) {
+    public dismiss(data = this.card) {
         this.modalController.dismiss(data);
     }
 
