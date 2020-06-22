@@ -12,6 +12,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { FileUploaderOptions } from 'ng2-file-upload/file-upload/file-uploader.class';
 import { IonSearchbar } from '@ionic/angular';
+import { forkJoin, Observable, zip } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -19,6 +20,7 @@ import { IonSearchbar } from '@ionic/angular';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  public newAvatar: any;
   public uploader: FileUploader;
   public errors = null;
   public user: User;
@@ -77,20 +79,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const files = Array.from(this.fileInput.nativeElement.files);
+    const obs: Observable<any>[] = [];
     const formData = new FormData();
     formData.append('email', value.email);
     formData.append('fullname', value.fullname);
 
-    if (files.length) {
-      this.uploadAvatar(files[0] as File);
-      // formData.append('avatar', files[0] as any);
+    if (this.newUserAvatarObj) {
+      obs.push(this.authService.uploadAvatar(this.newUserAvatarObj.file));
     }
 
     this.errors = null;
     await this.loaderService.presentLoading();
+    obs.push(this.authService.updateProfile(formData));
 
-    this.subs.sink = this.authService.updateProfile(formData)
+    this.subs.sink = forkJoin(obs)
         .pipe(
            finalize(() => this.loaderService.dismissLoading())
         )
@@ -101,6 +103,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
               this.toastService.presentErrorToast();
               this.errors = error;
             });
+  }
+
+  public onAvatarSelect(target): void {
+    const file = target.files[0];
+
+    if (file) {
+      this.newUserAvatarObj = {
+        file,
+        url: this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
+      };
+    }
+
   }
 
   private setProfileForm(): void {
