@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
+const toastCommonConfig: any = {
+    position: 'top',
+    buttons: [{
+        icon: 'close',
+        role: 'cancel'
+    }]
+};
+
 @Injectable({
     providedIn: 'root'
 })
@@ -12,23 +20,18 @@ export class ToastService {
 
     public async presentToast(message: string, color = 'primary') {
         this.toast = await this.toastController.create({
+            ...toastCommonConfig,
             message,
             color,
-            position: 'top',
-            duration: 2500,
-            buttons: [{
-                icon: 'close',
-                role: 'cancel'
-            }]
         });
         await this.toast.present();
     }
 
     public async presentErrorToast(message: string = 'Что-то пошло не так :(') {
         this.toast = await this.toastController.create({
+            ...toastCommonConfig,
             message,
             color: 'danger',
-            duration: 4000,
         });
         await this.toast.present();
     }
