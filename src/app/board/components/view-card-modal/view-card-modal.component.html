@@ -9,7 +9,7 @@
 
 <ion-content fullscreen *ngIf="(currentUser$ | async) as currentUser">
 
-  <ion-grid class="ion-padding-end">
+  <ion-grid class="ion-padding-bottom">
     <ion-row class="ion-justify-content-start ion-align-items-center">
       <ng-container *ngFor="let user of card.users">
         <ion-chip [routerLink]="['/tabs/users', user._id]" (click)="dismiss()">
@@ -25,53 +25,75 @@
     </ion-row>
   </ion-grid>
 
-  <p class="ion-padding" *ngIf="card.description && card.description.length">{{card.description}}</p>
+  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.description && card.description.length">Описание: {{card.description}}</p>
 
-  <ion-item>
-    <ion-label position="floating">Добавить заметку</ion-label>
-    <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
-  </ion-item>
+  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.estimateTime">
+    Оценка:
+    {{card.estimateTime.value}} {{card.estimateTime.suffix}}
+  </p>
 
-  <div class="ion-padding">
-    <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
+  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.loggedTime && card.loggedTime.length">
+    Залогировано:
+    {{loggedTimeSum.valueH}} {{loggedTimeSum.suffixH}} {{loggedTimeSum.valueM}} {{loggedTimeSum.suffixM}}
+  </p>
+
+  <div class="ion-no-padding ion-padding-top">
+    <ion-segment (ionChange)="segmentChanged($event)" value="notes">
+      <ion-segment-button *ngFor="let segment of segments" [value]="segment.value">
+        <ion-label>{{segment.viewValue}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </div>
 
-  <ion-list *ngIf="card.notes.length">
+  <ng-container *ngIf="segment === 'notes'">
+    <ion-item>
+      <ion-label position="floating">Добавить заметку</ion-label>
+      <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
+    </ion-item>
 
-    <ion-list-header>
-      Заметки
-    </ion-list-header>
+    <div class="ion-padding">
+      <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
+    </div>
 
-    <ion-item-sliding *ngFor="let note of card.notes">
-      <ion-item>
-        <ion-avatar slot="start">
-          <img [src]="note.owner.avatar">
-        </ion-avatar>
-        <ion-label>
-          <p>{{note.createdAt | date: 'short'}}</p>
-          <p>{{note.owner.fullname}}</p>
-          <h2 class="ion-text-wrap">{{note.name}}</h2>
-        </ion-label>
+    <ion-list *ngIf="card.notes.length">
 
-        <ion-note slot="end">
-          <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
-            <ion-icon *ngIf="!isFavorite.get(note._id)" name="heart-outline"></ion-icon>
-            <ion-icon color="primary" *ngIf="isFavorite.get(note._id)" name="heart"></ion-icon>
-          </ion-button>
-        </ion-note>
+      <ion-list-header>
+        Заметки
+      </ion-list-header>
 
-      </ion-item>
-      <ion-item-options side="end" *ngIf="currentUser._id === note.owner._id">
-        <ion-item-option>
-          <ion-icon name="pencil-outline" size="large"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="deleteNote($event, note._id)">
-          <ion-icon name="trash-outline" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+      <ion-item-sliding *ngFor="let note of card.notes">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img [src]="note.owner.avatar">
+          </ion-avatar>
+          <ion-label>
+            <p>{{note.createdAt | date: 'short'}}</p>
+            <p>{{note.owner.fullname}}</p>
+            <h2 class="ion-text-wrap">{{note.name}}</h2>
+          </ion-label>
 
-  </ion-list>
+          <ion-note slot="end">
+            <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
+              <ion-icon *ngIf="!isFavorite.get(note._id)" name="heart-outline"></ion-icon>
+              <ion-icon color="primary" *ngIf="isFavorite.get(note._id)" name="heart"></ion-icon>
+            </ion-button>
+          </ion-note>
+
+        </ion-item>
+        <ion-item-options side="end" *ngIf="currentUser._id === note.owner._id">
+          <ion-item-option>
+            <ion-icon name="pencil-outline" size="large"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="deleteNote($event, note._id)">
+            <ion-icon name="trash-outline" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="segment === 'actions'"></ng-container>
 
 </ion-content>
 

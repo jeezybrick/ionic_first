@@ -12,6 +12,7 @@ import { NoteService } from '../../../shared/services/note.service';
 import { finalize, tap } from 'rxjs/operators';
 import { Note } from '../../../shared/models/note.model';
 import { AddUserToCardModalComponent } from '../add-user-to-card-modal/add-user-to-card-modal.component';
+import { CardLogTimeSuffixType } from '../../../shared/interfaces/card-log-time-submit-data.interface';
 
 @Component({
     selector: 'app-view-card-modal',
@@ -22,6 +23,17 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
     public noteText = '';
     public currentUser$: Observable<User>;
     public isFavorite: Map<string, boolean>;
+    public segments: {value: string; viewValue: string; }[] = [
+        {
+            value: 'notes',
+            viewValue: 'Заметки'
+        },
+        {
+            value: 'actions',
+            viewValue: 'Все действия'
+        },
+    ];
+    public segment: 'notes' | 'actions' = 'notes';
 
     private toggleIsFavoriteStateSubscription: Subscription;
     private subs = new SubSink();
@@ -49,6 +61,17 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subs.unsubscribe();
+    }
+
+    get loggedTimeSum() {
+        const sumInMinutes = this.card.loggedTime.filter(item => item.suffix === 'm').reduce((acc: number, b: any) => acc + b.value, 0);
+        const sumInHours = this.card.loggedTime.filter(item => item.suffix === 'h').reduce((acc: number, b: any) => acc + b.value, 0);
+        return {
+            valueM: sumInMinutes,
+            valueH: sumInHours,
+            suffixM: 'm',
+            suffixH: 'h'
+        };
     }
 
     public async addUsersToCard() {
@@ -138,6 +161,10 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
                 (error) => {
                     this.toastService.presentErrorToast();
                 });
+    }
+
+    public segmentChanged(ev: any) {
+        this.segment = ev.detail.value;
     }
 
     private clearNoteText(): void {
