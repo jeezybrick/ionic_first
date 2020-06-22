@@ -3,6 +3,7 @@ import { ToastController } from '@ionic/angular';
 
 const toastCommonConfig: any = {
     position: 'top',
+    duration: 2500,
     buttons: [{
         icon: 'close',
         role: 'cancel'
