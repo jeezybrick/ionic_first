@@ -12,9 +12,9 @@ export class Card extends Base {
   column?: Column;
   description: string;
   priority: CardPrioritiesEnum;
-  priorityName?: string;
   users?: User[];
   owner?: User | string;
   loggedTime?: { date: string | Date; value: number; suffix: CardLogTimeSuffixType }[];
   estimateTime?: { value: number; suffix: CardLogTimeSuffixType };
+  actions?: { date: string | Date; message: string; }[];
 }

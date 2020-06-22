@@ -64,8 +64,8 @@ export class CardService {
     constructor(private http: HttpClient) {
     }
 
-    public getAllCards(columnId): any {
-        return this.http.get(`/api/columns/${columnId}/cards`);
+    public getAllCards(columnId): Observable<Card[]> {
+        return this.http.get<Card[]>(`/api/columns/${columnId}/cards`);
     }
 
     public createCard(columnId: string, data: any): any {
@@ -84,12 +84,12 @@ export class CardService {
         return this.http.patch<Card>(`/api/cards/${cardId}`, data);
     }
 
-    public addUsersToCard(cardId: string, ids: string[]): Observable<User[]> {
-        return this.http.post<User[]>(`/api/cards/${cardId}/add-users`, {users: ids});
+    public addUsersToCard(cardId: string, ids: string[]): Observable<Card> {
+        return this.http.post<Card>(`/api/cards/${cardId}/add-users`, {users: ids});
     }
 
-    public removeUsersFromCard(cardId: string, ids: string[]): Observable<User[]> {
-        return this.http.post<User[]>(`/api/cards/${cardId}/remove-users`, {users: ids});
+    public removeUsersFromCard(cardId: string, ids: string[]): Observable<Card> {
+        return this.http.post<Card>(`/api/cards/${cardId}/remove-users`, {users: ids});
     }
 
     public logTime(cardId: string, data: CardLogTimeSubmitDataInterface): Observable<Card> {

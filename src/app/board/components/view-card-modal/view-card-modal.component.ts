@@ -12,7 +12,6 @@ import { NoteService } from '../../../shared/services/note.service';
 import { finalize, tap } from 'rxjs/operators';
 import { Note } from '../../../shared/models/note.model';
 import { AddUserToCardModalComponent } from '../add-user-to-card-modal/add-user-to-card-modal.component';
-import { CardLogTimeSuffixType } from '../../../shared/interfaces/card-log-time-submit-data.interface';
 
 @Component({
     selector: 'app-view-card-modal',
@@ -84,7 +83,7 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
         modal.onWillDismiss().then((res) => {
             if (res && res.data) {
-                this.card.users = [...res.data];
+                this.card = {...this.card, ...res.data};
             }
         });
 
@@ -100,9 +99,9 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
         this.subs.sink = this.noteService.createNote(this.card._id, {name: this.noteText})
             .pipe(finalize(() => this.loaderService.dismissLoading()))
-            .subscribe((response: Note) => {
+            .subscribe((response: Card) => {
                 this.clearNoteText();
-                this.card.notes.push(response);
+                this.card = {...this.card, ...response};
                 this.toastService.presentToast('Заметка упешно добавлена');
             }, (error) => {
                 this.toastService.presentErrorToast();
@@ -116,9 +115,9 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
         this.subs.sink = this.noteService.deleteNote(noteId)
             .pipe(finalize(() => this.loaderService.dismissLoading()))
-            .subscribe((response: Note) => {
+            .subscribe((response: Card) => {
                     this.toastService.presentToast('Заметка упешно удалена');
-                    this.card.notes = this.card.notes.filter(item => item._id !== response._id);
+                    this.card = {...this.card, ...response};
                 },
                 (error) => {
                     this.toastService.presentErrorToast();
@@ -154,9 +153,9 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
 
         this.subs.sink = this.cardService.removeUsersFromCard(this.card._id, [user._id])
             .pipe(finalize(() => this.loaderService.dismissLoading()))
-            .subscribe((response: User[]) => {
+            .subscribe((response: Card) => {
                     this.toastService.presentToast('Пользователь успешно удален с карточки');
-                    this.card.users = [...response];
+                    this.card = {...this.card, ...response};
                 },
                 (error) => {
                     this.toastService.presentErrorToast();

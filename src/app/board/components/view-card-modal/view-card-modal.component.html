@@ -1,99 +1,115 @@
 <ion-header translucent>
-  <ion-toolbar>
-    <ion-title>{{card?.name}}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Закрыть</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>{{card?.name}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">Закрыть</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen *ngIf="(currentUser$ | async) as currentUser">
 
-  <ion-grid class="ion-padding-bottom">
-    <ion-row class="ion-justify-content-start ion-align-items-center">
-      <ng-container *ngFor="let user of card.users">
-        <ion-chip [routerLink]="['/tabs/users', user._id]" (click)="dismiss()">
-          <ion-avatar>
-            <img [src]="user.avatar" />
-          </ion-avatar>
-          <ion-label>{{user.fullname}}</ion-label>
-          <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle" (click)="removeUserFromCard($event, user)"></ion-icon>
-        </ion-chip>
-      </ng-container>
+    <ion-grid class="ion-padding-bottom">
+        <ion-row class="ion-justify-content-start ion-align-items-center">
+            <ng-container *ngFor="let user of card.users">
+                <ion-chip [routerLink]="['/tabs/users', user._id]" (click)="dismiss()">
+                    <ion-avatar>
+                        <img [src]="user.avatar"/>
+                    </ion-avatar>
+                    <ion-label>{{user.fullname}}</ion-label>
+                    <ion-icon *ngIf="currentUser._id === card.owner && currentUser._id !== user._id" name="close-circle"
+                              (click)="removeUserFromCard($event, user)"></ion-icon>
+                </ion-chip>
+            </ng-container>
 
-      <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline" (click)="addUsersToCard()">Добавить</ion-button>
-    </ion-row>
-  </ion-grid>
+            <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline" (click)="addUsersToCard()">
+                Добавить
+            </ion-button>
+        </ion-row>
+    </ion-grid>
 
-  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.description && card.description.length">Описание: {{card.description}}</p>
+    <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin"
+       *ngIf="card.description && card.description.length">Описание: {{card.description}}</p>
 
-  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.estimateTime">
-    Оценка:
-    {{card.estimateTime.value}} {{card.estimateTime.suffix}}
-  </p>
+    <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.estimateTime">
+        Оценка:
+        {{card.estimateTime.value}}{{card.estimateTime.suffix}}
+    </p>
 
-  <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.loggedTime && card.loggedTime.length">
-    Залогировано:
-    {{loggedTimeSum.valueH}} {{loggedTimeSum.suffixH}} {{loggedTimeSum.valueM}} {{loggedTimeSum.suffixM}}
-  </p>
+    <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin"
+       *ngIf="card.loggedTime && card.loggedTime.length">
+        Залогировано:
+        {{loggedTimeSum.valueH}}{{loggedTimeSum.suffixH}} {{loggedTimeSum.valueM}}{{loggedTimeSum.suffixM}}
+    </p>
 
-  <div class="ion-no-padding ion-padding-top">
-    <ion-segment (ionChange)="segmentChanged($event)" value="notes">
-      <ion-segment-button *ngFor="let segment of segments" [value]="segment.value">
-        <ion-label>{{segment.viewValue}}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-
-  <ng-container *ngIf="segment === 'notes'">
-    <ion-item>
-      <ion-label position="floating">Добавить заметку</ion-label>
-      <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
-    </ion-item>
-
-    <div class="ion-padding">
-      <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
+    <div class="ion-no-padding ion-padding-top">
+        <ion-segment (ionChange)="segmentChanged($event)" value="notes">
+            <ion-segment-button *ngFor="let segment of segments" [value]="segment.value">
+                <ion-label>{{segment.viewValue}}</ion-label>
+            </ion-segment-button>
+        </ion-segment>
     </div>
 
-    <ion-list *ngIf="card.notes.length">
-
-      <ion-list-header>
-        Заметки
-      </ion-list-header>
-
-      <ion-item-sliding *ngFor="let note of card.notes">
+    <ng-container *ngIf="segment === 'notes'">
         <ion-item>
-          <ion-avatar slot="start">
-            <img [src]="note.owner.avatar">
-          </ion-avatar>
-          <ion-label>
-            <p>{{note.createdAt | date: 'short'}}</p>
-            <p>{{note.owner.fullname}}</p>
-            <h2 class="ion-text-wrap">{{note.name}}</h2>
-          </ion-label>
-
-          <ion-note slot="end">
-            <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
-              <ion-icon *ngIf="!isFavorite.get(note._id)" name="heart-outline"></ion-icon>
-              <ion-icon color="primary" *ngIf="isFavorite.get(note._id)" name="heart"></ion-icon>
-            </ion-button>
-          </ion-note>
-
+            <ion-label position="floating">Добавить заметку</ion-label>
+            <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
         </ion-item>
-        <ion-item-options side="end" *ngIf="currentUser._id === note.owner._id">
-          <ion-item-option>
-            <ion-icon name="pencil-outline" size="large"></ion-icon>
-          </ion-item-option>
-          <ion-item-option color="danger" (click)="deleteNote($event, note._id)">
-            <ion-icon name="trash-outline" size="large"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
 
-    </ion-list>
-  </ng-container>
+        <div class="ion-padding">
+            <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
+        </div>
 
-  <ng-container *ngIf="segment === 'actions'"></ng-container>
+        <ion-list *ngIf="card.notes.length">
+
+            <ion-list-header>
+                Заметки
+            </ion-list-header>
+
+            <ion-item-sliding *ngFor="let note of card.notes">
+                <ion-item>
+                    <ion-avatar slot="start">
+                        <img [src]="note.owner.avatar">
+                    </ion-avatar>
+                    <ion-label>
+                        <p>{{note.createdAt | date: 'short'}}</p>
+                        <p>{{note.owner.fullname}}</p>
+                        <h2 class="ion-text-wrap">{{note.name}}</h2>
+                    </ion-label>
+
+                    <ion-note slot="end">
+                        <ion-button size="small" (click)="toggleIsFavoriteState(note)" fill="clear">
+                            <ion-icon *ngIf="!isFavorite.get(note._id)" name="heart-outline"></ion-icon>
+                            <ion-icon color="primary" *ngIf="isFavorite.get(note._id)" name="heart"></ion-icon>
+                        </ion-button>
+                    </ion-note>
+
+                </ion-item>
+                <ion-item-options side="end" *ngIf="currentUser._id === note.owner._id">
+                    <ion-item-option *ngIf="false">
+                        <ion-icon name="pencil-outline" size="large"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="danger" (click)="deleteNote($event, note._id)">
+                        <ion-icon name="trash-outline" size="large"></ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </ion-list>
+    </ng-container>
+
+    <ng-container *ngIf="segment === 'actions'">
+        <ion-list *ngIf="card.actions.length">
+            <ion-item *ngFor="let action of card.actions">
+                <ion-label>
+                  <p>{{action.date | date: 'short'}}</p>
+                    <h2 class="ion-text-wrap">
+                      {{action.message}}
+                    </h2>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+    </ng-container>
 
 </ion-content>
 

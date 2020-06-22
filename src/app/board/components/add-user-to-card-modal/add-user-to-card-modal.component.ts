@@ -51,7 +51,7 @@ export class AddUserToCardModalComponent implements OnDestroy {
 
     this.subs.sink = this.cardService.addUsersToCard(this.card._id, this.selectedUsers.map(item => item._id))
         .pipe(finalize(() => this.loaderService.dismissLoading()))
-        .subscribe((response: User[]) => {
+        .subscribe((response: Card) => {
           this.dismiss(response);
           this.toastService.presentToast('Пользователи упешно добавлены');
         }, (error) => {
