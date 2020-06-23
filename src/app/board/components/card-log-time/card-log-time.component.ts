@@ -42,7 +42,7 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.logTimeForm = this.fb.group({
       date: [new Date().toISOString(), Validators.required],
-      value: [null],
+      value: [null,  Validators.min(0)],
       suffix: [this.logTimeValues[0].value, Validators.required],
     });
   }

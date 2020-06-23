@@ -31,7 +31,7 @@ export class CardAddEstimateTimeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.estimateTimeForm = this.fb.group({
-      value: [this.card.estimateTime ? this.card.estimateTime.value : null],
+      value: [this.card.estimateTime ? this.card.estimateTime.value : null,  Validators.min(0)],
       suffix: [this.card.estimateTime ? this.card.estimateTime.suffix : this.logTimeValues[0].value, Validators.required],
     });
   }
