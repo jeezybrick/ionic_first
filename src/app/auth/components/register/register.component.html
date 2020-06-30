@@ -8,11 +8,11 @@
 
 <ion-content [fullscreen]="true">
 
-  <form novalidate [formGroup]="userForm">
+  <form novalidate [formGroup]="registerForm">
 
     <ion-item>
       <ion-label position="floating">Повне ім'я</ion-label>
-      <ion-input type="text" formControlName="fullname" required></ion-input>
+      <ion-input id="full-name" type="text" formControlName="fullname" required></ion-input>
       <ion-text color="danger" *ngIf="fullname.touched && fullname.hasError('required')">
         Обязательное поле
       </ion-text>
@@ -20,7 +20,7 @@
 
   <ion-item>
     <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" formControlName="email" required></ion-input>
+    <ion-input id="email" type="email" formControlName="email" required></ion-input>
     <ion-text color="danger" *ngIf="email.touched && email.hasError('email')">
       Невірний email
     </ion-text>
@@ -28,7 +28,7 @@
 
     <ion-item>
       <ion-label position="floating">Пароль</ion-label>
-      <ion-input type="password" formControlName="password" required></ion-input>
+      <ion-input id="password" type="password" formControlName="password" required></ion-input>
       <ion-text color="danger" *ngIf="password.touched && password.hasError('required')">
         Обязательное поле
       </ion-text>
@@ -36,14 +36,14 @@
 
     <ion-item>
       <ion-label position="floating">Введіть пароль ще раз</ion-label>
-      <ion-input type="password" formControlName="repeatPassword" required></ion-input>
+      <ion-input id="repeat-password" type="password" formControlName="repeatPassword" required></ion-input>
       <ion-text color="danger" *ngIf="repeatPassword.touched && repeatPassword.hasError('passwordMatch')">
         Паролі не співпадають
       </ion-text>
     </ion-item>
 
   <div class="ion-padding">
-    <ion-button expand="block" (click)="register()" [disabled]="userForm.invalid">Реєстрація</ion-button>
+    <ion-button id="submit-btn" expand="block" (click)="register()" [disabled]="registerForm.invalid">Реєстрація</ion-button>
   </div>
 
   <ion-grid *ngIf="error">

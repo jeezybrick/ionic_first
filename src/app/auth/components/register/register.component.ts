@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { finalize } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
-  public userForm: FormGroup;
+export class RegisterComponent implements OnInit, OnDestroy {
+  public registerForm: FormGroup;
   public error = null;
+  private subs = new SubSink();
 
   constructor(private authService: AuthService,
               private fb: FormBuilder,
@@ -20,7 +22,7 @@ export class RegisterComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.userForm = this.fb.group({
+    this.registerForm = this.fb.group({
       fullname: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
@@ -28,25 +30,29 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
   get fullname(): FormControl {
-    return this.userForm.get('fullname') as FormControl;
+    return this.registerForm.get('fullname') as FormControl;
   }
 
   get email(): FormControl {
-    return this.userForm.get('email') as FormControl;
+    return this.registerForm.get('email') as FormControl;
   }
 
   get password(): FormControl {
-    return this.userForm.get('password') as FormControl;
+    return this.registerForm.get('password') as FormControl;
   }
 
   get repeatPassword(): FormControl {
-    return this.userForm.get('repeatPassword') as FormControl;
+    return this.registerForm.get('repeatPassword') as FormControl;
   }
 
   public async register() {
 
-    if (!this.userForm.valid) {
+    if (!this.registerForm.valid) {
       return;
     }
 
@@ -57,11 +63,11 @@ export class RegisterComponent implements OnInit {
       email,
       password,
       repeatPassword
-    } = this.userForm.getRawValue();
+    } = this.registerForm.getRawValue();
 
 
     // отправка данніх на бекенд
-    this.authService.register(fullname, email, password, repeatPassword)
+    this.subs.sink = this.authService.register(fullname, email, password, repeatPassword)
         .pipe(
             finalize(() => this.loaderService.dismissLoading())
         )

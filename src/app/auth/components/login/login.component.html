@@ -7,33 +7,37 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <form novalidate [formGroup]="loginForm">
 
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input id="email" type="email" [(ngModel)]="email"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Пароль</ion-label>
-    <ion-input id="password" type="password" [(ngModel)]="password"></ion-input>
-  </ion-item>
-
-  <div class="ion-padding">
-    <ion-button class="submit-button" expand="block" (click)="login()" [disabled]="!email.length || !password.length">Логин</ion-button>
-  </div>
-
-  <ion-grid *ngIf="error">
-    <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-text class="ion-padding ion-justify-content-center" color="danger">
-        {{error.message}}
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input id="email" type="email" formControlName="email"></ion-input>
+      <ion-text color="danger" *ngIf="email.touched && email.hasError('email')">
+        Невірний email
       </ion-text>
-    </ion-row>
-  </ion-grid>
+    </ion-item>
 
-  <ion-item>
-    <ion-label>
-      Все ще незареєстровані? <a [routerLink]="['/auth/register']">Натисніть сюди</a>
-    </ion-label>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Пароль</ion-label>
+      <ion-input id="password" type="password" formControlName="password"></ion-input>
+    </ion-item>
 
+    <div class="ion-padding">
+      <ion-button data-cy="submit" expand="block" (click)="login()" [disabled]="loginForm.invalid">Логин</ion-button>
+    </div>
+
+    <ion-grid *ngIf="error">
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-text class="ion-padding ion-justify-content-center" color="danger">
+          {{error.message}}
+        </ion-text>
+      </ion-row>
+    </ion-grid>
+
+    <ion-item>
+      <ion-label>
+        Все ще незареєстровані? <a class="register-link" [routerLink]="['/auth/register']">Натисніть сюди</a>
+      </ion-label>
+    </ion-item>
+  </form>
 </ion-content>
