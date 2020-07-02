@@ -11,7 +11,7 @@
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input id="email" type="email" formControlName="email"></ion-input>
+      <ion-input data-cy="email" id="email" type="email" formControlName="email"></ion-input>
       <ion-text color="danger" *ngIf="email.touched && email.hasError('email')">
         Невірний email
       </ion-text>
@@ -19,11 +19,12 @@
 
     <ion-item>
       <ion-label position="floating">Пароль</ion-label>
-      <ion-input id="password" type="password" formControlName="password"></ion-input>
+      <ion-input data-cy="password" id="password" type="password" formControlName="password"></ion-input>
     </ion-item>
 
     <div class="ion-padding">
-      <ion-button data-cy="submit" expand="block" (click)="login()" [disabled]="loginForm.invalid">Логин</ion-button>
+      <ion-button expand="block" (click)="login()">Логин</ion-button>
+     <!-- <button data-cy="submit" (click)="login()" [disabled]="loginForm.invalid">Логин</button>-->
     </div>
 
     <ion-grid *ngIf="error">
