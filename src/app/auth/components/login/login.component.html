@@ -23,8 +23,7 @@
     </ion-item>
 
     <div class="ion-padding">
-      <ion-button expand="block" (click)="login()">Логин</ion-button>
-     <!-- <button data-cy="submit" (click)="login()" [disabled]="loginForm.invalid">Логин</button>-->
+      <ion-button data-cy="submit" expand="block" (click)="login()" [disabled]="loginForm.invalid">Логин</ion-button>
     </div>
 
     <ion-grid *ngIf="error">

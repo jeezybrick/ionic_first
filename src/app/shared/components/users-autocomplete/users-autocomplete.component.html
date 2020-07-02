@@ -1,5 +1,6 @@
 <div class="autocomplete-wrap">
   <ion-searchbar #searchInput
+                 data-cy="users-autocomplete-input"
                  type="text"
                  [placeholder]="placeholder"
                  (ionFocus)="onFocus()"
@@ -9,7 +10,7 @@
 
   <div class="autocomplete-body" *ngIf="searchInputFocused">
     <ion-list>
-      <ion-item *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+      <ion-item data-cy="users-autocomplete-item" *ngFor="let user of filteredUsers; let index = index" (click)="selectUser(user)">
         <ion-avatar slot="end">
           <img [src]="user.avatar">
         </ion-avatar>

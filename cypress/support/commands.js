@@ -23,3 +23,19 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+import "cypress-localstorage-commands";
+
+Cypress.Commands.add("login", (email, password) => {
+    cy.request({
+        method: 'POST',
+        url: Cypress.config('apiUrl') + '/api/auth/login',
+        body: {
+            email: email || '123@gmail.com',
+            password: password || '123456',
+        },
+    }).its('body')
+        .then((res) => {
+        cy.setLocalStorage("Token", res.token);
+    })
+})
