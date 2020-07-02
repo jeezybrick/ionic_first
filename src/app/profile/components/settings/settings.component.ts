@@ -11,8 +11,7 @@ import { FileItem, FileLikeObject, FileUploader } from 'ng2-file-upload';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { FileUploaderOptions } from 'ng2-file-upload/file-upload/file-uploader.class';
-import { IonSearchbar } from '@ionic/angular';
-import { forkJoin, Observable, zip } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -20,7 +19,6 @@ import { forkJoin, Observable, zip } from 'rxjs';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  public newAvatar: any;
   public uploader: FileUploader;
   public errors = null;
   public user: User;
@@ -28,8 +26,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public isUserLoading = true;
   public attachmentAddingErrorMessage: string | null;
   public newUserAvatarObj: { file: File; url: SafeUrl | string; } | null = null;
+  public maxFileSizeInMb: number = 5;
 
-  private maxFileSizeInMb: number = 5;
   private subs = new SubSink();
   private allowedMimeType = [
     'image/png',
@@ -108,7 +106,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public onAvatarSelect(target): void {
     const file = target.files[0];
 
-    if (file) {
+    if (file && file.size <= this.maxFileSizeInMb * 1024 * 1024) {
       this.newUserAvatarObj = {
         file,
         url: this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
@@ -122,7 +120,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
       avatar: [undefined],
       fullname: [this.user.fullname, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       email: [this.user.email, [Validators.email, Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
-      // password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -185,10 +182,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
     };
   }
 
-  private uploadAvatar(file: File): void {
-    this.subs.sink = this.authService.uploadAvatar(file).subscribe((res) => {
-
-    });
-  }
 
 }
