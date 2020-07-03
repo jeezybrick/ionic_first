@@ -27,7 +27,7 @@
 
     <div class="ion-padding">
         <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Создать доску</ion-button>
-        <button data-cy="create-board-submit" (click)="createBoard()" [disabled]="!boardName.length" style="left: -9999px;position: absolute;"></button>
+        <button class="not-visible" data-cy="create-board-submit" (click)="createBoard()" [disabled]="!boardName.length"></button>
     </div>
 </ion-content>
 

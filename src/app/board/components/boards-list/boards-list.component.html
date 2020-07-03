@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Доски</ion-title>
+    <ion-buttons slot="end">
+      <ion-button data-cy="add-board-button" (click)="presentModal()">Добавить</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -24,10 +27,10 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list *ngIf="!isBoardsListLoading">
-    <ion-item-sliding *ngFor="let board of boards" [routerLink]="[board._id, 'columns']">
+  <ion-list *ngIf="!isBoardsListLoading" class="ion-padding-bottom">
+    <ion-item-sliding data-cy="board-item" *ngFor="let board of boards" [routerLink]="[board._id, 'columns']">
       <ion-item>
-        <ion-label>
+        <ion-label data-cy="board-item-label">
           <h3>{{board.name}}</h3>
           <p>{{board.createdAt | date: 'longDate'}}</p>
         </ion-label>
@@ -36,17 +39,11 @@
         </ion-note>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option *ngIf="currentUser._id === board.owner" color="danger" (click)="deleteBoard($event, board._id)">
+        <ion-item-option data-cy="board-item-remove-option" *ngIf="currentUser._id === board.owner" color="danger" (click)="deleteBoard($event, board._id)">
           <ion-icon name="trash-outline" size="large"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button data-cy="add-board-button" (click)="presentModal()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
 </ion-content>

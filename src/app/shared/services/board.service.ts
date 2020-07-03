@@ -18,8 +18,8 @@ export class BoardService {
     constructor(private http: HttpClient, private tokenStorage: TokenStorage) {
     }
 
-    public getBoards(sortBy = 'createdAt', sortDirection = '1'): any {
-        return this.http.get<Board[]>('/api/boards', {params: {sortBy, sortDirection}}).pipe(
+    public getBoards(): Observable<Board[]> {
+        return this.http.get<Board[]>('/api/boards').pipe(
             tap((boards: Board[]) => {
                 this.boards = boards;
             })
