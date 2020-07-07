@@ -5,17 +5,16 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentRoutingModule } from './payment-routing.module';
 import { PaymentMyComponent } from './components/payment-my/payment-my.component';
-import { NgxStripeModule } from 'ngx-stripe';
+import { TwilioMyComponent } from './components/twilio-my/twilio-my.component';
 
 @NgModule({
-  declarations: [PaymentMyComponent],
+  declarations: [PaymentMyComponent, TwilioMyComponent],
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-      ReactiveFormsModule,
+    ReactiveFormsModule,
     PaymentRoutingModule,
-    // NgxStripeModule.forChild(),
   ]
 })
 export class PaymentModule { }

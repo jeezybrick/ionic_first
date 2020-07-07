@@ -1,19 +1,12 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { BoardService } from './shared/services/board.service';
-import { ToastService } from './shared/services/toast.service';
-import { TwilioService } from './shared/services/twilio.service';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { TwilioService } from '../../../shared/services/twilio.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  selector: 'app-twilio-my',
+  templateUrl: './twilio-my.component.html',
+  styleUrls: ['./twilio-my.component.scss'],
 })
-export class AppComponent {
-
+export class TwilioMyComponent implements OnInit {
   message: string;
   accessToken: string;
   roomName: string;
@@ -21,6 +14,12 @@ export class AppComponent {
 
   @ViewChild('localVideo') localVideo: ElementRef;
   @ViewChild('remoteVideo') remoteVideo: ElementRef;
+
+  constructor(private twilioService: TwilioService) {
+    this.twilioService.msgSubject.subscribe(r => {
+      this.message = r;
+    });
+  }
 
 
   ngOnInit() {
@@ -40,7 +39,6 @@ export class AppComponent {
   }
 
   connect(): void {
-    debugger;
     const storage = JSON.parse(localStorage.getItem('token') || '{}');
     const date = Date.now();
     if (!this.roomName || !this.username) { this.message = 'enter username and room name.'; return; }
@@ -59,28 +57,5 @@ export class AppComponent {
         },
         error => this.log(JSON.stringify(error)));
 
-  }
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private boardService: BoardService,
-    private toastService: ToastService,
-    private twilioService: TwilioService,
-  ) {
-    this.initializeApp();
-    this.twilioService.msgSubject.subscribe(r => {
-      this.message = r;
-    });
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-      this.boardService.startPollingInviteToBoard().subscribe((value) => {
-        this.toastService.presentToast('Вы были добавлены к одной или несколим доскам');
-      });
-    });
   }
 }

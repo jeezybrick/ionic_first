@@ -1,3 +1,39 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Доски</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+
+    <p>
+      {{ message }}
+    </p>
+
+    <div id="video-container">
+
+      <div id="local" #localVideo>
+        <p>local video</p>
+      </div>
+
+      <div id="remote" #remoteVideo>
+        <p>remote video</p>
+      </div>
+      <input type="text" [(ngModel)]="username" placeholder="username">
+
+      <input type="text" [(ngModel)]="roomName" placeholder="room name">
+
+      <input type="button" value="connect" (click)="connect()">
+
+      <input type="button"  value="disconnect" (click)="disconnect()">
+
+    </div>
+
+  </ion-content>
+
+  <!--<ion-router-outlet></ion-router-outlet>-->
+
+
 </ion-app>
+

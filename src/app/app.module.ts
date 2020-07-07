@@ -13,6 +13,7 @@ import { AuthHeaderInterceptor } from './shared/interceptors/header.interceptor'
 import { socketConfig, SocketService } from './shared/services/socket.service';
 import { SocketIoModule } from 'ngx-socket-io';
 import { NgxStripeModule } from 'ngx-stripe';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { NgxStripeModule } from 'ngx-stripe';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+      FormsModule,
     SocketIoModule.forRoot(socketConfig),
     NgxStripeModule.forRoot('pk_test_51H2EoUEW52dlACmR09FDqCahZlArzqD6oGJExz54fUIOWH7x1QaxsSyx5Xu6ExGaIc5zuRkuhQfwob5kICOnZOaj00WDpWYgYi'),
   ],
