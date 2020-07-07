@@ -12,12 +12,20 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthHeaderInterceptor } from './shared/interceptors/header.interceptor';
 import { socketConfig, SocketService } from './shared/services/socket.service';
 import { SocketIoModule } from 'ngx-socket-io';
+import { NgxStripeModule } from 'ngx-stripe';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, SocketIoModule.forRoot(socketConfig)],
+  imports: [
+      BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    SocketIoModule.forRoot(socketConfig),
+    NgxStripeModule.forRoot('pk_test_51H2EoUEW52dlACmR09FDqCahZlArzqD6oGJExz54fUIOWH7x1QaxsSyx5Xu6ExGaIc5zuRkuhQfwob5kICOnZOaj00WDpWYgYi'),
+  ],
   providers: [
     StatusBar,
     SplashScreen,
