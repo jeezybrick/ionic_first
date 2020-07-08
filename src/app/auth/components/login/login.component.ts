@@ -5,6 +5,8 @@ import { finalize } from 'rxjs/operators';
 import { LoaderService } from '../../../shared/services/loader.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
+import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService,
               private router: Router,
               private fb: FormBuilder,
+              private socialAuthService: SocialAuthService,
               private loaderService: LoaderService) { }
 
   ngOnInit() {
@@ -53,6 +56,19 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['']);
         }, (error) => {
           this.error = error;
+        });
+  }
+
+  public async loginViaGoogle() {
+    this.error = null;
+    await this.loaderService.presentLoading();
+
+    this.subs.sink = from(this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID))
+        .pipe(
+            finalize(() => this.loaderService.dismissLoading())
+        )
+        .subscribe((res) => {
+          console.log(res);
         });
   }
 

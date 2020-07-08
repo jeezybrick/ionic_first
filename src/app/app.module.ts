@@ -12,12 +12,20 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthHeaderInterceptor } from './shared/interceptors/header.interceptor';
 import { socketConfig, SocketService } from './shared/services/socket.service';
 import { SocketIoModule } from 'ngx-socket-io';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, SocketIoModule.forRoot(socketConfig)],
+  imports: [
+      BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    SocketIoModule.forRoot(socketConfig),
+    SocialLoginModule
+  ],
   providers: [
     StatusBar,
     SplashScreen,
@@ -33,6 +41,20 @@ import { SocketIoModule } from 'ngx-socket-io';
       deps: [SocketService],
       multi: true
     },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+                '480785717279-b5l8b391tdv1lk336rqdo74hmdo17v2d.apps.googleusercontent.com'
+            ),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })

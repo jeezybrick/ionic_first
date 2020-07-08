@@ -24,6 +24,7 @@
 
     <div class="ion-padding">
       <ion-button data-cy="submit" expand="block" (click)="login()" [disabled]="loginForm.invalid">Логин</ion-button>
+      <ion-button expand="block" color="secondary" fill="outline" (click)="loginViaGoogle()">Зайти через Google</ion-button>
     </div>
 
     <ion-grid *ngIf="error">
