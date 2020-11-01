@@ -1,11 +1,12 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { BoardService } from '../../../shared/services/board.service';
-import { Board } from '../../../shared/models/board.model';
-import { finalize } from 'rxjs/operators';
-import { LoaderService } from '../../../shared/services/loader.service';
-import { ToastService } from '../../../shared/services/toast.service';
 import { SubSink } from 'subsink';
+import { BoardService } from '../../../shared/services/board.service';
+import { ToastService } from '../../../shared/services/toast.service';
+import { LoaderService } from '../../../shared/services/loader.service';
+import { finalize } from 'rxjs/operators';
+import { Board } from '../../../shared/models/board.model';
+import { BoardTypes } from '../../../shared/enums/board-types.enum';
 
 @Component({
     selector: 'app-create-board-modal',
@@ -13,6 +14,7 @@ import { SubSink } from 'subsink';
     styleUrls: ['./create-board-modal.component.scss'],
 })
 export class CreateBoardModalComponent implements OnDestroy {
+    @Input() boardType: BoardTypes;
     public boardName = '';
     public selectedUsers = [];
     private subs = new SubSink();

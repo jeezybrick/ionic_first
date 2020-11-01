@@ -18,6 +18,8 @@ import { AddUserToCardModalComponent } from './components/add-user-to-card-modal
 import { CardLogTimeComponent } from './components/card-log-time/card-log-time.component';
 import { CardAddEstimateTimeComponent } from './components/card-add-estimate-time/card-add-estimate-time.component';
 import { CardMoveToColumnModalComponent } from './components/card-move-to-column-modal/card-move-to-column-modal.component';
+import { BoardTypeInfoPopoverComponent } from './components/board-type-info-popover/board-type-info-popover.component';
+import { ChooseBoardByTypeModalComponent } from './components/choose-board-by-type-modal/choose-board-by-type-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { CardMoveToColumnModalComponent } from './components/card-move-to-column
     CardLogTimeComponent,
     CardAddEstimateTimeComponent,
     CardMoveToColumnModalComponent,
+    ChooseBoardByTypeModalComponent,
+    BoardTypeInfoPopoverComponent,
   ],
   imports: [
     IonicModule,

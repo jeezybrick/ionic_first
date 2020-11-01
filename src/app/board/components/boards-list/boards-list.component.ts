@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Board } from '../../../shared/models/board.model';
 import { BoardService } from '../../../shared/services/board.service';
 import { CreateBoardModalComponent } from '../create-board-modal/create-board-modal.component';
@@ -10,6 +10,8 @@ import { SubSink } from 'subsink';
 import { User } from '../../../shared/models/user.model';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Observable } from 'rxjs';
+import { BoardTypes } from '../../../shared/enums/board-types.enum';
+import { ChooseBoardByTypeModalComponent } from '../choose-board-by-type-modal/choose-board-by-type-modal.component';
 
 @Component({
     selector: 'app-boards-list',
@@ -39,10 +41,28 @@ export class BoardsListComponent implements OnInit, OnDestroy {
         this.subs.unsubscribe();
     }
 
-    async presentModal() {
+    async showChooseBoardByTypeModal() {
+        const modal = await this.modalController.create({
+            component: ChooseBoardByTypeModalComponent,
+        });
+
+        modal.onWillDismiss().then((res) => {
+            if (res && res.data) {
+                this.showCreateBoardModal(res.data);
+            }
+        });
+
+        return await modal.present();
+    }
+
+    async showCreateBoardModal(boardType: BoardTypes = BoardTypes.Dedault) {
         const modal = await this.modalController.create({
             component: CreateBoardModalComponent,
+            componentProps: {
+                boardType,
+            }
         });
+
         return await modal.present();
     }
 
@@ -86,4 +106,5 @@ export class BoardsListComponent implements OnInit, OnDestroy {
                 });
 
     }
+
 }

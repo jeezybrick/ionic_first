@@ -1,0 +1,34 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Закрыть</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+  <ion-list>
+    <ion-radio-group [value]="checkedBoardType">
+      <ion-list-header>
+        <ion-label>Оберіть метод управління проектом</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let boardType of boardTypes" (click)="chooseBoardType(boardType.type)">
+        <ion-label>{{boardType.type}}</ion-label>
+        <ion-radio slot="start" [value]="boardType.type"></ion-radio>
+        <ion-note class="note" color="primary" slot="end" (click)="showInfoPopover($event, boardType.infoText)">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </ion-note>
+      </ion-item>
+
+    </ion-radio-group>
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="submit()" [disabled]="!checkedBoardType">OK</ion-button>
+  </div>
+</ion-content>
+
+
