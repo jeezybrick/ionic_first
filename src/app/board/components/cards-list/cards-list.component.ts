@@ -226,6 +226,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
             component: CardMoveToColumnModalComponent,
             componentProps: {
                 card,
+                boardType: this.board.type
             },
         });
 
