@@ -134,8 +134,8 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
             .pipe(
                 delay(1000)
             )
-            .subscribe((response: any) => {
-            this.board = {...response, type: this.boardService.getBoardType(response.type)};
+            .subscribe((response: Board) => {
+            this.board = response;
             this.columns = [...response.columns];
             this.isBoardLoading = false;
 

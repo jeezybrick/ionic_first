@@ -30,7 +30,10 @@ export class BoardService {
     }
 
     public getBoardDetail(boardId: string): Observable<Board> {
-        return this.http.get<Board>(`/api/boards/${boardId}`);
+        return this.http.get<Board>(`/api/boards/${boardId}`)
+            .pipe(
+                map((res: any) => ({...res, type: this.getBoardType(res.type)}))
+            );
     }
 
     public createBoard(data: { name: string; users?: string[]; type: BoardTypes }): Observable<Board> {

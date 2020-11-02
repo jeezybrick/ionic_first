@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card (click)="addCard()" *ngIf="!cards.length">
+  <ion-card (click)="addCard()" *ngIf="isShownAddCard && !cards.length">
     <ion-card-content>
       <ion-row class="ion-justify-content-center ion-align-items-center">
         <ion-icon name="add" size="large"></ion-icon>
@@ -90,7 +90,7 @@
 
   </ion-reorder-group>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="cards.length">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShownAddCard && cards.length">
     <ion-fab-button (click)="addCard()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

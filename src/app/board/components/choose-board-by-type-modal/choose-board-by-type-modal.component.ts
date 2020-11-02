@@ -9,8 +9,7 @@ import { BoardTypeInfoPopoverComponent } from '../board-type-info-popover/board-
   styleUrls: ['./choose-board-by-type-modal.component.scss'],
 })
 export class ChooseBoardByTypeModalComponent {
-
-  public checkedBoardType: BoardTypes;
+  public checkedBoardType: BoardTypes = BoardTypes.Default;
   public boardTypes: {type: BoardTypes, infoText: string}[] = [
     {
       type: BoardTypes.Scrum,

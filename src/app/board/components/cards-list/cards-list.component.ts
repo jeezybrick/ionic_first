@@ -3,9 +3,9 @@ import { ActionSheetController, ModalController } from '@ionic/angular';
 import { ToastService } from '../../../shared/services/toast.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { LoaderService } from '../../../shared/services/loader.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Card } from '../../../shared/models/card.model';
-import { delay, finalize, map } from 'rxjs/operators';
+import { delay, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { cardPriorities, CardService, UpdateCardPositionInterface } from '../../../shared/services/card.service';
 import { Observable } from 'rxjs';
@@ -15,6 +15,11 @@ import { ViewCardModalComponent } from '../view-card-modal/view-card-modal.compo
 import { CardLogTimeComponent } from '../card-log-time/card-log-time.component';
 import { CardAddEstimateTimeComponent } from '../card-add-estimate-time/card-add-estimate-time.component';
 import { CardMoveToColumnModalComponent } from '../card-move-to-column-modal/card-move-to-column-modal.component';
+import { BoardService } from '../../../shared/services/board.service';
+import { Board } from '../../../shared/models/board.model';
+import { BoardTypes } from '../../../shared/enums/board-types.enum';
+import { ColumnService } from '../../../shared/services/column.service';
+import { Column } from '../../../shared/models/column.model';
 
 @Component({
     selector: 'app-cards-list',
@@ -22,12 +27,16 @@ import { CardMoveToColumnModalComponent } from '../card-move-to-column-modal/car
     styleUrls: ['./cards-list.component.scss'],
 })
 export class CardsListComponent implements OnInit, OnDestroy {
+    public board: Board;
+    public column: Column;
     public cards: Card[] = [];
     public currentUser$: Observable<User>;
     public isCardsLoading = true;
     public currentUserId: string;
     public columnId: string;
     public isReorderDisabled: boolean = true;
+    public BoardTypes = BoardTypes;
+    private params: Params;
     private subs = new SubSink();
 
     constructor(
@@ -36,6 +45,8 @@ export class CardsListComponent implements OnInit, OnDestroy {
         private modalController: ModalController,
         private cardService: CardService,
         private toastService: ToastService,
+        private boardService: BoardService,
+        private columnService: ColumnService,
         private authService: AuthService,
         private actionSheetController: ActionSheetController,
         private loaderService: LoaderService) {
@@ -44,24 +55,37 @@ export class CardsListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.currentUser$ = this.authService.getUser();
         this.subs.sink = this.authService.getUser().subscribe(currentUser => this.currentUserId = currentUser._id);
-        this.subs.sink = this.route.params.subscribe((params) => {
-            this.columnId = params.columnId;
+        this.subs.sink = this.route.params
+            .pipe(
+                tap(params => this.params = params),
+                switchMap(() => this.boardService.getBoardDetail(this.params.boardId)),
+                tap(board =>  this.board = board),
+                switchMap(board => this.columnService.getColumns(board._id)),
+            )
+            .subscribe(columns => {
 
-            if (!this.columnId) {
-                this.router.navigate(['boards']);
-                return;
-            }
+                this.columnId = this.params.columnId;
 
-            this.getCards(this.columnId);
+                if (!this.columnId) {
+                    this.router.navigate(['boards']);
+                    return;
+                }
 
-        });
+                this.column = columns.find(column => column._id === this.columnId);
+                this.getCards(this.columnId);
+
+            });
     }
 
     ngOnDestroy() {
         this.subs.unsubscribe();
     }
 
-    public doReorder(ev: any) {
+    public get isShownAddCard(): boolean {
+        return !this.isCardsLoading && (this.board.type === BoardTypes.Waterflow ? this.column.name === 'Резерв' : true);
+    }
+
+    public doReorder(ev: CustomEvent) {
         const cardsCountIndexes = this.cards.length - 1;
         const toIndex = ev.detail.to > cardsCountIndexes ? cardsCountIndexes : ev.detail.to;
         const fromIndex = ev.detail.from;
@@ -285,7 +309,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
                 map((cards: Card[]) => cards.map(item => {
                     const priorityName: string = cardPriorities.find(option => option.value === item.priority).name;
                     return {...item, priorityName};
-                }))
+                })),
             )
             .subscribe((response: Card[]) => {
                 this.cards = response;
