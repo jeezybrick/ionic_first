@@ -55,7 +55,7 @@ export class BoardsListComponent implements OnInit, OnDestroy {
         return await modal.present();
     }
 
-    async showCreateBoardModal(boardType: BoardTypes = BoardTypes.Dedault) {
+    async showCreateBoardModal(boardType: BoardTypes = BoardTypes.Default) {
         const modal = await this.modalController.create({
             component: CreateBoardModalComponent,
             componentProps: {

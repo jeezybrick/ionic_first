@@ -14,6 +14,7 @@ import { AddUserToBoardModalComponent } from '../add-user-to-board-modal/add-use
 import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 import { AuthService } from '../../../shared/services/auth.service';
+import { BoardTypes } from '../../../shared/enums/board-types.enum';
 
 @Component({
     selector: 'app-columns-list',
@@ -27,6 +28,7 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
     public isBoardLoading = true;
     public currentUser$: Observable<User>;
     public currentUserId: string;
+    public BoardTypes = BoardTypes;
     private subs = new SubSink();
 
     constructor(private router: Router,
@@ -132,8 +134,8 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
             .pipe(
                 delay(1000)
             )
-            .subscribe((response: Board) => {
-            this.board = response;
+            .subscribe((response: any) => {
+            this.board = {...response, type: this.boardService.getBoardType(response.type)};
             this.columns = [...response.columns];
             this.isBoardLoading = false;
 

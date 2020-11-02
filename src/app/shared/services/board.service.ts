@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { Observable, Subject, Subscription, timer } from 'rxjs';
 import { Board } from '../models/board.model';
 import { User } from '../models/user.model';
 import { TokenStorage } from './token.storage';
+import { BoardTypes } from '../enums/board-types.enum';
+import { ApiBoardTypesEnum } from '../enums/api-board-types.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +22,7 @@ export class BoardService {
 
     public getBoards(): Observable<Board[]> {
         return this.http.get<Board[]>('/api/boards').pipe(
+            map(boards => boards.map((board: any) => ({...board, type: this.getBoardType(board.type)}))),
             tap((boards: Board[]) => {
                 this.boards = boards;
             })
@@ -30,8 +33,14 @@ export class BoardService {
         return this.http.get<Board>(`/api/boards/${boardId}`);
     }
 
-    public createBoard(data: { name: string; users?: string[] }): any {
-        return this.http.post('/api/boards', data).pipe(
+    public createBoard(data: { name: string; users?: string[]; type: BoardTypes }): Observable<Board> {
+        const apiBoardType: ApiBoardTypesEnum = this.getApiBoardType(data.type);
+        const adaptedData = {
+            name: data.name,
+            users: data.users,
+            type: apiBoardType,
+        };
+        return this.http.post('/api/boards', adaptedData).pipe(
             tap((board: Board) => {
                 this.boards.push(board);
             })
@@ -82,6 +91,32 @@ export class BoardService {
             this.pollingInviteToBoard$.complete();
         }
 
+    }
+
+    public getApiBoardType(type: BoardTypes): ApiBoardTypesEnum {
+        switch (type) {
+            case BoardTypes.Scrum:
+                return ApiBoardTypesEnum.scrum;
+            case BoardTypes.Kanban:
+                return ApiBoardTypesEnum.kanban;
+            case BoardTypes.Waterflow:
+                return ApiBoardTypesEnum.waterflow;
+            default:
+                return ApiBoardTypesEnum.default;
+        }
+    }
+
+    public getBoardType(type: ApiBoardTypesEnum): BoardTypes {
+        switch (type) {
+            case ApiBoardTypesEnum.scrum:
+                return BoardTypes.Scrum;
+            case ApiBoardTypesEnum.kanban:
+                return BoardTypes.Kanban;
+            case ApiBoardTypesEnum.waterflow:
+                return BoardTypes.Waterflow;
+            default:
+                return BoardTypes.Default;
+        }
     }
 
 }

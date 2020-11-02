@@ -45,7 +45,7 @@ export class CreateBoardModalComponent implements OnDestroy {
     public async createBoard() {
         await this.loaderService.presentLoading('Cохранение...');
 
-        this.subs.sink = this.boardService.createBoard({name: this.boardName, users: this.selectedUsers.map(item => item._id)})
+        this.subs.sink = this.boardService.createBoard({name: this.boardName, users: this.selectedUsers.map(item => item._id), type: this.boardType})
             .pipe(finalize(() => this.loaderService.dismissLoading()))
             .subscribe((response: Board) => {
                 this.dismiss();

@@ -25,7 +25,7 @@ export class ChooseBoardByTypeModalComponent {
       infoText: 'Дотримуючись моделі Waterflow, ви маєте можливість переходити від однієї стадії до іншої строго послідовно.'
     },
     {
-      type: BoardTypes.Dedault,
+      type: BoardTypes.Default,
       infoText: 'Вибираючи Вільний метод, ви маєте можливість створювати будь-які колонки і переміщуватися вільно між ними.'
     },
   ];
