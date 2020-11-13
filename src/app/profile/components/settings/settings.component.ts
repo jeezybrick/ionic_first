@@ -125,6 +125,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private getProfile(event?): void {
     this.subs.sink = this.authService.me().subscribe((data: any) => {
+      console.log(data);
       this.user = data.user;
 
       this.initUploader();

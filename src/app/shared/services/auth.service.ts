@@ -17,10 +17,12 @@ export class AuthService {
     public user: User;
 
     constructor(private socket: Socket, private http: HttpClient, private token: TokenStorage, private boardService: BoardService) {
-        this.me().subscribe((data) => {
-            this.user = data.user;
-            this.socket.emit('set-id', data.user._id);
-        });
+        if(this.token.getToken()) {
+            this.me().subscribe((data) => {
+                this.user = data.user;
+                this.socket.emit('set-id', data.user._id);
+            });
+        }
     }
 
     login(email: string, password: string): Observable<any> {
