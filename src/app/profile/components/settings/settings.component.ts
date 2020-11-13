@@ -46,10 +46,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
               private fb: FormBuilder) { }
 
   ngOnInit() {
+    console.log('SettingsComponent ngOnInit');
     this.getProfile();
   }
 
   ngOnDestroy() {
+    console.log('SettingsComponent ngOnDestroy');
     this.subs.unsubscribe();
   }
   
