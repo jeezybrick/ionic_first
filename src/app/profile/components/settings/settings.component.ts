@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +12,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { FileUploaderOptions } from 'ng2-file-upload/file-upload/file-uploader.class';
 import { forkJoin, Observable } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-settings',
@@ -43,15 +44,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
               private toastService: ToastService,
               private router: Router,
               private sanitizer: DomSanitizer,
+              @Inject(DOCUMENT) private document: Document,
               private fb: FormBuilder) { }
 
   ngOnInit() {
-    console.log('SettingsComponent ngOnInit');
     this.getProfile();
   }
 
   ngOnDestroy() {
-    console.log('SettingsComponent ngOnDestroy');
     this.subs.unsubscribe();
   }
   
@@ -71,7 +71,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public logout(): void {
     this.authService.signOut();
-    this.router.navigate(['/auth/login']);
+    this.document.location.href = '/auth/login';
   }
 
   public async onSubmit({value, invalid}: any) {
@@ -127,7 +127,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private getProfile(event?): void {
     this.subs.sink = this.authService.me().subscribe((data: any) => {
-      console.log(data);
       this.user = data.user;
 
       this.initUploader();
