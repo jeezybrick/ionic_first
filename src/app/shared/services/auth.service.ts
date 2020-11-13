@@ -95,17 +95,11 @@ export class AuthService {
   }
 
   me(): Observable<any> {
-    return new Observable(observer => {
-      const tokenVal = this.token.getToken();
-      if (!tokenVal) {
-        return observer.complete();
-      }
-      this.http.get('/api/auth/me').subscribe((data: any) => {
-        observer.next({user: data.user});
-        this.setUser(data.user);
-        observer.complete();
-      });
-    });
+    return this.http.get('/api/auth/me').pipe(
+        tap(data => {
+          this.setUser(data.user);
+        }),
+    );
   }
 
   signOut(): void {
@@ -113,6 +107,5 @@ export class AuthService {
     this.setUser(null);
     this.user = null;
     this.boardService.stopPollingInviteToBoard();
-
   }
 }
