@@ -12,6 +12,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthHeaderInterceptor } from './shared/interceptors/header.interceptor';
 import { socketConfig, SocketService } from './shared/services/socket.service';
 import { SocketIoModule } from 'ngx-socket-io';
+import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 
 
 @NgModule({
@@ -25,6 +26,11 @@ import { SocketIoModule } from 'ngx-socket-io';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHeaderInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true,
     },
     {
