@@ -12,21 +12,22 @@ export class ChooseBoardByTypeModalComponent {
   public checkedBoardType: BoardTypes = BoardTypes.Default;
   public boardTypes: {type: BoardTypes, infoText: string}[] = [
     {
-      type: BoardTypes.Scrum,
-      infoText: 'Дотримуючись методу Scrum, ви маєте можливість створювати спринти та задачі у них. Проектна команда може почати наступний спринт тільки коли попередній закінчений.',
+      type: BoardTypes.Default,
+      infoText: 'Вибираючи Вільний метод, ви маєте можливість створювати будь-які колонки і переміщуватися вільно між ними.'
     },
     {
       type: BoardTypes.Kanban,
       infoText: 'Дотримуючись моделі Kanban, ви маєте можливість вільно пересуватися між стадіями розробки та призупинити виконання завдання на будь-якому етапі в разі, якщо з\'явилися інші термінові завдання або змінився пріоритет поточної.'
     },
     {
+      type: BoardTypes.Scrum,
+      infoText: 'Дотримуючись методу Scrum, ви маєте можливість створювати спринти та задачі у них. Проектна команда може почати наступний спринт тільки коли попередній закінчений.',
+    },
+    {
       type: BoardTypes.Waterflow,
       infoText: 'Дотримуючись моделі Waterflow, ви маєте можливість переходити від однієї стадії до іншої строго послідовно.'
     },
-    {
-      type: BoardTypes.Default,
-      infoText: 'Вибираючи Вільний метод, ви маєте можливість створювати будь-які колонки і переміщуватися вільно між ними.'
-    },
+
   ];
 
   constructor(public modalController: ModalController, public popoverController: PopoverController) {
