@@ -245,40 +245,40 @@ export class CardsListComponent implements OnInit, OnDestroy {
         event.preventDefault();
 
         const actionSheet = await this.actionSheetController.create({
-            header: 'Карточки',
+            header: 'Картки',
             buttons: [{
-                text: 'Оценка времени',
+                text: 'Оцінка часу',
                 handler: () => {
                     this.addEstimate(card);
                 }
             }, {
-                text: 'Залогировать время',
+                text: 'Врахувати час',
                 handler: () => {
                     this.logTime(card);
                 }
             }, {
-                text: 'Переместить в колонку',
+                text: 'Перемістити у колонку',
                 handler: () => {
                     this.showMoveToColumnModal(card);
                 }
             }, {
-                text: 'Посмотреть',
+                text: 'Переглянути',
                 handler: () => {
                     this.viewCard(card);
                 }
             }, {
-                text: 'Редактировать',
+                text: 'Редагувати',
                 handler: () => {
                     this.editCard(card);
                 }
             }, {
-                text: 'Удалить',
+                text: 'Видалити',
                 role: 'destructive',
                 handler: () => {
                     this.removeCard(card._id);
                 }
             }, {
-                text: 'Отмена',
+                text: 'Відмінити',
                 role: 'cancel'
             }]
         });
@@ -296,7 +296,7 @@ export class CardsListComponent implements OnInit, OnDestroy {
             .pipe(finalize(() => this.loaderService.dismissLoading()))
             .subscribe((response: Card[]) => {
                     this.cards = response;
-                    this.toastService.presentToast('Карточка упешно удалена');
+                    this.toastService.presentToast('Картка успішно видалена');
                 },
                 (error) => {
                     this.toastService.presentErrorToast();

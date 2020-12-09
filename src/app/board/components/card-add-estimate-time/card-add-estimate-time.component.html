@@ -1,8 +1,8 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>Оценка времени для карточки {{card?.name}}</ion-title>
+    <ion-title>Оцінка часу для картки {{card?.name}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Закрыть</ion-button>
+      <ion-button (click)="dismiss()">Закрити</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -27,8 +27,8 @@
                         formControlName="suffix"
                         required
                         style="max-width: 100%"
-                        okText="Выбрать"
-                        cancelText="Отмена">
+                        okText="Обрати"
+                        cancelText="Відмінити">
               <ion-select-option
                       *ngFor="let option of logTimeValues"
                       [value]="option.value">

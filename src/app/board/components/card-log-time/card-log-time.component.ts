@@ -56,7 +56,7 @@ export class CardLogTimeComponent implements OnInit, OnDestroy {
   }
 
   public async submit() {
-    await this.loaderService.presentLoading('Сохранение...');
+    await this.loaderService.presentLoading('Збереження...');
     const data: CardLogTimeSubmitDataInterface = {
       ...this.logTimeForm.value,
       date: new Date(this.logTimeForm.value.date).toISOString(),

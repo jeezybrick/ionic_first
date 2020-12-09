@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Профиль
+      Профіль
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -33,7 +33,7 @@
     </ion-grid>
 
     <ion-item>
-      <ion-label position="floating" >Полное имя</ion-label>
+      <ion-label position="floating" >Полное Ім'я</ion-label>
       <ion-input formControlName="fullname"></ion-input>
       <ion-text color="danger" *ngIf="profileForm.get('fullname').hasError('required') && profileForm.get('fullname').touched">
         Обов'язкове поле

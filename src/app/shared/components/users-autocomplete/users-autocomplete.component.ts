@@ -31,7 +31,7 @@ export class UsersAutocompleteComponent implements OnChanges, OnDestroy, AfterVi
   private subs = new SubSink();
 
   @Input() selectedUsers: User[] = [];
-  @Input() placeholder: string = 'Добавить пользователя к доске';
+  @Input() placeholder: string = 'Додати користувача до дошки\n';
   @Output() userSelected: EventEmitter<User> = new EventEmitter<User>();
   @ViewChild('searchInput') searchInput: IonSearchbar;
 

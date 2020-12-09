@@ -57,7 +57,7 @@ export class CardMoveToColumnModalComponent implements OnInit, OnDestroy {
     }
 
     public async submit() {
-        await this.loaderService.presentLoading('Сохранение...');
+        await this.loaderService.presentLoading('Збереження...');
         const newColumn: Column = this.columns.find(item => item._id === this.checkedColumnId);
         const data: UpdateCardPositionInterface = {
             previousColumnId: this.card.column._id,
@@ -71,7 +71,7 @@ export class CardMoveToColumnModalComponent implements OnInit, OnDestroy {
             .pipe(finalize(() => this.loaderService.dismissLoading()))
             .subscribe((response: Card[]) => {
                 this.dismiss(response);
-                this.toastService.presentToast('Карточка успешно перемещена');
+                this.toastService.presentToast('Картка успішно переміщена');
             }, (error) => {
                 this.toastService.presentErrorToast();
             });

@@ -1,8 +1,9 @@
 <ion-header translucent>
     <ion-toolbar>
-        <ion-title>Залогировать время</ion-title>
+        <ion-title>Врахувати час
+        </ion-title>
         <ion-buttons slot="end">
-            <ion-button (click)="dismiss()">Закрыть</ion-button>
+            <ion-button (click)="dismiss()">Закрити</ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -29,8 +30,8 @@
                                     formControlName="suffix"
                                     required
                                     style="max-width: 100%"
-                                    okText="Выбрать"
-                                    cancelText="Отмена">
+                                    okText="Обрати"
+                                    cancelText="Відмінити">
                             <ion-select-option
                                     *ngFor="let option of logTimeValues"
                                     [value]="option.value">
@@ -44,7 +45,7 @@
         </ion-item>
 
         <div class="ion-padding">
-            <ion-button expand="block" (click)="submit()" [disabled]="logTimeForm.invalid">Залогировать время</ion-button>
+            <ion-button expand="block" (click)="submit()" [disabled]="logTimeForm.invalid">Врахувати час</ion-button>
         </div>
 
     </form>

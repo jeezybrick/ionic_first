@@ -2,14 +2,14 @@
     <ion-toolbar>
         <ion-title>Створити дошку - {{boardType}}</ion-title>
         <ion-buttons slot="end">
-            <ion-button (click)="dismiss()">Закрыть</ion-button>
+            <ion-button (click)="dismiss()">Закрити</ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
     <ion-item>
-        <ion-label position="floating">Имя доски</ion-label>
+        <ion-label position="floating">Ім'я дошки</ion-label>
         <ion-input data-cy="board-name-input" type="text" [(ngModel)]="boardName"></ion-input>
     </ion-item>
 
@@ -26,7 +26,7 @@
     <app-users-autocomplete [selectedUsers]="selectedUsers" (userSelected)="onUserSelected($event)"></app-users-autocomplete>
 
     <div class="ion-padding">
-        <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Создать доску</ion-button>
+        <ion-button expand="block" (click)="createBoard()" [disabled]="!boardName.length">Створити дошку</ion-button>
         <button class="not-visible" data-cy="create-board-submit" (click)="createBoard()" [disabled]="!boardName.length"></button>
     </div>
 </ion-content>

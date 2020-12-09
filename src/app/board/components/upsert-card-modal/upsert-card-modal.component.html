@@ -2,25 +2,26 @@
   <ion-toolbar>
     <ion-title>{{headerText}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Закрыть</ion-button>
+      <ion-button (click)="dismiss()">Закрити</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
   <ion-item>
-    <ion-label position="floating">Имя</ion-label>
+    <ion-label position="floating">Ім'я
+    </ion-label>
     <ion-input type="text" [(ngModel)]="cardName"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Описание</ion-label>
+    <ion-label position="floating">Опис</ion-label>
     <ion-textarea rows="3" [(ngModel)]="cardDescription"></ion-textarea>
   </ion-item>
 
   <ion-item>
-    <ion-label>Приоритет</ion-label>
-    <ion-select placeholder="Не выбран" okText="Выбрать" cancelText="Отмена" [(ngModel)]="cardPriority">
+    <ion-label>Приорітет</ion-label>
+    <ion-select placeholder="Не выбран" okText="Обрати" cancelText="Відмінити" [(ngModel)]="cardPriority">
       <ion-select-option *ngFor="let priority of cardPriorities" [value]="priority.value">
         {{priority.name}}
       </ion-select-option>
@@ -38,7 +39,7 @@
   </div>
 
   <app-users-autocomplete [selectedUsers]="selectedUsers"
-                          [placeholder]="'Добавить пользователя к карточке'"
+                          [placeholder]="'Додати користувача до картки'"
                           (userSelected)="onUserSelected($event)"></app-users-autocomplete>
 
   <div class="ion-padding">

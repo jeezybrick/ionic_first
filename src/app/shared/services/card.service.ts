@@ -28,19 +28,19 @@ export interface CardPrioritiesInterface {
 
 export const cardPriorities: CardPrioritiesInterface[] = [
     {
-        name: 'Без приоритета',
+        name: 'Без приорітету',
         value: CardPrioritiesEnum.NO,
     },
     {
-        name: 'Низкий',
+        name: 'Низький',
         value: CardPrioritiesEnum.LOW,
     },
     {
-        name: 'Средний',
+        name: 'Середній',
         value: CardPrioritiesEnum.MEDIUM,
     },
     {
-        name: 'Высокий',
+        name: 'Високий',
         value: CardPrioritiesEnum.HIGH,
     },
 ];

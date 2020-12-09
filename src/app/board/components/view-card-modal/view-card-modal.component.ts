@@ -25,11 +25,11 @@ export class ViewCardModalComponent implements OnInit, OnDestroy {
     public segments: {value: string; viewValue: string; }[] = [
         {
             value: 'notes',
-            viewValue: 'Заметки'
+            viewValue: 'Замітки'
         },
         {
             value: 'actions',
-            viewValue: 'Все действия'
+            viewValue: 'Всі дії'
         },
     ];
     public segment: 'notes' | 'actions' = 'notes';

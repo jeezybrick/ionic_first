@@ -35,7 +35,7 @@
           </ion-chip>
         </ng-container>
 
-        <ion-button size="small" *ngIf="currentUser._id === board?.owner" (click)="addUsersToBoard()" fill="outline">Пригласить</ion-button>
+        <ion-button size="small" *ngIf="currentUser._id === board?.owner" (click)="addUsersToBoard()" fill="outline">Запросити</ion-button>
       </ion-row>
     </ion-grid>
 
@@ -59,15 +59,15 @@
         {{column.cards.length}}
         <span [ngSwitch]="true">
           <ng-container *ngSwitchCase="column.cards.length >= 2 && column.cards.length <= 4">
-            карточки
+            картки
           </ng-container>
 
           <ng-container *ngSwitchCase="column.cards.length === 1">
-            карточка
+            картка
           </ng-container>
 
           <ng-container *ngSwitchDefault>
-            карточек
+            карток
           </ng-container>
         </span>
       </ion-card-content>

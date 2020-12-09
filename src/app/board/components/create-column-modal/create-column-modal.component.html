@@ -1,20 +1,20 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>Добавить колонку</ion-title>
+    <ion-title>Додати колонку</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Закрыть</ion-button>
+      <ion-button (click)="dismiss()">Закрити</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
   <ion-item>
-    <ion-label position="floating">Имя колонки</ion-label>
+    <ion-label position="floating">Ім'я колонки</ion-label>
     <ion-input type="text" [(ngModel)]="columnName"></ion-input>
   </ion-item>
 
   <div class="ion-padding">
-    <ion-button expand="block" (click)="createColumn()" [disabled]="!columnName.length">Создать колонку</ion-button>
+    <ion-button expand="block" (click)="createColumn()" [disabled]="!columnName.length">Створити колонку</ion-button>
   </div>
 </ion-content>
 

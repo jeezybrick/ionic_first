@@ -2,7 +2,7 @@
     <ion-toolbar>
         <ion-title>{{card?.name}}</ion-title>
         <ion-buttons slot="end">
-            <ion-button (click)="dismiss()">Закрыть</ion-button>
+            <ion-button (click)="dismiss()">Закрити</ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -23,13 +23,13 @@
             </ng-container>
 
             <ion-button size="small" *ngIf="currentUser._id === card?.owner" fill="outline" (click)="addUsersToCard()">
-                Добавить
+                Додати
             </ion-button>
         </ion-row>
     </ion-grid>
 
     <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin"
-       *ngIf="card.description && card.description.length">Описание: {{card.description}}</p>
+       *ngIf="card.description && card.description.length">Опис: {{card.description}}</p>
 
     <p class="ion-no-padding ion-padding-horizontal ion-padding-bottom ion-no-margin" *ngIf="card.estimateTime">
         Оценка:
@@ -52,18 +52,18 @@
 
     <ng-container *ngIf="segment === 'notes'">
         <ion-item>
-            <ion-label position="floating">Добавить заметку</ion-label>
+            <ion-label position="floating">Додати замітку</ion-label>
             <ion-textarea rows="3" [(ngModel)]="noteText"></ion-textarea>
         </ion-item>
 
         <div class="ion-padding">
-            <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Добавить</ion-button>
+            <ion-button expand="block" (click)="addNote()" [disabled]="!noteText.length">Додати</ion-button>
         </div>
 
         <ion-list *ngIf="card.notes.length">
 
             <ion-list-header>
-                Заметки
+                Замітки
             </ion-list-header>
 
             <ion-item-sliding *ngFor="let note of card.notes">

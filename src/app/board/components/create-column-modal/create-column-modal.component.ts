@@ -35,7 +35,7 @@ export class CreateColumnModalComponent {
     this.columnService.createColumn(this.boardId, {name: this.columnName})
         .pipe(finalize(() => this.loaderService.dismissLoading()))
         .subscribe((response: Column) => {
-          this.toastService.presentToast('Колонка упешно добавлена');
+          this.toastService.presentToast('Колонка успішно додана');
           this.dismiss({createdColumn: response});
     });
   }

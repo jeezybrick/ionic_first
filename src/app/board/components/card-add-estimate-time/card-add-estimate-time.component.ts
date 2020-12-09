@@ -45,7 +45,7 @@ export class CardAddEstimateTimeComponent implements OnInit, OnDestroy {
   }
 
   public async submit() {
-    await this.loaderService.presentLoading('Сохранение...');
+    await this.loaderService.presentLoading('Збереження...');
     const data: CardEstimateTimeSubmitDataInterface = {
       ...this.estimateTimeForm.value,
     };

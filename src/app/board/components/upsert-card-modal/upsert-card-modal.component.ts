@@ -37,14 +37,14 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
       this.cardDescription = this.card.description;
       this.selectedUsers = [...this.card.users];
       this.cardPriority = this.card.priority;
-      this.headerText = 'Редактировать карточку';
-      this.submitFormText = 'Редактировать карточку';
+      this.headerText = 'Редагувати картку';
+      this.submitFormText = 'Редагувати картку';
     }
 
     if (!this.isEdit) {
       this.cardPriority = this.cardPriorities[0].value;
-      this.headerText = 'Добавить карточку';
-      this.submitFormText = 'Создать карточку';
+      this.headerText = 'Додати картку';
+      this.submitFormText = 'Створти картку';
     }
 
   }
@@ -95,7 +95,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: Card) => {
           this.dismiss({card: response});
-          this.toastService.presentToast('Карточка упешно отредактирована');
+          this.toastService.presentToast('Картка успішно відредагована');
         }, (error) => {
           this.toastService.presentErrorToast();
         });
@@ -120,7 +120,7 @@ export class UpsertCardModalComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: Card) => {
           this.dismiss({card: response});
-          this.toastService.presentToast('Карточка упешно создана');
+          this.toastService.presentToast('Картка успішно створена');
         }, (error) => {
           this.toastService.presentErrorToast();
         });

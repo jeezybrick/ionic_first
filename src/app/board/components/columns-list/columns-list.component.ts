@@ -112,13 +112,13 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
         const actionSheet = await this.actionSheetController.create({
             header: 'Колонки',
             buttons: [{
-                text: 'Удалить',
+                text: 'Видалити',
                 role: 'destructive',
                 handler: () => {
                     this.removeColumn(columnId);
                 }
             }, {
-                text: 'Отмена',
+                text: 'Відмінити',
                 role: 'cancel'
             }]
         });
@@ -157,7 +157,7 @@ export class ColumnsListComponent implements OnInit, OnDestroy {
                     const index = this.columns.findIndex((item) => item._id === columnId);
 
                     if (index > -1) {
-                        this.toastService.presentToast('Колонка упешно удалена');
+                        this.toastService.presentToast('Колонка успішно додана');
                         this.columns.splice(index, 1);
                     }
                 },
