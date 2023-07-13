@@ -47,7 +47,7 @@
     "codelyzer": "^5.1.2",
     "concurrently": "^5.2.0",
     "cy-mobile-commands": "^0.2.1",
-    "cypress": "^4.8.0",
+    "cypress": "^4.12.1",
     "cypress-localstorage-commands": "^1.2.1",
     "cypress-shadow-dom": "^1.4.1",
     "jasmine-core": "~3.5.0",
